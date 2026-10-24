@@ -10,6 +10,7 @@ from dataclasses import replace
 from .identity import matches, normalize
 from .models import AuditError, Observation, timestamp
 from .text_evidence import read_logs, read_text
+from .pdf_evidence import read_pdf, supplement_retention
 from .sql_evidence import COLLECTIONS, extract_observations as extract_sql
 
 SERVICE_COLLECTIONS = {
@@ -204,8 +205,14 @@ def enrich(observations, subject, cutoff):
 def extract_observations(files, subject, cutoff):
     observations = []
     extra, snapshots = [], []
+    documents = []
     for file in sorted(files, key=lambda f: (f.captured_at, f.file_id)):
         if file.captured_at > cutoff:
+            continue
+        if file.path.suffix == '.pdf':
+            document = read_pdf(file)
+            documents.append(document)
+            extra.extend(document.observations)
             continue
         if file.path.suffix == '.log':
             extra.extend(read_logs(file))
@@ -258,4 +265,4 @@ def extract_observations(files, subject, cutoff):
         refs = [o.facts[k] for k in ('user_id', 'customer_reference', 'subject_reference') if o.facts.get(k)]
         if any(r != subject.user_id and normalize('email', r) not in subject.aliases['email'] for r in refs):
             raise AuditError('Resource reassigned to another subject')
-    return enrich(observations + selected, subject, cutoff)
+    return enrich(supplement_retention(observations + selected, documents, subject, cutoff), subject, cutoff)

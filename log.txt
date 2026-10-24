@@ -1082,3 +1082,181 @@ branch=main
 repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
+
+## [2026-10-24T20:15:29.197978+00:00] SESSION START
+
+tool=Codex Desktop
+model=gpt-6.1-sol
+Repo Root: /home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+Branch: main
+Worktree: /home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+Parent Agent: none
+Language: py
+Time Remaining: not configured
+
+## [2026-10-24T20:23:07.638707+00:00] PDF extraction and scoring assessment
+
+User Prompt (verbatim, secrets redacted):
+# Prompt 5: PDF Evidence and Scoring Improvement
+
+Continue from local commit 3f370f0.
+
+The Technical Lead approves targeted PDF extraction and related accuracy improvements.
+
+Our objective is to maximize competition score, not production readiness.
+
+Current baseline:
+
+- 96 tests passing
+- 10/32 valid outputs
+- 2/32 exact matches
+- 10/32 correct statuses
+- 58/58 emitted steps correct
+- 22 unsupported public cases
+- Zero runtime inference costs
+
+## Objective
+
+Extract and correlate admissible PDF evidence to improve resource discovery, retention-policy reasoning, verification completeness, and exact-case accuracy.
+
+## 1. Inspect PDFs before designing the extractor
+
+There are four PDF files in the participant evidence manifest.
+
+Determine:
+
+- Which PDFs contain selectable text.
+- Which contain embedded images or scanned pages.
+- Which cases can be linked to their contents.
+- Whether retention dates, ownership, and resource identifiers are present.
+- Whether evidence is available before the relevant audit cutoff.
+
+Use deterministic PDF text extraction wherever possible.
+
+Do not introduce OCR or paid inference unless ordinary extraction is insufficient.
+
+## 2. Implement targeted PDF support
+
+Integrate extracted PDF facts into the existing typed evidence pipeline.
+
+Preserve:
+
+- Manifest evidence_id.
+- Source provenance.
+- Page references internally.
+- Capture and observation timestamps.
+- Subject/resource correlation.
+- Audit cutoff restrictions.
+
+Do not treat a PDF's existence as proof of retention applicability.
+
+Do not fabricate missing resource links.
+
+## 3. Improve complete-plan accuracy
+
+Prioritize generalized fixes that:
+
+- Resolve previously missing retention conditions.
+- Discover subject-owned attachments.
+- Identify required retained resources.
+- Recover missing verification steps.
+- Improve exact evidence citations and step ordering.
+
+Use `case_07` as a diagnostic example, not a hardcoded special case.
+
+Keep sample labels isolated from prediction logic.
+
+## 4. Benchmark after each significant improvement
+
+Run all tests and the complete 32-case benchmark.
+
+Report:
+
+- Valid outputs out of 32.
+- Correct statuses out of 32.
+- Exact matches out of 32.
+- Step precision and recall.
+- Citation accuracy.
+- Exact sequence accuracy.
+- Remaining unsupported cases.
+- Regressions.
+
+Identify which improvements came directly from PDF extraction versus other changes.
+
+## 5. Assess whether AI is justified
+
+After deterministic PDF extraction, evaluate whether remaining blockers require:
+
+- OCR.
+- Vision-capable inference.
+- Text-based OpenAI API interpretation.
+- Additional deterministic parsing.
+
+Do not incur paid inference costs yet.
+
+Provide a ranked recommendation based on observed cases and expected scoring benefit.
+
+## 6. Submission readiness check
+
+Without submitting anything:
+
+- Assess whether the current pipeline can produce a valid 518-row output.
+- Identify remaining blockers.
+- Check packaging requirements and report completeness.
+- Estimate the work required for a first valid submission candidate.
+
+Do not create fabricated rows to satisfy coverage.
+
+## 7. Interview briefing
+
+Update the five-minute interview briefing with:
+
+- PDF evidence capabilities.
+- How retention rules are applied.
+- How evidence timestamps affect decisions.
+- Measured accuracy improvements.
+- Current limitations.
+- Three likely interview questions and concise answers.
+
+## 8. Autonomous execution
+
+Implement, test, benchmark, and commit locally after successful validation.
+
+Never push or submit.
+
+Stop if a major architectural change or substantial API spending is necessary.
+
+## Completion report
+
+Provide:
+
+1. New functional capabilities.
+2. Test results.
+3. Before/after benchmark metrics.
+4. Cases unblocked by PDF evidence.
+5. Remaining blockers ranked by impact.
+6. Whether OCR, vision, or OpenAI inference is now justified.
+7. Submission-readiness assessment.
+8. Local commit hash.
+
+Stop after this milestone.
+
+
+Agent Response Summary:
+Inspected all four participant PDFs and implemented deterministic Poppler extraction with typed resource observations, page/source provenance, audit cutoffs, attachment ownership, and exact subject/order retention metadata joins. All 108 tests pass; complete public checkpoints remain at 10/32 valid and status-correct, 2/32 exact, with all 58 emitted steps correct and no regressions. The PDF discovers case_07's attachment but does not fully unblock any public case; separate catalog state and verification gaps remain. A label-free full run supports 86/518 requests and leaves 432 unsupported; evaluation/usage reports and the interview briefing document limitations and ranked recommendations, with zero paid inference. Prepared the validated milestone for a local commit only, without push, submission, fabricated rows or final output.csv.
+
+Actions:
+* Read AGENTS.md and PDF SKILL.md; verified runtime model from authoritative session turn_context.
+* Inspected/extracted four PDFs with pdftotext/pdfimages and rendered representative pages with pdftoppm.
+* Added code/audit/pdf_evidence.py and code/evaluation/readiness.py; integrated the evidence pipeline and updated CLI documentation.
+* Added twelve independent PDF tests; ran all 108 tests and three complete 32-case benchmark checkpoints.
+* Ran the 518-request label-free readiness audit, checked packaging requirements, and updated README.md, evaluation reports, and docs/interview_briefing.md.
+* Validated git diff and byte-identical existing benchmark predictions; local commit requested by the user.
+
+Context:
+tool=Codex Desktop
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none

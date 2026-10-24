@@ -7,6 +7,7 @@ from .identity import resolve_subject
 from .models import AuditError, Result, Step, timestamp
 from .policy import assess_policy
 from .evidence import extract_observations
+from .pdf_evidence import read_pdf
 from .sql_evidence import latest_per_copy, read_sql, TABLES, JSON_TABLES, COLLECTIONS
 
 
@@ -93,7 +94,8 @@ def audit(request, inputs):
         if timestamp(claim['event_time']) > max(o.observed_at for o in relevant):
             raise AuditError('Post-snapshot activity requires state reconstruction beyond this slice')
     decisions = assess_policy(latest, inputs.rules, request.audit_at)
-    unprocessed = [e for e in inputs.evidence if e.captured_at <= request.audit_at and e.path.suffix not in {'.sql', '.json', '.txt', '.log'}]
+    unprocessed = [e for e in inputs.evidence if e.captured_at <= request.audit_at and e.path.suffix not in {'.sql', '.json', '.txt', '.log'}
+                   and not (e.path.suffix == '.pdf' and read_pdf(e).understood)]
     closed_scope = not unprocessed
     if closed_scope:
         for file in inputs.evidence:
@@ -107,13 +109,13 @@ def audit(request, inputs):
     validate_result(result, request, inputs.citation_times())
     # Diagnostics retain physical copies, policy reasons and claims separately.
     details = {
-        'scope': 'Deterministic SQL/JSON/text/log audit; PDF and images remain uninterpreted',
+        'scope': 'Deterministic SQL/JSON/text/log/PDF audit; images remain uninterpreted',
         'evidence_scope_closed': closed_scope,
         'subject': asdict(subject),
         'observations': [asdict(o) for o in observations],
         'latest_copy_states': [asdict(o) for o in latest],
         'policy_rules': sorted({d.rule_id for d in decisions}),
         'activity_claims': claims,
-        'unprocessed_evidence_formats': sorted({e.path.suffix for e in inputs.evidence if e.path.suffix not in {'.sql', '.json', '.txt', '.log'} and e.captured_at <= request.audit_at}),
+        'unprocessed_evidence_formats': sorted({e.path.suffix for e in unprocessed}),
     }
     return result, details
