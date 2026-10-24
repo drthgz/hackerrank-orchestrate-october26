@@ -12,33 +12,28 @@ Read [`problem_statement.md`](./problem_statement.md) for the complete challenge
 
 ---
 
-## Quick Start
+## Current implementation: SQL vertical slice
 
-Clone the repository and move into the project directory:
+The approved first milestone audits explicit English profile-deletion requests against account primary/failover SQL snapshots. It resolves current and historical identifiers, filters evidence by audit cutoff, applies unconditional profile deletion policy, preserves independent replica state, and validates ordered output. It does not yet perform a complete multi-format audit or generate the final 518-row submission.
 
-```bash
-git clone https://github.com/interviewstreet/hackerrank-orchestrate-october26.git
-cd hackerrank-orchestrate-october26
-```
+Requires Python 3.10+ with standard-library SQLite (including JSON support). No third-party packages, API keys, network access or paid inference are needed. Validated here with Python 3.14.7. Start the coding agent from this repository root so `AGENTS.md` logging applies.
 
-Start your AI coding tool from the **repository root** so it automatically reads [`AGENTS.md`](./AGENTS.md) and logs your session turns to `log.txt` in the root directory.
-
-Build your solution in `code/main.py`, or use another language and document its setup and run command clearly in your README.
-
-Your solution must:
-
-- Read the input files from `dataset/`
-- Generate one prediction row for every request in `dataset/deletion_requests.csv`
-- Write the final predictions to `output.csv` in the repository root
-
-Run the starter Python entry point with:
+Run the approved public sample:
 
 ```bash
-python3 code/main.py
+python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_05 --output artifacts/case_05.csv --diagnostics artifacts/case_05_diagnostics.json
+python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_05 --output artifacts/case_05_repeat.csv
+python3 code/evaluation/main.py --prediction artifacts/case_05.csv --repeat artifacts/case_05_repeat.csv --case-id case_05
+python3 -m unittest discover -s tests -v
 ```
 
-The blank template at `dataset/output.csv` is provided as a reference. Your final generated file for submission must be the root-level `output.csv`.
+Relative command arguments resolve from the repository root, even when the entrypoint is launched from another directory using its absolute path. `--dataset` can select an alternative fixture dataset. Required `--case-id` selects by input ID only; the predictor has no case-specific rules or access to sample labels. Only the independent evaluator reads labels. Runtime diagnostics retain source table, physical copy, timestamps, identifiers, evidence IDs, policy-rule IDs, and activity claims.
 
+Outputs and diagnostics under `artifacts/` are ignored by Git. The CLI deliberately refuses to write this partial result to root `output.csv` or into `dataset/`. Unsupported intent, missing evidence, conflicting snapshots, unsupported subject-linked SQL schemas, conditional policy, tombstones, and post-snapshot activity fail explicitly with exit code 2. Unsupported non-SQL formats are listed in diagnostics; they are not interpreted. Successful slice execution does not establish global case coverage.
+
+The sample result is `INCOMPLETE`, with a surviving failover profile finding, deletion remediation, and absence verification. See [milestone evaluation](docs/vertical_slice_evaluation.md) and the [five-minute interview briefing](docs/interview_briefing.md). The full competition requirements below remain the final target. Default full-dataset execution and final packaging are not implemented in this milestone.
+
+---
 
 ## Dataset
 
