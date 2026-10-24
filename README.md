@@ -1,182 +1,100 @@
-# HackerRank Orchestrate - October 2026
+# Ghost Data Still Exists — competition audit agent
 
-## Ghost Data Still Exists
+Python 3.10+ with standard-library SQLite/JSON support and Poppler `pdftotext`.
+There are no Python package dependencies, runtime model calls or credentials.
 
-Build an AI agent that audits whether a user's personal data was actually deleted.
+Install Poppler on Debian/Ubuntu with `sudo apt install poppler-utils`, or on
+macOS with `brew install poppler`. On Windows, install Poppler and add its bin
+directory to PATH. `pdftotext -v` must work from the terminal.
 
-A deletion workflow may report **Complete** while data still exists in databases, logs, support attachments, exports, search indexes, archives, or backups. Sync and restore processes may also bring deleted data back.
+Place the supplied participant `dataset/` beside this README. The dataset is
+intentionally excluded from code.zip. All paths default relative to this project
+root; `--dataset` and `--requests` also accept absolute external paths.
 
-For each request, the agent must first determine whether deletion was actually requested. It then returns `COMPLETE`, `INCOMPLETE`, or `NOT_APPLICABLE`, reports any remaining data or recreation risk, and produces the ordered remediation and verification steps required to finish an authorized deletion safely.
-
-Read [`problem_statement.md`](./problem_statement.md) for the complete challenge contract.
-
----
-
-## Current implementation: deterministic evidence audit
-
-Python 3.10+; standard-library SQLite with JSON support and Poppler `pdftotext`
-(on Debian/Ubuntu: `sudo apt install poppler-utils`; macOS: `brew install poppler`).
-No Python packages, credentials, network access or paid inference are required.
-Inspection additionally uses `pdfinfo`, `pdfimages` and `pdftoppm` from Poppler.
+## Run
 
 ```bash
-python3 -m unittest discover -s tests -v
-python3 code/evaluation/main.py --all-samples --output-dir artifacts/evidence-final
-python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_06 --output artifacts/case_06.csv --diagnostics artifacts/case_06.json
+python3 -m unittest discover -s tests -q
+python3 code/main.py --all --mode best-effort --output output.csv --diagnostics artifacts/run.json
 ```
 
-The pipeline interprets relational and embedded-JSON SQL, standalone JSON snapshots
-and nested service responses, application/readback logs, structured text
-handover records, and targeted selectable-text business PDFs. It correlates current/historical identifiers and explicit source
-resource references. Named replicas remain independent. Runtime facts retain
-file IDs, record/line origins, observation times and capture/availability times.
+**Current coverage: 367/518. This is not yet a valid submission candidate.**
+The full command currently exits **2**, lists 151 unresolved cases, and writes
+only `artifacts/supported.csv` plus `artifacts/run.json`. It does not write a
+misleading partial root output.csv or fill unsupported rows. Once every request
+has a defensible answer, it atomically creates output.csv with exactly one row per
+input case. Do not upload the current partial CSV as the required final output.
 
-Intent recognizes explicit deletion, residual-copy removal, earlier-deletion
-audits and bounded multilingual forms. Explicit non-deletion returns exactly
-`NOT_APPLICABLE,[]`; unknown or conflicting requests remain unsupported.
+`best-effort` returns the maximum currently supported policy decisions while
+recording missing policy/resource facts in diagnostics. Every emitted INCOMPLETE
+requires a grounded violation, compatible remediation and verification. It never
+uses unknown alone as a status. COMPLETE requires sufficient evidence, positive
+profile absence, no unresolved relevant scope and valid verification citations.
+Reported workflow success is never accepted as proof.
 
-Policy and planning preserve retained records and tombstones, block recreation
-before record changes, and verify already-compliant resources as well as remedies.
-COMPLETE requires positive profile absence, supported policy conditions, closed
-evidence scope and citations covering the verification. Workflow success, cache
-misses, anonymous unlinked records and partial text are insufficient proofs.
-
-**Measured public results:** 32/32 intent classified; 10/32 structurally valid
-outputs; 10/32 public status matches; 2/32 full exact matches. All 108 tests pass.
-Emitted step precision is 100%; recall is 81.7% over emitted cases and 30.1% over
-all public cases. Partial plans remain a limitation, even when structurally valid.
-PDF support preserves those metrics without a measured scoring gain.
-See [PDF evaluation](evaluation/evaluation_report.md) and
-[interview briefing](docs/interview_briefing.md) for metrics and blockers.
-
-The evaluator attempts all requests before reading public labels. It reports
-unsupported cases rather than substituting guessed rows. Benchmark files under
-`artifacts/` are ignored. Relative CLI paths resolve from the repository root;
-`--dataset` accepts an independent fixture corpus. Partial CLI output cannot
-overwrite `dataset/` or root `output.csv`.
-
-Images and unrecognized PDFs remain uninterpreted and block COMPLETE scope closure.
-Retention applicability, support context/full text and resource identity links
-must come from admissible evidence; missing facts are not filled from labels or
-resource numbering. The label-free full readiness audit (`python3 code/evaluation/readiness.py`) supports
-86/518 requests and leaves 432 unsupported. It writes no final predictions.
-Full 518-case prediction, paid inference and submission
-packaging remain unfinished. Nothing is pushed or submitted.
-
----
-
-## Dataset
-
-All participant-facing files are in `dataset/`:
-
-| File | Contents |
-| --- | --- |
-| `deletion_requests.csv` | 518 requests |
-| `sample_deletion_requests.csv` | 32 sample requests |
-| `sample_output.csv` | Correct sample answers |
-| `user_identities.csv` | Current user identities |
-| `user_audit_log.csv` | Historical identity changes |
-| `system_activity.csv` | Activity across services and data processes |
-| `deletion_rules.csv` | Required treatment for each data category |
-| `evidence_files.csv` | Manifest of supplied evidence files |
-| `output.csv` | Blank output template |
-
-Evidence is stored under `dataset/evidence/` and may include PDFs, images, logs, JSON, plain text, or SQL snapshot exports. SQL captures may contain a primary database, regional replicas, a reporting replica, or a failover replica so replication drift can be investigated directly. The `.sql` files are readable as text and executable with SQLite.
-
-Only `deletion_requests.csv` requires answers. The other files provide evidence and context.
-
----
-
-## Output
-
-Create `output.csv` with these columns in this exact order:
-
-```text
-case_id,deletion_status,steps_json
-```
-
-Produce exactly one row per request. `deletion_status` is `COMPLETE`, `INCOMPLETE`, or `NOT_APPLICABLE`. `steps_json` is an ordered JSON array containing findings, remediation actions, and verification checks. Use an empty array (`[]`) for `NOT_APPLICABLE`. Evidence references may be a `file_id`, `activity_id`, or `audit_id`. Determine the resource state at `audit_at` from the available evidence; reported workflow statuses and operation results are claims. Use `dataset/sample_output.csv` as the format reference.
-
-The final file must contain 518 data rows sorted by `case_id` (plus the header row). The grader parses `steps_json` as JSON, so object-key order and whitespace do not matter; array order does. Order findings, remediation, and verification in that phase order. Within a phase, follow the operation order in the problem statement, then sort by `system_id` and `resource_id`.
-
----
-
-## Evaluation
-
-`output.csv` will be compared with hidden canonical answers. Scoring considers:
-
-- deletion assessment accuracy;
-- current and historical identity resolution;
-- discovery of remaining data and recreation risks;
-- correct policy application and evidence references; and
-- completeness and ordering of remediation and verification steps.
-
-Your `code.zip` must include:
-
-```text
-evaluation/evaluation_report.md
-evaluation/usage_report.md
-```
-
-- `evaluation_report.md` must cover case, row, field, and sequence accuracy, at least three additional evaluation cases created by you, failures found, and improvements made.
-- `usage_report.md` must cover the final full-dataset run, including model providers and names, model calls, input and output tokens, total and average tokens per request, and estimated total and per-request cost. Include per-model and overall totals when using multiple models.
-
-**Important:** Place `evaluation_report.md` and `usage_report.md` inside `evaluation/` (the AGENTS.md contract location; the evaluator itself is `code/evaluation/main.py`), write your complete evaluation metrics, custom evaluation test cases, and token/cost breakdowns directly inside those Markdown files, and keep prompts in source code or Markdown files. Automated code evaluation ignores raw data files (`.csv`, `.tsv`, `.json`, `.jsonl`, `.sql`, `.log`), so content stored only in those formats will not be visible to the code judge or AI interviewer.
-
----
-
-## Chat Transcript
-
-This repository includes [`AGENTS.md`](./AGENTS.md), which instructs compatible AI coding tools to append conversation summaries to `log.txt` in the repository root:
-
-| Platform | Path |
-| --- | --- |
-| macOS / Linux | `<repo root>/log.txt` |
-| Windows | `<repo root>\log.txt` |
-
-- Always launch your AI coding agent from the repository root (or explicitly ask it to read `./AGENTS.md` first) so every turn is logged to `log.txt` with the required `User Prompt`, `Agent Response Summary`, `Actions`, and `Context` sections.
-- Upload `log.txt` directly as your `chat_transcript` submission on HackerRank.
-- Do not include API keys, tokens, credentials, or secrets in prompts, code, configuration, or `log.txt`.
-
----
-
-## Packaging `code.zip` and Submission
-
-| Item | Description |
-| --- | --- |
-| `code.zip` | Runnable solution, prompts, configuration, `README.md`, and `evaluation/` reports |
-| `output.csv` | One answer row for each of the 518 requests in `dataset/deletion_requests.csv` |
-| `chat_transcript` | The root `log.txt` file generated by your coding agent |
-| AI interview | Live explanation of your architecture, approach, and evaluation |
-
-You may use any programming language, model, framework, or retrieval approach. Include clear setup and execution instructions in `README.md` inside `code.zip`.
-
-To package `code.zip` from the repository root without bundling the dataset:
-
-**macOS / Linux:**
+`strict` preserves conservative whole-case diagnostics:
 
 ```bash
-zip -r code.zip README.md code evaluation docs -x "*/__pycache__/*" "*/.venv/*" "*/venv/*" "*/node_modules/*" "*/.git/*" "*/.DS_Store"
+python3 code/main.py --all --mode strict --output output.csv --diagnostics artifacts/strict-run.json
+python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_06 --mode strict --output artifacts/case_06.csv
 ```
 
-**Windows (PowerShell):**
+Partial selected-case runs cannot overwrite final root output.csv. For full runs,
+exit 0 means all selected requests were written; exit 2 means explicit unsupported
+cases or input failure. Inspect diagnostics before using any artifact.
 
-```powershell
-Compress-Archive -Path README.md, code, evaluation, docs -DestinationPath code.zip -Force
+## Evidence and policy
+
+SQL snapshots and replicas, nested JSON, service/readback logs, text handovers and
+selectable-text PDFs feed typed observations. Current/historical identifiers and
+explicit resource lineage correlate the subject. Observations retain capture and
+observation times, evidence IDs, source provenance and page/line origins. Future
+captures and post-snapshot state uncertainty cannot silently become proof.
+
+The eleven supplied screenshots have reviewed, content-hash-bound field
+transcriptions in `code/audit/reviewed_images.py`. These are evidence artifacts,
+not output labels or case-ID rules. Unknown or changed images remain unresolved.
+Read [image review](docs/image_review.md) for excluded ambiguous/future fields.
+
+Policy requires evidence of retention dates, ownership, shared support context
+and other conditions. Tombstones preserve permitted stable references. Flows and
+restore risks are stopped before record changes. In best-effort mode an unresolved
+resource does not discard a different supported violation; omissions remain
+explicit. Complete-plan accuracy is lower than structurally valid output coverage.
+
+## Evaluate
+
+```bash
+python3 code/evaluation/main.py --all-samples --mode strict --output-dir artifacts/strict
+python3 code/evaluation/main.py --all-samples --mode best-effort --output-dir artifacts/best-effort
 ```
 
-When packaging `code.zip`:
+The predictor never reads public labels. The evaluator opens them only after all
+predictions are attempted and repeats successful predictions for reproducibility.
 
-- Keep evaluation reports in top-level `evaluation/`; the commands above include that directory. The current usage report documents a readiness audit, not a finished output-producing run.
-- Do **not** include `dataset/`, virtual environments (`.venv`, `venv`, `node_modules`), or build caches (`__pycache__`). On Windows, keep `.venv` at the repository root (outside `code/`) and remove any `code/__pycache__` folders before running `Compress-Archive`.
-- Do **not** include nested archives (`.zip`, `.tar`, `.gz`, `.tgz`, `.7z`, `.rar`) inside `code.zip` — submissions containing nested archive files will be rejected.
+Current public results: **22/32** valid rows and correct statuses; **2/32** exact
+cases/sequences; **118/118** emitted step contents correct; **61.14%** recall over
+all public steps. All **115 tests** pass. Runtime inference costs are **$0**.
+See [evaluation](evaluation/evaluation_report.md), [actual usage](evaluation/usage_report.md)
+and [interview briefing](docs/interview_briefing.md) for denominators and limitations.
 
-Before submitting, confirm that:
+## Package and traces
 
-- `output.csv` has the exact header `case_id,deletion_status,steps_json` and contains all 518 data rows sorted by `case_id`;
-- every `steps_json` value is a valid JSON array with consecutive step numbers starting at `1`;
-- findings cite valid evidence IDs, and `COMPLETE` verification steps cite evidence proving the current state;
-- proposed remediation and future verification steps use an empty `evidence_id` (`""`);
-- `code.zip` includes your runnable code, `README.md`, `evaluation/evaluation_report.md`, and `evaluation/usage_report.md`;
-- `log.txt` follows the `AGENTS.md` turn format and is uploaded to the `chat_transcript` slot; and
-- no API keys, credentials, real personal data, or sensitive configuration values are included.
+```bash
+python3 code/tools/package.py
+python3 code/tools/export_traces.py
+```
+
+`code.zip` contains runnable source, tests, README, required reports, the supplied
+problem statement and current briefing/review. It excludes dataset, caches,
+virtual environments, credentials, nested archives and traces. Its file list and
+ZIP integrity are validated by the packaging command.
+
+`log.txt` is the required chat transcript and is provided separately.
+`agent-trace.zip` contains relevant, redacted local Codex session snapshots only.
+The active session snapshot is incomplete: after closing Codex, rerun the trace
+export command from a terminal before uploading, as required by the supplied
+agent trace instructions. No authentication/configuration stores are included.
+
+The source archive is runnable, but submission remains blocked on 151 cases and
+the missing valid 518-row output.csv. No push or submission is performed.

@@ -1,24 +1,23 @@
-# Runtime model usage — PDF milestone
+# Actual runtime usage — best-effort full run
 
-This milestone used deterministic Python/SQLite and local Poppler PDF extraction.
-The 32-case baseline, intermediate PDF checkpoint and final benchmark all incurred
-zero runtime inference usage. The final benchmark repeats successful predictions
-for reproducibility. Development-assistant usage is outside these runtime totals
-and has not been measured here.
+The final full-dataset attempt ran all 518 requests in 23.520
+seconds on the current host. It produced 367 validated rows in
+artifacts/supported.csv and left 151 unsupported. It did not
+produce the required complete output.csv. This is the actual partial-output run,
+not a fabricated successful submission run.
 
-| Run | Requests attempted | Supported | Providers/models | Calls | Input tokens | Output tokens | Total tokens | Average tokens/request | Estimated total cost | Estimated cost/request |
-| --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Public baseline | 32 | 10 | None | 0 | 0 | 0 | 0 | 0 | $0 | $0 |
-| Initial PDF checkpoint | 32 | 10 | None | 0 | 0 | 0 | 0 | 0 | $0 | $0 |
-| Final public benchmark | 32 | 10 | None | 0 | 0 | 0 | 0 | 0 | $0 | $0 |
-| Full-dataset readiness audit | 518 | 86 | None | 0 | 0 | 0 | 0 | 0 | $0 | $0 |
-| Overall | 614 attempts, excluding reproducibility repeats | — | None | 0 | 0 | 0 | 0 | 0 | $0 | $0 |
+| Provider/model | Calls | Input tokens | Output tokens | Total tokens | Average tokens/request | Estimated total cost | Estimated cost/request |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| None — deterministic Python/SQLite/Poppler + reviewed evidence cache | 0 | 0 | 0 | 0 | 0 | $0 | $0 |
+| Overall runtime totals | 0 | 0 | 0 | 0 | 0 | $0 | $0 |
 
-There are no per-model entries because no inference provider/model was invoked.
-Local CPU, development time and host electricity are not inference charges.
+The public benchmark and reproducibility runs also use zero inference calls,
+tokens and cost. Screenshot review and coding-assistant development usage are
+not runtime inference; development tokens/cost were not measured and are excluded.
+No credentials, paid OCR, vision endpoint or text-model API was used.
 
-**Submission limitation:** the 518-request readiness audit left 432 cases
-unsupported and did not produce output.csv. There is no final full-dataset
-prediction run to attribute to a submission artifact. Replace/extend this report
-with the measured final output-producing run before submission; do not represent
-this dry run as a finished 518-row prediction. No API credentials were used.
+Partial output SHA-256: `a36638ca3b4acbcb093bba472f398186d4fd28570b617575aa047b8eee48cfcb`.
+
+Before a valid submission, rerun after all unresolved cases have defensible
+answers, then update this report to identify the actual 518-row output-producing
+run and its artifact hash. No such run exists yet.
