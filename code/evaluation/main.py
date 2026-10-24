@@ -46,12 +46,17 @@ def compare(prediction, expected):
 
 def evaluate_all(inputs, labels_path, output_dir):
     """Predict every request before opening labels; unsupported stays explicit."""
-    from audit.pipeline import audit
+    from audit.pipeline import audit, classify_intent
     from audit.contract import write_output
     output_dir.mkdir(parents=True, exist_ok=True)
     results, unsupported, reproducible = [], {}, True
+    intent_counts, intent_unsupported = Counter(), {}
     started = time.perf_counter()
     for request in inputs.requests:
+        try:
+            intent_counts[classify_intent(request.request_text)] += 1
+        except AuditError as exc:
+            intent_unsupported[request.case_id] = str(exc)
         try:
             result, _ = audit(request, inputs)
             repeated, _ = audit(request, inputs)
@@ -90,6 +95,8 @@ def evaluate_all(inputs, labels_path, output_dir):
     citation_fields = sum(v['citation_field_matches'] for v in comparisons.values())
     citation_total = sum(v['citation_field_comparisons'] for v in comparisons.values())
     report = {
+        'intent_classified': sum(intent_counts.values()),
+        'intent_counts': dict(intent_counts), 'intent_unsupported': intent_unsupported,
         'processed': n, 'total_public_samples': len(inputs.requests), 'unsupported': unsupported,
         'all_processed_structurally_valid': True,
         'status_matches': status_count, 'status_accuracy_processed': ratio(status_count, n),

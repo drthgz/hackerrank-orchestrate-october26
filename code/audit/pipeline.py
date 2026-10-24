@@ -1,35 +1,12 @@
 import re
 from dataclasses import asdict
 
+from .intent import classify_intent
 from .contract import order_steps, validate_result
 from .identity import resolve_subject
 from .models import AuditError, Result, Step, timestamp
 from .policy import assess_policy
 from .sql_evidence import extract_observations, latest_per_copy, read_sql, TABLES, JSON_TABLES, COLLECTIONS
-
-
-def classify_intent(text):
-    text = text.casefold().replace('’', "'").strip()
-    sentences = [s.strip() for s in re.split(r'[.!\n]+', text) if s.strip()]
-    non_deletion = [
-        r"(?:please )?(?:export|download|send me a copy of) my (?:data|personal data|account data)",
-        r"(?:please )?(?:correct|update) my (?:email address|phone number|name)",
-        r"(?:please )?(?:unsubscribe me from|opt me out of) (?:marketing|marketing emails)",
-        r"(?:please )?(?:do not|don't) (?:delete|remove|erase) my (?:account|profile|data)",
-    ]
-    # Every clause must be explicitly understood: mixed deletion/non-deletion,
-    # negation, qualifications and unknown clauses do not imply authorization.
-    if sentences and all(any(re.fullmatch(p, s) for p in non_deletion) for s in sentences):
-        return 'NON_DELETION'
-    if re.search(r"\b(no|not|never|don't|do not|except|unless|if|only|cancel|revoke|withdraw)\b|\?", text):
-        raise AuditError('Ambiguous or restricted intent is unsupported')
-    patterns = [
-        r'please (?:permanently )?(?:delete|remove|erase) [\w\s-]*\b(?:account|profile|personal data)(?: associated with this email address| linked to this email address)?',
-        r'please treat this message as a request for permanent account deletion',
-    ]
-    if any(any(re.fullmatch(p, s) for p in patterns) for s in sentences):
-        return 'DELETION'
-    raise AuditError('Request intent is outside the supported explicit English grammar')
 
 
 def authorize_deletion(text):

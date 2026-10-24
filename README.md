@@ -16,7 +16,7 @@ Read [`problem_statement.md`](./problem_statement.md) for the complete challenge
 
 The approved structured-evidence milestone supports all three statuses within explicit evidence boundaries:
 
-- `NOT_APPLICABLE`: recognized English export, correction, marketing opt-out, or no-deletion instructions, with exactly `[]`. Mixed/ambiguous intent fails explicitly.
+- `NOT_APPLICABLE`: recognized explicit export, correction, marketing opt-out, or no-deletion instructions, with exactly `[]`. Mixed/ambiguous intent fails explicitly.
 - `INCOMPLETE`: evidence-backed surviving records, exposed tombstone/analytics identifiers, active connectors, or restorable archives; official ordered findings, actions and verification.
 - `COMPLETE`: positive scoped profile-absence proof through prior resource lineage, compliant known resources/copies, sufficient conditional-policy facts, closed supported SQL scope, and citable verification. Empty searches or retained records alone are insufficient.
 
@@ -32,7 +32,9 @@ python3 -m unittest discover -s tests -v
 
 Relative arguments resolve from the repository root even if an absolute entrypoint path is launched elsewhere. `--dataset` accepts another fixture corpus. `--case-id` selects a request, never a prediction rule. Only the evaluator reads public labels, after all predictions have been attempted. `--all-samples` attempts all 32 requests and writes ignored benchmark diagnostics and processed rows under `artifacts/structured-benchmark/`. It returns failure on a baseline regression; a successful exit does not mean every new sample matches. Read the report's explicit accuracy and unsupported counts.
 
-**Measured public results:** 2/32 produced rows, 30 unsupported; status 2/2, exact case 1/2. `case_05` remains byte-identical to the prior baseline. `case_09` identifies the restore risk but misses two required verification steps. This is a known incomplete plan, not a submission-ready result. COMPLETE and NOT_APPLICABLE behavior is validated using independent synthetic fixtures; there are no processed public examples of those statuses yet.
+**Measured public results (intent milestone):** 32/32 pass deterministic intent classification; 3/32 produce structurally valid rows, with 3/3 status matches and 1/32 full exact matches. These are partial plans: case_06 misses one verification step and case_09 misses two. The remaining 29 cases stop on unsupported SQL lineage (27) or security-retention applicability (2). No full-case output coverage is claimed. See [intent evaluation](docs/intent_evaluation.md).
+
+Intent supports direct deletion, residual-copy removal, earlier-deletion audits, scoped retention qualifications, and explicit Spanish/French/Japanese authorization forms. Unknown wording, conditional authorization, conflicting instructions and mixed export/deletion remain unsupported. NON_DELETION requires positive recognized wording and produces exactly `NOT_APPLICABLE,[]`; unknown requests never fall through to that status.
 
 Adapters cover account/search/export/analytics/security/connector/backup relational schemas and known collections inside primary, regional, reporting, read, and failover SQL exports. Physical copies stay separate; observations preserve identifiers, source table/copy, capture/update times and evidence ID. Policy interpretation requires actual supplied facts; missing retention dates, unclear support ownership/context, unlinked resources, and conflicting observations remain unsupported.
 
