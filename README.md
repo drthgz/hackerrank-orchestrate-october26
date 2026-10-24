@@ -12,35 +12,51 @@ Read [`problem_statement.md`](./problem_statement.md) for the complete challenge
 
 ---
 
-## Current implementation: structured SQL audit
+## Current implementation: deterministic evidence audit
 
-The approved structured-evidence milestone supports all three statuses within explicit evidence boundaries:
-
-- `NOT_APPLICABLE`: recognized explicit export, correction, marketing opt-out, or no-deletion instructions, with exactly `[]`. Mixed/ambiguous intent fails explicitly.
-- `INCOMPLETE`: evidence-backed surviving records, exposed tombstone/analytics identifiers, active connectors, or restorable archives; official ordered findings, actions and verification.
-- `COMPLETE`: positive scoped profile-absence proof through prior resource lineage, compliant known resources/copies, sufficient conditional-policy facts, closed supported SQL scope, and citable verification. Empty searches or retained records alone are insufficient.
-
-Requires Python 3.10+ with standard-library SQLite including JSON support. No packages, credentials, network access or paid inference are required. Validated with Python 3.14.7. Start the coding agent from the repository root so `AGENTS.md` logging applies.
+Python 3.10+; standard-library SQLite with JSON support. No dependencies,
+credentials, network access or paid inference are required.
 
 ```bash
-python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_05 --output artifacts/case_05.csv --diagnostics artifacts/case_05_diagnostics.json
-python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_05 --output artifacts/case_05_repeat.csv
-python3 code/evaluation/main.py --prediction artifacts/case_05.csv --repeat artifacts/case_05_repeat.csv --case-id case_05
-python3 code/evaluation/main.py --all-samples
 python3 -m unittest discover -s tests -v
+python3 code/evaluation/main.py --all-samples --output-dir artifacts/evidence-final
+python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_06 --output artifacts/case_06.csv --diagnostics artifacts/case_06.json
 ```
 
-Relative arguments resolve from the repository root even if an absolute entrypoint path is launched elsewhere. `--dataset` accepts another fixture corpus. `--case-id` selects a request, never a prediction rule. Only the evaluator reads public labels, after all predictions have been attempted. `--all-samples` attempts all 32 requests and writes ignored benchmark diagnostics and processed rows under `artifacts/structured-benchmark/`. It returns failure on a baseline regression; a successful exit does not mean every new sample matches. Read the report's explicit accuracy and unsupported counts.
+The pipeline interprets relational and embedded-JSON SQL, standalone JSON snapshots
+and nested service responses, application/readback logs, and structured text
+handover records. It correlates current/historical identifiers and explicit source
+resource references. Named replicas remain independent. Runtime facts retain
+file IDs, record/line origins, observation times and capture/availability times.
 
-**Measured public results (intent milestone):** 32/32 pass deterministic intent classification; 3/32 produce structurally valid rows, with 3/3 status matches and 1/32 full exact matches. These are partial plans: case_06 misses one verification step and case_09 misses two. The remaining 29 cases stop on unsupported SQL lineage (27) or security-retention applicability (2). No full-case output coverage is claimed. See [intent evaluation](docs/intent_evaluation.md).
+Intent recognizes explicit deletion, residual-copy removal, earlier-deletion
+audits and bounded multilingual forms. Explicit non-deletion returns exactly
+`NOT_APPLICABLE,[]`; unknown or conflicting requests remain unsupported.
 
-Intent supports direct deletion, residual-copy removal, earlier-deletion audits, scoped retention qualifications, and explicit Spanish/French/Japanese authorization forms. Unknown wording, conditional authorization, conflicting instructions and mixed export/deletion remain unsupported. NON_DELETION requires positive recognized wording and produces exactly `NOT_APPLICABLE,[]`; unknown requests never fall through to that status.
+Policy and planning preserve retained records and tombstones, block recreation
+before record changes, and verify already-compliant resources as well as remedies.
+COMPLETE requires positive profile absence, supported policy conditions, closed
+evidence scope and citations covering the verification. Workflow success, cache
+misses, anonymous unlinked records and partial text are insufficient proofs.
 
-Adapters cover account/search/export/analytics/security/connector/backup relational schemas and known collections inside primary, regional, reporting, read, and failover SQL exports. Physical copies stay separate; observations preserve identifiers, source table/copy, capture/update times and evidence ID. Policy interpretation requires actual supplied facts; missing retention dates, unclear support ownership/context, unlinked resources, and conflicting observations remain unsupported.
+**Measured public results:** 32/32 intent classified; 10/32 structurally valid
+outputs; 10/32 public status matches; 2/32 full exact matches. All 96 tests pass.
+Emitted step precision is 100%; recall is 81.7% over emitted cases and 30.1% over
+all public cases. Partial plans remain a limitation, even when structurally valid.
+See [evidence evaluation](docs/evidence_evaluation.md) and
+[interview briefing](docs/interview_briefing.md) for metrics and blockers.
 
-Non-SQL evidence is not interpreted. Admissible unprocessed formats or SQL tables block COMPLETE; residual SQL findings can still produce an INCOMPLETE row whose whole-case coverage is not established. These limits are exposed in diagnostics. The CLI refuses to overwrite `dataset/` or root `output.csv` with a partial result. Full 518-case execution, multimodal extraction, paid inference and final packaging remain unimplemented.
+The evaluator attempts all requests before reading public labels. It reports
+unsupported cases rather than substituting guessed rows. Benchmark files under
+`artifacts/` are ignored. Relative CLI paths resolve from the repository root;
+`--dataset` accepts an independent fixture corpus. Partial CLI output cannot
+overwrite `dataset/` or root `output.csv`.
 
-See [structured evaluation](docs/structured_evaluation.md), [interview briefing](docs/interview_briefing.md), and the historical [first-slice evaluation](docs/vertical_slice_evaluation.md). The competition requirements below remain the final target.
+PDF and image evidence remains uninterpreted and blocks COMPLETE scope closure.
+Retention applicability, support context/full text and resource identity links
+must come from admissible evidence; missing facts are not filled from labels or
+resource numbering. Full 518-case prediction, paid inference and submission
+packaging remain outside the implemented milestone. Nothing is pushed or submitted.
 
 ---
 

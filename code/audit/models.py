@@ -42,6 +42,8 @@ class Subject:
     # Historical values are retained for discovery; future aliases are excluded.
     aliases: dict[str, frozenset[str]]
     provenance: tuple[str, ...]
+    # Names are scanned for residual PII, never used as identity join keys.
+    names: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True)

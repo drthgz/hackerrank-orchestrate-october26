@@ -42,14 +42,14 @@ def assess_policy(observations, rules, cutoff=None):
             raise AuditError('Missing or ambiguous category policy')
         rule = candidates[0]
         action, rule_id = rule['required_action'], rule['rule_id']
-        if category in {'USER_PROFILE', 'SEARCH_INDEX_ENTRY', 'USER_EXPORT'}:
+        if category in {'USER_PROFILE', 'SEARCH_INDEX_ENTRY', 'USER_EXPORT', 'SECONDARY_IDENTIFIER', 'CACHE_ENTRY', 'MARKETING_PROFILE'}:
             if (rule['condition'], action) != ('Always', 'DELETE'):
                 raise AuditError('Unsupported unconditional deletion policy')
             compliant, verify, state = not o.present, 'VERIFY_RECORD_ABSENT', 'ABSENT'
         else:
             if CONDITIONS.get(category) != (rule['condition'], action):
                 raise AuditError('Unsupported conditional policy')
-            if not o.present:
+            if not o.present and category != 'SUPPORT_ATTACHMENT':
                 raise AuditError('Required preserved record is missing; restoration is not an allowed operation')
             if category == 'SECURITY_AUDIT_LOG':
                 end = facts.get('retention_until')
@@ -67,7 +67,7 @@ def assess_policy(observations, rules, cutoff=None):
                 verify, state = 'VERIFY_RECORD_REDACTED', 'REDACTED'
             elif category == 'ANALYTICS_PROFILE':
                 ref = 'customer_reference' if 'customer_reference' in facts else 'user_id'
-                compliant = identifiers_cleared(facts, (ref, 'email', 'phone', 'email_hash'))
+                compliant = False if facts.get('identifier_exposure') is True else identifiers_cleared(facts, (ref, 'email', 'phone', 'email_hash'))
                 compliant = compliant and all(facts.get(k) in (None, '') for k in ('user_id', 'customer_reference', 'subject_reference'))
                 verify, state = 'VERIFY_RECORD_ANONYMIZED', 'ANONYMIZED'
             elif category == 'BACKUP_ARCHIVE':
@@ -76,15 +76,20 @@ def assess_policy(observations, rules, cutoff=None):
             elif category == 'SUPPORT_MESSAGE':
                 if not boolean(facts, 'shared_context'):
                     raise AuditError('Shared support context not established')
-                # A field-only scan cannot prove free text is redacted.
-                if not boolean(facts, 'text_scan_complete'):
-                    raise AuditError('Support text needs interpretation')
-                compliant = identifiers_cleared(facts, ('requester_name', 'requester_email', 'requester_phone')) and not boolean(facts, 'text_has_subject_identifiers')
+                # Positive exposure proves a violation even in partial text.
+                # Proving compliance needs a full-text scan and cleared fields.
+                if facts.get('identifier_exposure') is True:
+                    compliant = False
+                else:
+                    if not boolean(facts, 'text_scan_complete'):
+                        raise AuditError('Support text needs interpretation')
+                    compliant = (identifiers_cleared(facts, ('requester_name', 'requester_email', 'requester_phone'))
+                                 and not boolean(facts, 'text_has_subject_identifiers'))
                 verify, state = 'VERIFY_RECORD_REDACTED', 'REDACTED'
             elif category == 'SUPPORT_ATTACHMENT':
                 if not boolean(facts, 'belongs_only_to_subject'):
                     raise AuditError('Attachment ownership condition not established')
-                compliant, verify, state = False, 'VERIFY_RECORD_ABSENT', 'ABSENT'
+                compliant, verify, state = not o.present, 'VERIFY_RECORD_ABSENT', 'ABSENT'
             else:
                 raise AuditError('Unsupported policy category')
         decisions.append(PolicyDecision(o, action, rule_id, compliant, verify, state))

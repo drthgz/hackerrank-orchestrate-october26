@@ -29,7 +29,12 @@ def compare(prediction, expected):
     matched = sum((left & right).values())
     denom = max(len(actual), len(expected['steps'])) * 7
     fields = sum(a.get(k) == b.get(k) for a, b in zip(actual, expected['steps']) for k in a)
+    cited = lambda steps: {(s['phase'], s['operation'], s['system_id'], s['resource_id']): s['evidence_id']
+                           for s in steps if s['evidence_id']}
+    actual_cited, expected_cited = cited(actual), cited(expected['steps'])
     return {
+        'cited_step_matches': sum(expected_cited.get(key) == value for key, value in actual_cited.items()),
+        'cited_step_comparisons': max(len(actual_cited), len(expected_cited)),
         'deletion_status_matches': prediction.deletion_status == expected['status'],
         'all_steps_match': left == right,
         'evidence_references_match': [s['evidence_id'] for s in actual] == [s['evidence_id'] for s in expected['steps']],
@@ -94,7 +99,35 @@ def evaluate_all(inputs, labels_path, output_dir):
     sequence_count = sum(v['step_ordering_matches'] for v in comparisons.values())
     citation_fields = sum(v['citation_field_matches'] for v in comparisons.values())
     citation_total = sum(v['citation_field_comparisons'] for v in comparisons.values())
+    all_expected_steps = sum(len(json.loads(labels[r.case_id]['steps_json'])) for r in inputs.requests)
+    all_expected_citations = sum(bool(s['evidence_id']) for r in inputs.requests
+                                 for s in json.loads(labels[r.case_id]['steps_json']))
+    cited_matches = sum(v['cited_step_matches'] for v in comparisons.values())
+    cited_total = sum(v['cited_step_comparisons'] for v in comparisons.values())
+    def blocker_category(reason):
+        if 'retention' in reason.lower():
+            return 'retention_facts'
+        if 'profile-absence' in reason:
+            return 'profile_absence_lineage'
+        if 'unprocessed evidence scope' in reason:
+            return 'unparsed_media_scope'
+        if 'Subject-linked activity' in reason:
+            return 'unresolved_activity_resource'
+        if 'resource lineage' in reason:
+            return 'missing_subject_linked_evidence'
+        if 'Support text' in reason or 'shared_context' in reason or 'text_scan_complete' in reason:
+            return 'support_context_or_full_text'
+        return 'other'
     report = {
+        'valid_output_coverage': ratio(n, len(inputs.requests)),
+        'status_accuracy_all_samples': ratio(status_count, len(inputs.requests)),
+        'sequence_accuracy_all_samples': ratio(sequence_count, len(inputs.requests)),
+        'step_recall_all_samples': ratio(steps_matched, all_expected_steps),
+        'expected_steps_all_samples': all_expected_steps,
+        'cited_step_matches': cited_matches, 'cited_step_comparisons': cited_total,
+        'cited_step_accuracy_processed': ratio(cited_matches, cited_total),
+        'cited_step_accuracy_all_samples': ratio(cited_matches, all_expected_citations),
+        'blockers_by_category': dict(Counter(blocker_category(reason) for reason in unsupported.values())),
         'intent_classified': sum(intent_counts.values()),
         'intent_counts': dict(intent_counts), 'intent_unsupported': intent_unsupported,
         'processed': n, 'total_public_samples': len(inputs.requests), 'unsupported': unsupported,

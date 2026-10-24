@@ -969,3 +969,116 @@ branch=main
 repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
+
+## [2026-10-24T19:58:21.059299+00:00] Deterministic JSON, log and text evidence coverage
+
+User Prompt (verbatim, secrets redacted):
+# Evidence Coverage Milestone
+
+Continue from local commit dd8f6a6.
+
+Our objective is to maximize HackerRank scoring accuracy, not build production-grade infrastructure.
+
+Current benchmark:
+
+- 32/32 intent classification
+- 3/32 valid outputs
+- 1/32 exact public-label matches
+- 61 passing tests
+- 27 cases blocked by missing evidence coverage
+- 2 cases blocked by security-retention facts
+
+## Your mission
+
+Implement generalized deterministic evidence extraction and correlation to unblock the largest possible number of public cases.
+
+Prioritize:
+
+1. Standalone JSON evidence and nested records.
+2. Application logs and trace-linked events.
+3. Plain-text evidence and resource references.
+4. Historical resource lineage and subject identity correlation.
+5. Evidence establishing retention obligations and already-compliant resource states.
+6. Complete verification coverage, including resources requiring no remediation.
+
+Preserve audit cutoffs, source provenance, independent replicas, and exact official step ordering.
+
+Do not hardcode public case IDs, expected output steps, or sample-label values into prediction logic.
+
+## Optimize for measurable accuracy
+
+After implementing each major extraction capability, run the full 32-case benchmark.
+
+Track:
+
+- Valid output coverage out of 32.
+- Exact matches out of 32.
+- Status accuracy out of 32.
+- Step precision and recall.
+- Evidence citation accuracy.
+- Exact sequence accuracy.
+- Remaining blockers by category.
+
+Prioritize generalized improvements that increase exact matches, not merely the number of emitted rows.
+
+Investigate missing verification steps in partially correct cases.
+
+## Scope
+
+Use the existing architecture. Avoid major rewrites.
+
+No PDF, OCR, vision, or paid inference yet.
+
+Do not weaken validators or fabricate evidence to achieve coverage.
+
+If missing evidence genuinely requires PDF or image interpretation, identify those cases and report the expected benefit.
+
+## Autonomous workflow
+
+Implement, test, debug, benchmark, and locally commit validated milestones without asking for routine approval.
+
+Maintain the interview briefing with:
+
+- Features now supported.
+- Remaining limitations.
+- Important architectural decisions.
+- Actual benchmark results.
+- Three likely interview questions and answers.
+
+Never push or submit.
+
+## Completion
+
+Stop when deterministic JSON/text/log extraction and correlation are implemented and benchmarked.
+
+Report:
+
+1. New capabilities.
+2. Test count and results.
+3. Before/after coverage and exact accuracy.
+4. Remaining blockers ranked by impact.
+5. Whether PDF, vision, or AI is now justified.
+6. Local commit hash.
+
+Keep the summary concise and oriented toward the Technical Lead.
+
+Agent Response Summary:
+Implemented standalone/nested JSON, readback/application logs, handover text, source-resource lineage and policy metadata correlation within the existing observation/policy/planner architecture. Preserved cutoffs, provenance, named replicas and canonical validation; added residual-name/phone scans without using names as identity joins. All 96 tests pass; full public benchmark improved from 3 to 10 valid outputs and from 1 to 2 exact matches, with 10 correct statuses, 58/58 matching emitted step contents and 19/19 matching non-empty citations. Documented remaining retention, lineage, full-text and media blockers and updated the interview briefing; prepared the validated local commit with no push or submission.
+
+Actions:
+* Added code/audit/evidence.py, code/audit/text_evidence.py and 35 generalized tests in tests/test_evidence.py.
+* Extended existing identity, SQL lineage, policy and diagnostics; kept code/audit/contract.py unchanged.
+* Benchmarked all 32 cases after JSON, logs/text, lineage and final policy/provenance integration.
+* Ran python3 -m unittest discover -s tests -v: 96 passing.
+* Ran python3 code/evaluation/main.py --all-samples --output-dir artifacts/evidence-final: deterministic, structurally valid, zero baseline regressions.
+* Exercised the CLI and diagnostics for case_06; ran git diff --check.
+* Updated README.md, docs/evidence_evaluation.md and docs/interview_briefing.md with measured metrics and three interview questions/answers.
+* Confirmed Codex Desktop / gpt-6.1-sol from authoritative session metadata. No PDF/OCR/vision or runtime model inference used.
+
+Context:
+tool=Codex Desktop
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none

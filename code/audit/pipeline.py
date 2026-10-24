@@ -6,7 +6,8 @@ from .contract import order_steps, validate_result
 from .identity import resolve_subject
 from .models import AuditError, Result, Step, timestamp
 from .policy import assess_policy
-from .sql_evidence import extract_observations, latest_per_copy, read_sql, TABLES, JSON_TABLES, COLLECTIONS
+from .evidence import extract_observations
+from .sql_evidence import latest_per_copy, read_sql, TABLES, JSON_TABLES, COLLECTIONS
 
 
 def authorize_deletion(text):
@@ -25,7 +26,7 @@ def plan(decisions, case_id, complete_scope=False):
     if not incomplete and not any(d.observation.category == 'USER_PROFILE' and not d.observation.present for d in decisions):
         raise AuditError('Complete account deletion requires positive scoped profile-absence evidence')
     if not incomplete and not complete_scope:
-        raise AuditError('Compliant SQL observations do not close the unprocessed evidence scope')
+        raise AuditError('Compliant observations do not close the unprocessed evidence scope')
     steps = []
     actions = {
         'DELETE': ('REPORT_REMAINING_RECORD', 'PRESENT', 'DELETE_RECORD'),
@@ -46,6 +47,10 @@ def plan(decisions, case_id, complete_scope=False):
                 Step(0, 'FINDING', system, resource, finding, state, representative.observation.evidence_id),
                 Step(0, 'REMEDIATION', system, resource, action, representative.final_state, ''),
             ])
+        if not incomplete and any(
+                any(eid != d.observation.evidence_id for eid in d.observation.facts.get('_policy_evidence', {}).values())
+                for d in copies):
+            raise AuditError('Complete verification requires policy metadata from another witness')
         if not incomplete and len({d.observation.evidence_id for d in copies}) > 1:
             # A single output citation must prove all copies covered by this
             # logical verification; do not arbitrarily hide other witnesses.
@@ -73,14 +78,14 @@ def audit(request, inputs):
     observations = extract_observations(inputs.evidence, subject, request.audit_at)
     latest = latest_per_copy(observations, request.audit_at)
     if not latest:
-        raise AuditError('No supported SQL resource lineage links to subject')
+        raise AuditError('No supported evidence resource lineage links to subject')
     resources = {o.resource_id for o in latest}
     for event in inputs.activity:
         if timestamp(event['event_time']) > request.audit_at or event['resource_id'] in resources:
             continue
         keys = {subject.user_id, *subject.aliases['email'], *subject.aliases['email_hash']}
         if any(re.search(r'(?<![\w@.])' + re.escape(k) + r'(?![\w@.])', event.get('details', ''), re.I) for k in keys if k):
-            raise AuditError('Subject-linked activity resource lacks scoped SQL evidence')
+            raise AuditError('Subject-linked activity resource lacks scoped evidence')
     claims = [x for x in inputs.activity if x['resource_id'] in resources
               and timestamp(x['event_time']) <= request.audit_at]
     for claim in claims:
@@ -88,11 +93,11 @@ def audit(request, inputs):
         if timestamp(claim['event_time']) > max(o.observed_at for o in relevant):
             raise AuditError('Post-snapshot activity requires state reconstruction beyond this slice')
     decisions = assess_policy(latest, inputs.rules, request.audit_at)
-    unprocessed = [e for e in inputs.evidence if e.captured_at <= request.audit_at and e.path.suffix != '.sql']
+    unprocessed = [e for e in inputs.evidence if e.captured_at <= request.audit_at and e.path.suffix not in {'.sql', '.json', '.txt', '.log'}]
     closed_scope = not unprocessed
     if closed_scope:
         for file in inputs.evidence:
-            if file.captured_at <= request.audit_at:
+            if file.captured_at <= request.audit_at and file.path.suffix == '.sql':
                 tables = read_sql(file)
                 if set(tables) - (set(TABLES) | JSON_TABLES | {'snapshot_scope'}):
                     closed_scope = False
@@ -102,13 +107,13 @@ def audit(request, inputs):
     validate_result(result, request, inputs.citation_times())
     # Diagnostics retain physical copies, policy reasons and claims separately.
     details = {
-        'scope': 'Structured SQL audit; unprocessed formats remain outside interpretation',
+        'scope': 'Deterministic SQL/JSON/text/log audit; PDF and images remain uninterpreted',
         'evidence_scope_closed': closed_scope,
         'subject': asdict(subject),
         'observations': [asdict(o) for o in observations],
         'latest_copy_states': [asdict(o) for o in latest],
         'policy_rules': sorted({d.rule_id for d in decisions}),
         'activity_claims': claims,
-        'unprocessed_evidence_formats': sorted({e.path.suffix for e in inputs.evidence if e.path.suffix != '.sql' and e.captured_at <= request.audit_at}),
+        'unprocessed_evidence_formats': sorted({e.path.suffix for e in inputs.evidence if e.path.suffix not in {'.sql', '.json', '.txt', '.log'} and e.captured_at <= request.audit_at}),
     }
     return result, details

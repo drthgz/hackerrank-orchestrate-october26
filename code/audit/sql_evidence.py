@@ -109,7 +109,7 @@ def read_sql(file):
         db.close()
 
 
-def extract_observations(files, subject, cutoff):
+def extract_observations(files, subject, cutoff, linked_resources=None):
     snapshots = []
     for file in sorted(files, key=lambda x: (x.captured_at, x.file_id)):
         if file.path.suffix != '.sql' or file.captured_at > cutoff:
@@ -163,6 +163,8 @@ def extract_observations(files, subject, cutoff):
     for snapshot in snapshots:
         key = (snapshot.file.origin, snapshot.system, snapshot.category)
         ids = linked.setdefault(key, set())
+        if snapshot.category in {'USER_PROFILE', 'SEARCH_INDEX_ENTRY', 'USER_EXPORT'}:
+            ids.update((linked_resources or {}).get((snapshot.system, snapshot.category), ()))
         ids.update(r['resource_id'] for r in snapshot.rows if matches(r, subject))
     observations = []
     for snapshot in snapshots:

@@ -17,15 +17,21 @@ def resolve_subject(email, cutoff, identities, history) -> Subject:
                     and timestamp(x['event_time']) <= cutoff]
         values = {k: set() for k in ('email', 'phone', 'email_hash')}
         sources = []
+        names = set()
         # A post-cutoff snapshot cannot introduce aliases. Earlier audit events
         # may independently establish an alias even when that snapshot is later.
         if timestamp(identity['updated_at']) <= cutoff:
+            if identity.get('name'):
+                names.add(identity['name'])
             for kind in values:
                 if identity[kind]:
                     values[kind].add(normalize(kind, identity[kind]))
             sources.append('user_identities:' + identity['user_id'])
         for event in relevant:
             kind = event['field_name']
+            if kind == 'name':
+                sources.append(event['audit_id'])
+                names.update(event[k] for k in ('old_value', 'new_value') if event[k])
             if kind in values:
                 for key in ('old_value', 'new_value'):
                     if event[key]:
@@ -34,7 +40,7 @@ def resolve_subject(email, cutoff, identities, history) -> Subject:
         if normalize('email', email) in values['email']:
             candidates.append(Subject(identity['user_id'],
                                       {k: frozenset(v) for k, v in values.items()},
-                                      tuple(sorted(set(sources)))))
+                                      tuple(sorted(set(sources))), frozenset(names)))
     if len(candidates) != 1:
         raise AuditError(f'Expected one temporally supported identity, found {len(candidates)}')
     return candidates[0]
@@ -60,7 +66,13 @@ def matches(row, subject):
                  and normalize('email', ref) not in subject.aliases['email']]
     if (direct or alias) and conflicts:
         raise AuditError('Identifier matches a conflicting stable subject reference')
-    nested = any(matches(value, subject) for value in row.values() if isinstance(value, dict))
+    def nested_match(value):
+        if isinstance(value, dict):
+            return matches(value, subject)
+        if isinstance(value, list):
+            return any(nested_match(item) for item in value)
+        return False
+    nested = any(nested_match(value) for value in row.values() if isinstance(value, (dict, list)))
     if nested and conflicts:
         raise AuditError('Nested identity conflicts with enclosing stable subject reference')
     return direct or alias or nested
