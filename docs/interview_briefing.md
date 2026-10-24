@@ -1,43 +1,48 @@
-# Interview briefing: first SQL vertical slice
+# Interview briefing: structured evidence milestone
 
-## What works now
+## What now works
 
-The Python CLI produces the correct public `case_05` row without reading its label. It uses actual request, identity/history, policy, activity and evidence-manifest inputs. Identity resolution supports current and historical emails, normalizes email case and phone formatting, and refuses ambiguous people or aliases only established after the audit cutoff.
+The Python pipeline handles explicit non-deletion intent, evidence-backed INCOMPLETE assessments, and carefully scoped COMPLETE assessments. It interprets relational SQL inventories and known JSON records embedded inside primary, failover, regional, reporting and read-replica SQL dumps. It preserves temporal identity history and physical copies independently.
 
-It executes admissible SQL dumps in isolated in-memory SQLite, independently inspects account primary and failover tables, and retains the system/resource, physical copy, table, snapshot time, row update time, and source file ID. A surviving profile governed by unconditional DELETE produces a finding, remediation, and future verification. Serialization follows the exact official operation order and validates output coverage for the selected request.
+Supported policy predicates include unconditional profile/search/export deletion, attributable analytics, retained security records with supplied retention dates, deleted-account tombstones, restore controls, and connector state. Conditional policy needs structured facts. Missing facts are not guessed.
 
-This milestone uses deterministic rules and no runtime AI calls. It establishes the reliable foundation for the approved hybrid architecture, not the complete competition submission.
+Explicit English export, correction, marketing opt-out and no-deletion requests return NOT_APPLICABLE with no steps. This decision happens before subject/evidence inspection: a request for access is not authorization to delete or verify deletion. Mixed or ambiguous requests remain unsupported.
 
-## Pipeline in one minute
+Runtime AI use remains zero. This is the deterministic foundation of the approved hybrid architecture, not a completed competition entry.
 
-1. Validate CSV headers, IDs, timestamps, manifest paths and basic policy/input enums.
-2. Recognize a narrow explicit English deletion instruction; reject unsupported or restricted intent.
-3. Resolve the subject through temporally available identifiers and history.
-4. Read pre-cutoff SQL evidence, discover resources through identifiers, and observe each copy separately.
-5. Select the latest observation within each copy lineage. Keep operational claims separate from state evidence.
-6. Apply the supplied USER_PROFILE / Always / DELETE policy. Missing, conflicting or unsupported policy is an error.
-7. Produce deduplicated logical resource steps while retaining copy-level diagnostics. Order and number steps, validate citations and future-work evidence rules, then write CSV.
-8. A separate evaluator opens the label and compares status, steps, citations, fields, sequence and repeated-run bytes.
+## COMPLETE needs positive evidence
 
-## Why replica independence matters
+A failed search can mean the identity was wrong, the table was incomplete, or the relevant copy was never inspected. It does not prove deletion.
 
-In the sample, the primary snapshot has no subject row while the failover snapshot still contains it. Combining copies too early could let a clean primary erase the evidence of surviving personal data. The intermediate model therefore keeps `(system, resource, copy)` states separate. Only after assessment are multiple violating copies consolidated into the required logical resource step. A future executor would need the diagnostics to treat all physical copies.
+For COMPLETE, a resource must first be linked to the subject. A subsequent admissible, declared SQL snapshot can then prove it absent. All known copies must comply, retained records must remain, policy conditions must be established, and no admissible evidence source may remain outside the supported SQL interpretation scope. A retained security record alone cannot establish account deletion. Every verification must have a valid citation that covers its relevant copies; unsupported multiple-witness cases are refused.
 
-A successful deletion workflow says an operation ran; it does not establish that every copy is absent. Replication may fail, lag, or recreate a row. We therefore treat the sample's deletion and synchronization SUCCESS results as claims and cite the surviving row itself.
+A known remaining row independently supports INCOMPLETE, but the complete remediation/verification plan may still be incomplete when other formats have not been interpreted. The benchmark measures this distinction honestly.
 
-## What remains unsupported
+## Historical identities and replicas
 
-No PDFs, screenshots, OCR, standalone JSON/log/text evidence interpretation, broad multilingual intent, runtime model adapter, full retention/redaction/anonymization, active-flow/restore planning, or full-dataset execution yet. Only recognized account primary/failover schemas receive semantic state interpretation. Subject-linked SQL outside those schemas fails explicitly. Non-SQL sources are listed as unprocessed, so this is a scoped audit rather than a guarantee that other systems are clean.
+The resolver builds alias sets only from snapshots/history available by audit_at. It uses exact stable references, emails, phones and hashes, including nested structured SQL document fields. Names alone do not merge people. Conflicting stable references fail instead of silently combining identities.
 
-No COMPLETE or NOT_APPLICABLE prediction path is enabled yet. A clean supported snapshot cannot prove the global deletion is complete. Unresolved identity, conflicting evidence, unsupported policy or later operational activity aborts rather than fabricating an answer. The final root output.csv is protected against accidental replacement with a one-row result.
+Resource lineage persists after redaction or anonymization removes the original identifiers. State is indexed by system, resource and physical-copy lineage, so a newer clean primary never overwrites a surviving failover row. Conflicting simultaneous observations are errors, not arbitrary tie-breaks.
+
+Tombstones preserve the actual internal subject ID, not an email disguised as a reference. Direct identifiers must be cleared. Analytics must also lose subject references to be anonymous.
+
+## Important concept: a closed evidence scope
+
+A closed scope means the system has interpreted the evidence needed to justify its conclusion within the supplied supported corpus. It is stronger than finding no violations in the files it happened to read. An unparsed screenshot or an unknown SQL table leaves that scope open. This implementation therefore refuses COMPLETE while such admissible sources remain, even if its SQL observations look clean.
+
+## Measured result and limitations
+
+58 tests pass. The public benchmark produces 2/32 rows: both statuses are correct, but only case_05 matches its entire label. case_09 has the correct restore-risk finding and blocking action but lacks account-absence and retained-security verification. Baseline regressions: zero. Synthetic fixtures validate COMPLETE and NOT_APPLICABLE; public coverage does not yet demonstrate those paths.
+
+No OCR, PDF/image interpretation, standalone JSON/log/text adapters, broad multilingual intent, paid inference, or full submission run. Missing retention/ownership facts, unlinked resources, incompatible dependency/order constraints, and unsupported citation coverage are explicit boundaries. Status accuracy is not a substitute for a complete ordered answer.
 
 ## Three likely questions
 
-**How do you prevent sample-answer leakage?**
-The predictor never imports the evaluator or opens labels. Resource discovery uses identifiers in actual SQL, not numbers in case IDs. A regression test runs the predictor with an audit hook that raises on any attempt to open sample_output. The independent evaluator reads the label only after prediction.
+**How do you avoid unauthorized deletion?**
+A narrow intent classifier distinguishes explicit non-deletion requests and returns an empty plan. Uncertain or mixed language is rejected rather than treated as permission. No live service is modified; outputs are audit plans.
 
-**How do you enforce the audit time?**
-Manifest captures and observation timestamps must be at or before audit_at. Row updates cannot be later than their snapshot. Identity snapshots and history are filtered separately. A post-cutoff dump is skipped before parsing; newer primary evidence cannot overwrite a different replica's earlier state.
+**How do you prove COMPLETE rather than assume it?**
+I require historical resource linkage, positive scoped absence for the profile, compliant known copies and retained records, supported policy conditions, closed SQL evidence scope and evidence-backed verification. No matching row alone is insufficient.
 
-**What does a perfect result on this sample prove?**
-It proves this narrow end-to-end path matches its public label and is reproducible. It does not establish performance on the other 31 samples or 518 evaluation cases. Synthetic regressions exercise identity ambiguity, temporal boundaries, replica drift, policy refusal, SQL isolation, and ordering; broad accuracy requires subsequent milestones.
+**How do you avoid overfitting the samples?**
+The predictor never reads labels or infers people/resources from case numbers. Independent fixtures use unrelated IDs and mutated timelines, identities and copies. The evaluator opens public labels only after attempting prediction and reports unsupported cases, missing steps and regressions separately. The remaining case_09 error is documented rather than patched with its expected IDs.

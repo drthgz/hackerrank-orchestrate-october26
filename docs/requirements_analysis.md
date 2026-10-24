@@ -1,6 +1,6 @@
 # Requirements discovery and proposed architecture
 
-Date: 2026-10-24. Status: discovery complete; architecture proposed, awaiting approval. No challenge solution implemented, no model inference calls made, no predictions produced.
+Date: 2026-10-24. Historical phase-1 status: discovery complete; architecture proposed. The Technical Lead subsequently approved the architecture and SQL vertical slice in Prompt 2, and structured-evidence/status expansion in Prompt 3. This document records discovery findings; current capabilities and measured results are in structured_evaluation.md.
 
 ## 1. Sources and baseline
 

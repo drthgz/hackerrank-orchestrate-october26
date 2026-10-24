@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
@@ -57,6 +57,8 @@ class Observation:
     available_at: datetime
     source_table: str
     identifiers: tuple[tuple[str, str], ...]
+    facts: dict = field(default_factory=dict)
+    subject_id: str = ""
 
 
 @dataclass(frozen=True)
@@ -64,6 +66,9 @@ class PolicyDecision:
     observation: Observation
     action: str
     rule_id: str
+    compliant: bool = False
+    verify_operation: str = "VERIFY_RECORD_ABSENT"
+    final_state: str = "ABSENT"
 
 
 @dataclass(frozen=True)

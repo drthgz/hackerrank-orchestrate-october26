@@ -1,4 +1,4 @@
-"""Run the explicit SQL vertical slice; no public labels are read here."""
+"""Run a structured SQL deletion audit; no public labels are read here."""
 import argparse
 import json
 import sys
@@ -27,7 +27,7 @@ def json_value(value):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Limited SQL profile audit; not a full 518-case submission runner yet.')
+    parser = argparse.ArgumentParser(description='Structured SQL audit; unsupported scopes fail explicitly. Not a full-dataset submission runner yet.')
     parser.add_argument('--dataset', default='dataset')
     parser.add_argument('--requests', required=True)
     parser.add_argument('--case-id', required=True)
@@ -50,7 +50,7 @@ def main():
         if diagnostic:
             diagnostic.parent.mkdir(parents=True, exist_ok=True)
             diagnostic.write_text(json.dumps(details, default=json_value, indent=2, sort_keys=True) + '\n', encoding='utf-8')
-        print(f'Validated 1 selected row: {result.deletion_status}; {len(result.steps)} steps. SQL slice only.')
+        print(f'Validated 1 selected row: {result.deletion_status}; {len(result.steps)} steps. Structured SQL scope only.')
         return 0
     except (AuditError, OSError, ValueError) as exc:
         print(f'Audit failed: {exc}', file=sys.stderr)

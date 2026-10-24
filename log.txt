@@ -789,3 +789,126 @@ branch=main
 repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
+
+## [2026-10-24T13:54:19.289240+00:00] Structured SQL evidence and three-status coverage
+
+User Prompt (verbatim, secrets redacted):
+# HackerRank Orchestrate October 2026 — Prompt 3: Structured Evidence and Deletion Status Coverage
+
+The Technical Lead approves the next implementation milestone.
+
+Current validated baseline:
+
+- Local commit: b439c5f
+- 35 tests passing
+- case_05 exact public-label match
+- Deterministic identity resolution, scoped SQL evidence, temporal filtering, policy handling, step ordering, and CSV validation
+- No paid inference or multimodal extraction
+
+## Objective
+
+Expand the existing generalized pipeline to support all three deletion statuses and additional structured SQL evidence, without introducing speculative interpretations or overengineering.
+
+## Functional priorities
+
+1. Generalize SQL evidence parsing and state reconstruction across supported database schemas.
+2. Resolve historical identities and relevant resources without case-specific mappings.
+3. Preserve independent state for primary databases, replicas, and other distinct copies.
+4. Apply audit-time cutoffs consistently.
+5. Detect evidence-backed residual records and produce INCOMPLETE findings, remediation, and verification.
+6. Recognize explicitly non-deletion requests and produce NOT_APPLICABLE with exactly `[]`.
+7. Recognize COMPLETE only when available scoped evidence establishes the required compliant state.
+8. Preserve retained records and tombstones according to the supplied policies.
+9. Continue enforcing exact official step ordering and evidence requirements.
+
+Do not infer COMPLETE merely because no matching record was found.
+
+## Evaluation
+
+Expand the independent evaluator to run every public sample that the current implementation can process.
+
+Report:
+
+- Number processed out of 32
+- Number unsupported and why
+- Status accuracy
+- Exact case accuracy
+- Step, field, citation, and sequence accuracy
+- Regressions against previously correct cases
+
+Add independent synthetic fixtures for:
+
+- Non-deletion requests
+- COMPLETE with valid evidence
+- Historical identity aliases
+- Replica drift
+- Retained records
+- Audit cutoff boundaries
+- Conflicting evidence
+
+Never use sample labels inside the prediction pipeline.
+
+## Scope controls
+
+- No OCR or broad multimodal implementation yet.
+- No paid inference without approval.
+- No case-specific hardcoding.
+- Do not fabricate evidence or compliant states.
+- Do not weaken existing validators.
+- Preserve the working case_05 baseline.
+
+Investigate and resolve routine implementation issues autonomously.
+
+Stop for approval if a major architectural change or an unresolved correctness conflict is necessary.
+
+## Interview briefing
+
+Maintain a concise, five-minute briefing covering:
+
+- What new features work
+- What remains unsupported
+- Why COMPLETE requires positive evidence
+- How NOT_APPLICABLE protects against unauthorized deletion
+- How historical identity and replica state are handled
+- Three likely interview questions and concise answers
+- One important technical concept I should understand
+
+## Git and reporting
+
+Run all relevant tests and evaluations.
+
+Create a descriptive local commit after successful validation.
+
+Never push, publish, or submit.
+
+Return a concise technical-lead report with:
+
+1. Functional capabilities completed
+2. Unsupported features
+3. Tests and measured evaluation results
+4. Regression count
+5. Major risks
+6. Recommended next milestone
+7. Local commit hash
+
+Stop after this milestone. Do not begin multimodal extraction without approval.
+
+
+Agent Response Summary:
+Expanded the typed pipeline to relational SQL scopes and embedded JSON primary/replica schemas, temporal resource lineage, conditional policy facts, retained security records, stable-reference tombstones, analytics, connector and restore controls. Added explicit non-deletion handling and guarded COMPLETE requiring positive profile-absence proof and closed supported evidence scope; ambiguous intent, missing policy facts and conflicting evidence remain unsupported. All 58 tests pass, including all original 35 unchanged, and the independent evaluator attempts all 32 samples: 2 rows produced, 30 unsupported, 2/2 status accuracy, 1/2 exact cases, 6/8 expected step matches, 38/56 field matches, and zero baseline regressions with reproducible CSVs. Documented the new case_09 failure (two missing verification steps), updated README and interview briefing, and prepared one validated local commit. No labels entered predictor logic, dataset files changed, paid inference ran, or remote operations occurred.
+
+Actions:
+* Extended code/audit identity, models, SQL evidence and pipeline; added explicit policy predicates in policy.py.
+* Expanded code/evaluation/main.py with all-public-sample attempts, unsupported reasons, metrics, repeatability and baseline regression checks.
+* Added tests/test_structured.py (23 new tests); retained all original tests.
+* Updated README.md, docs/interview_briefing.md and discovery status; added docs/structured_evaluation.md.
+* Ran 58 tests, repeated full public benchmark, case_05 byte-hash regression, dataset/instruction diff checks and git diff --check; generated ignored artifacts only.
+* Prepared authorized local milestone commit; no push, publication or submission.
+
+Context:
+tool=Codex
+model=gpt-6-astra
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none

@@ -3,6 +3,8 @@ import argparse
 import csv
 import json
 import sys
+import hashlib
+import time
 from collections import Counter
 from dataclasses import asdict
 from pathlib import Path
@@ -32,6 +34,8 @@ def compare(prediction, expected):
         'all_steps_match': left == right,
         'evidence_references_match': [s['evidence_id'] for s in actual] == [s['evidence_id'] for s in expected['steps']],
         'step_ordering_matches': actual == expected['steps'],
+        'citation_field_matches': sum(a['evidence_id'] == b['evidence_id'] for a, b in zip(actual, expected['steps'])),
+        'citation_field_comparisons': max(len(actual), len(expected['steps'])),
         'step_matches': matched,
         'expected_steps': len(expected['steps']),
         'predicted_steps': len(actual),
@@ -40,17 +44,96 @@ def compare(prediction, expected):
     }
 
 
+def evaluate_all(inputs, labels_path, output_dir):
+    """Predict every request before opening labels; unsupported stays explicit."""
+    from audit.pipeline import audit
+    from audit.contract import write_output
+    output_dir.mkdir(parents=True, exist_ok=True)
+    results, unsupported, reproducible = [], {}, True
+    started = time.perf_counter()
+    for request in inputs.requests:
+        try:
+            result, _ = audit(request, inputs)
+            repeated, _ = audit(request, inputs)
+            reproducible = reproducible and result == repeated
+            validate_result(result, request, inputs.citation_times())
+            results.append(result)
+        except AuditError as exc:
+            unsupported[request.case_id] = str(exc)
+    elapsed = time.perf_counter() - started
+    selected = [r for r in inputs.requests if r.case_id not in unsupported]
+    prediction_path = output_dir / 'predictions.csv'
+    write_output(prediction_path, results, selected, inputs.citation_times())
+    # This is the sole label access; it is outside prediction and occurs after
+    # all selected requests have been attempted independently.
+    with labels_path.open(encoding='utf-8', newline='') as source:
+        labels = {row['case_id']: row for row in csv.DictReader(source)}
+    comparisons = {}
+    for result in results:
+        label = labels[result.case_id]
+        comparisons[result.case_id] = compare(result, {'status': label['deletion_status'], 'steps': json.loads(label['steps_json'])})
+    n = len(results)
+    steps_matched = sum(v['step_matches'] for v in comparisons.values())
+    predicted_steps = sum(v['predicted_steps'] for v in comparisons.values())
+    expected_steps = sum(v['expected_steps'] for v in comparisons.values())
+    fields_matched = sum(v['field_matches'] for v in comparisons.values())
+    fields_total = sum(v['field_comparisons'] for v in comparisons.values())
+    # An explicit benchmark baseline belongs to evaluation only.
+    requested_ids = {r.case_id for r in inputs.requests}
+    regressions = [cid for cid in ['case_05'] if cid in requested_ids and (cid not in comparisons or not
+                   (comparisons[cid]['deletion_status_matches'] and comparisons[cid]['step_ordering_matches']))]
+    ratio = lambda a, b: a / b if b else None
+    status_count = sum(v['deletion_status_matches'] for v in comparisons.values())
+    exact_count = sum(v['deletion_status_matches'] and v['step_ordering_matches'] for v in comparisons.values())
+    citation_count = sum(v['evidence_references_match'] for v in comparisons.values())
+    sequence_count = sum(v['step_ordering_matches'] for v in comparisons.values())
+    citation_fields = sum(v['citation_field_matches'] for v in comparisons.values())
+    citation_total = sum(v['citation_field_comparisons'] for v in comparisons.values())
+    report = {
+        'processed': n, 'total_public_samples': len(inputs.requests), 'unsupported': unsupported,
+        'all_processed_structurally_valid': True,
+        'status_matches': status_count, 'status_accuracy_processed': ratio(status_count, n),
+        'exact_case_matches': exact_count, 'exact_case_accuracy_processed': ratio(exact_count, n),
+        'exact_case_yield_all_samples': ratio(exact_count, len(inputs.requests)),
+        'step_matches': steps_matched, 'predicted_steps': predicted_steps, 'expected_steps_processed': expected_steps,
+        'step_precision': ratio(steps_matched, predicted_steps), 'step_recall': ratio(steps_matched, expected_steps),
+        'step_f1': ratio(2 * steps_matched, predicted_steps + expected_steps),
+        'field_matches': fields_matched, 'field_comparisons': fields_total, 'field_accuracy': ratio(fields_matched, fields_total),
+        'citation_field_matches': citation_fields, 'citation_field_comparisons': citation_total,
+        'citation_field_accuracy': ratio(citation_fields, citation_total),
+        'citation_sequence_matches': citation_count, 'citation_sequence_accuracy': ratio(citation_count, n),
+        'sequence_matches': sequence_count, 'sequence_accuracy': ratio(sequence_count, n),
+        'regressions': regressions, 'regression_count': len(regressions), 'reproducible_results': reproducible,
+        'elapsed_seconds_including_repeat': elapsed,
+        'prediction_sha256': hashlib.sha256(prediction_path.read_bytes()).hexdigest(),
+        'comparisons': comparisons,
+    }
+    (output_dir / 'benchmark.json').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
+    return report
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--prediction', required=True)
-    parser.add_argument('--repeat', required=True, help='Separately generated output to compare byte-for-byte')
-    parser.add_argument('--case-id', required=True)
+    parser.add_argument('--all-samples', action='store_true')
+    parser.add_argument('--output-dir', default='artifacts/structured-benchmark')
+    parser.add_argument('--prediction')
+    parser.add_argument('--repeat', help='Separately generated output to compare byte-for-byte')
+    parser.add_argument('--case-id')
     parser.add_argument('--labels', default='dataset/sample_output.csv')
     parser.add_argument('--requests', default='dataset/sample_deletion_requests.csv')
     parser.add_argument('--dataset', default='dataset')
     args = parser.parse_args()
     try:
         inputs = load_inputs(rooted(args.dataset), rooted(args.requests))
+        if args.all_samples:
+            output_dir = rooted(args.output_dir).resolve()
+            if output_dir.is_relative_to(rooted(args.dataset).resolve()):
+                raise AuditError('Benchmark outputs cannot overwrite dataset inputs')
+            report = evaluate_all(inputs, rooted(args.labels), output_dir)
+            print(json.dumps(report, indent=2, sort_keys=True))
+            return 0 if not report['regressions'] and report['reproducible_results'] else 1
+        if not (args.prediction and args.repeat and args.case_id):
+            raise AuditError('Use --all-samples or supply --prediction, --repeat and --case-id')
         request = next(r for r in inputs.requests if r.case_id == args.case_id)
         results = read_output(rooted(args.prediction))
         if len(results) != 1 or results[0].case_id != args.case_id:

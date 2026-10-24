@@ -41,20 +41,26 @@ def resolve_subject(email, cutoff, identities, history) -> Subject:
 
 
 def matches(row, subject):
-    for key in ('user_id', 'customer_reference', 'subject_reference'):
-        if row.get(key) == subject.user_id:
-            return True
+    """Exact typed keys only; nested SQL JSON documents retain their structure."""
+    stable = ('user_id', 'customer_reference', 'subject_reference')
+    refs = [row[k] for k in stable if isinstance(row.get(k), str) and row[k]]
+    direct = subject.user_id in refs
+    alias = False
     for kind, columns in {
-        'email': ('email', 'customer_email', 'owner_email', 'requester_email'),
+        'email': ('email', 'customer_email', 'owner_email', 'requester_email', 'uploaded_by', 'subject_selector', 'subject_reference'),
         'phone': ('phone', 'owner_phone', 'requester_phone'),
         'email_hash': ('email_hash',),
     }.items():
         for column in columns:
             value = row.get(column)
             if isinstance(value, str) and normalize(kind, value) in subject.aliases[kind]:
-                # A conflicting stable reference must not be silently merged.
-                refs = [row.get(k) for k in ('user_id', 'customer_reference', 'subject_reference')]
-                if any(ref and ref != subject.user_id for ref in refs):
-                    raise AuditError('Identifier matches a conflicting stable subject reference')
-                return True
-    return False
+                alias = True
+    # subject_reference may contain an email instead of an internal ID.
+    conflicts = [ref for ref in refs if ref != subject.user_id
+                 and normalize('email', ref) not in subject.aliases['email']]
+    if (direct or alias) and conflicts:
+        raise AuditError('Identifier matches a conflicting stable subject reference')
+    nested = any(matches(value, subject) for value in row.values() if isinstance(value, dict))
+    if nested and conflicts:
+        raise AuditError('Nested identity conflicts with enclosing stable subject reference')
+    return direct or alias or nested

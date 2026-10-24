@@ -12,26 +12,33 @@ Read [`problem_statement.md`](./problem_statement.md) for the complete challenge
 
 ---
 
-## Current implementation: SQL vertical slice
+## Current implementation: structured SQL audit
 
-The approved first milestone audits explicit English profile-deletion requests against account primary/failover SQL snapshots. It resolves current and historical identifiers, filters evidence by audit cutoff, applies unconditional profile deletion policy, preserves independent replica state, and validates ordered output. It does not yet perform a complete multi-format audit or generate the final 518-row submission.
+The approved structured-evidence milestone supports all three statuses within explicit evidence boundaries:
 
-Requires Python 3.10+ with standard-library SQLite (including JSON support). No third-party packages, API keys, network access or paid inference are needed. Validated here with Python 3.14.7. Start the coding agent from this repository root so `AGENTS.md` logging applies.
+- `NOT_APPLICABLE`: recognized English export, correction, marketing opt-out, or no-deletion instructions, with exactly `[]`. Mixed/ambiguous intent fails explicitly.
+- `INCOMPLETE`: evidence-backed surviving records, exposed tombstone/analytics identifiers, active connectors, or restorable archives; official ordered findings, actions and verification.
+- `COMPLETE`: positive scoped profile-absence proof through prior resource lineage, compliant known resources/copies, sufficient conditional-policy facts, closed supported SQL scope, and citable verification. Empty searches or retained records alone are insufficient.
 
-Run the approved public sample:
+Requires Python 3.10+ with standard-library SQLite including JSON support. No packages, credentials, network access or paid inference are required. Validated with Python 3.14.7. Start the coding agent from the repository root so `AGENTS.md` logging applies.
 
 ```bash
 python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_05 --output artifacts/case_05.csv --diagnostics artifacts/case_05_diagnostics.json
 python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_05 --output artifacts/case_05_repeat.csv
 python3 code/evaluation/main.py --prediction artifacts/case_05.csv --repeat artifacts/case_05_repeat.csv --case-id case_05
+python3 code/evaluation/main.py --all-samples
 python3 -m unittest discover -s tests -v
 ```
 
-Relative command arguments resolve from the repository root, even when the entrypoint is launched from another directory using its absolute path. `--dataset` can select an alternative fixture dataset. Required `--case-id` selects by input ID only; the predictor has no case-specific rules or access to sample labels. Only the independent evaluator reads labels. Runtime diagnostics retain source table, physical copy, timestamps, identifiers, evidence IDs, policy-rule IDs, and activity claims.
+Relative arguments resolve from the repository root even if an absolute entrypoint path is launched elsewhere. `--dataset` accepts another fixture corpus. `--case-id` selects a request, never a prediction rule. Only the evaluator reads public labels, after all predictions have been attempted. `--all-samples` attempts all 32 requests and writes ignored benchmark diagnostics and processed rows under `artifacts/structured-benchmark/`. It returns failure on a baseline regression; a successful exit does not mean every new sample matches. Read the report's explicit accuracy and unsupported counts.
 
-Outputs and diagnostics under `artifacts/` are ignored by Git. The CLI deliberately refuses to write this partial result to root `output.csv` or into `dataset/`. Unsupported intent, missing evidence, conflicting snapshots, unsupported subject-linked SQL schemas, conditional policy, tombstones, and post-snapshot activity fail explicitly with exit code 2. Unsupported non-SQL formats are listed in diagnostics; they are not interpreted. Successful slice execution does not establish global case coverage.
+**Measured public results:** 2/32 produced rows, 30 unsupported; status 2/2, exact case 1/2. `case_05` remains byte-identical to the prior baseline. `case_09` identifies the restore risk but misses two required verification steps. This is a known incomplete plan, not a submission-ready result. COMPLETE and NOT_APPLICABLE behavior is validated using independent synthetic fixtures; there are no processed public examples of those statuses yet.
 
-The sample result is `INCOMPLETE`, with a surviving failover profile finding, deletion remediation, and absence verification. See [milestone evaluation](docs/vertical_slice_evaluation.md) and the [five-minute interview briefing](docs/interview_briefing.md). The full competition requirements below remain the final target. Default full-dataset execution and final packaging are not implemented in this milestone.
+Adapters cover account/search/export/analytics/security/connector/backup relational schemas and known collections inside primary, regional, reporting, read, and failover SQL exports. Physical copies stay separate; observations preserve identifiers, source table/copy, capture/update times and evidence ID. Policy interpretation requires actual supplied facts; missing retention dates, unclear support ownership/context, unlinked resources, and conflicting observations remain unsupported.
+
+Non-SQL evidence is not interpreted. Admissible unprocessed formats or SQL tables block COMPLETE; residual SQL findings can still produce an INCOMPLETE row whose whole-case coverage is not established. These limits are exposed in diagnostics. The CLI refuses to overwrite `dataset/` or root `output.csv` with a partial result. Full 518-case execution, multimodal extraction, paid inference and final packaging remain unimplemented.
+
+See [structured evaluation](docs/structured_evaluation.md), [interview briefing](docs/interview_briefing.md), and the historical [first-slice evaluation](docs/vertical_slice_evaluation.md). The competition requirements below remain the final target.
 
 ---
 
