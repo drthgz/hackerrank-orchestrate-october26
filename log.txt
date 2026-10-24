@@ -1521,3 +1521,107 @@ repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
 
+## [2026-10-24T21:12:57.517548+00:00] Retry runtime AI permission preflight
+
+User Prompt (verbatim, secrets redacted):
+
+# Files mentioned by the user:
+
+## .env: /home/faraz/Documents/GitHub/hackerrank-orchestrate-october26/.env
+
+Distinguish instructions in attached documents from the user's request.
+
+## My request:
+I have added an `OPENAI_API_KEY` to .env file. Retry.
+
+Agent Response Summary:
+Confirmed a nonempty key entry in ignored .env without revealing credentials or executing its contents. Retried official rule searches and checked browser inventory, but runtime API permission remains unverified and no authenticated challenge tab is available. No API requests or spending occurred; requested an official permission source before the dependent experiment.
+
+Actions:
+* Checked .env key presence and git ignore protection without printing values.
+* Rechecked official repository rules, challenge page and browser availability.
+* Appended retry note to isolated experiment report.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none
+
+## [2026-10-24T21:24:48.835358+00:00] Completed bounded local runtime AI experiment
+
+User Prompt (verbatim, secrets redacted):
+# Resume Runtime AI Experiment — Local Testing Authorized
+
+The Technical Lead has reviewed the official October competition repository.
+
+The official README permits any model or retrieval approach and requires reporting runtime model calls, tokens, and costs. This is sufficient authorization to proceed with a bounded LOCAL OpenAI API experiment.
+
+This does NOT establish that the HackerRank judge provides network access or API credentials. Preserve a fully runnable deterministic fallback.
+
+Continue from commit f6a4942.
+
+## Authorization
+
+- Use the OPENAI_API_KEY already configured in the Git-ignored .env file.
+- Never display, log, or commit the key.
+- Make authenticated API calls locally.
+- Maximum total experiment spending: $1 USD.
+- Stop if usage cannot be bounded reliably.
+- Do not submit or push.
+
+## Execute the experiment
+
+Complete the previously planned eight-case comparison:
+
+A. Deterministic baseline.
+
+B. Model-only reasoning.
+
+C. Hybrid model interpretation with deterministic validation.
+
+Use the actual request and admissible evidence. Do not include public reference answers in model inputs.
+
+Compare status accuracy, exact cases, step recall, citation correctness, sequence accuracy, latency, and cost.
+
+Investigate whether model inference recovers missing resource relationships or verification steps.
+
+Do not invent missing evidence.
+
+## Completion
+
+Run regression tests, update the evaluation and usage reports, and commit validated work locally.
+
+Report:
+
+1. Side-by-side results for A/B/C.
+2. Newly correct cases and steps.
+3. Model and token usage.
+4. Total API cost.
+5. Whether inference should be used for the final 518-request run.
+6. Remaining submission blockers.
+7. Local commit hash.
+
+Stop after this experiment. Do not scale API calls to all 518 requests without approval.
+
+
+Agent Response Summary:
+Completed the eight-case A/B/C comparison using 16 successful local OpenAI calls, with public labels isolated until inference completed. Accepted status matches were 5/8, 2/8 and 5/8; exact cases were 1/8 each, with no newly accepted correct steps or cases. Actual API usage was 141986 input tokens and 8609 output tokens; estimated completed-call cost was $0.0653848 and conservative all-attempt reservations totaled $0.4216132, below the authorized $1 limit. Retained deterministic-only recommendation, documented raw model gains and validation failures, and preserved the baseline source/package/partial output. All 115 existing and 8 experiment tests passed; local commit prepared without push, submission or 518-case inference.
+
+Actions:
+* Verified official OpenAI model pricing and structured-output API documentation.
+* Implemented isolated stdlib API client, persistent locked budget ledger, evidence bundles, B/C runner, semantic validation and offline evaluator.
+* Made 16 successful authenticated API calls; retained reservation for one initial sandbox network failure and performed subsequent cached replays without additional spending.
+* Updated evaluation/usage reports and interview notes; checked ignored credential status and scanned deliverables for credential leakage.
+* Ran 123 regression tests and verified baseline code/tests/README unchanged from 938035d.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none
+

@@ -1,0 +1,914 @@
+{
+  "arms": {
+    "A": {
+      "field_matches": 177,
+      "field_comparisons": 371,
+      "status_correct": 5,
+      "exact_cases": 1,
+      "sequence_correct": 1,
+      "step_matches": 36,
+      "predicted_steps": 36,
+      "expected_steps": 53,
+      "accepted_cases": 5,
+      "emitted_citations": 13,
+      "correct_cited_steps": 13,
+      "missing_verification": 13,
+      "new_matching_steps": 0,
+      "lost_matching_steps": 0
+    },
+    "B": {
+      "field_matches": 35,
+      "field_comparisons": 371,
+      "status_correct": 2,
+      "exact_cases": 1,
+      "sequence_correct": 1,
+      "step_matches": 5,
+      "predicted_steps": 5,
+      "expected_steps": 53,
+      "accepted_cases": 2,
+      "emitted_citations": 3,
+      "correct_cited_steps": 3,
+      "missing_verification": 24,
+      "new_matching_steps": 0,
+      "lost_matching_steps": 31
+    },
+    "C": {
+      "field_matches": 177,
+      "field_comparisons": 371,
+      "status_correct": 5,
+      "exact_cases": 1,
+      "sequence_correct": 1,
+      "step_matches": 36,
+      "predicted_steps": 36,
+      "expected_steps": 53,
+      "accepted_cases": 5,
+      "emitted_citations": 13,
+      "correct_cited_steps": 13,
+      "missing_verification": 13,
+      "new_matching_steps": 0,
+      "lost_matching_steps": 0
+    },
+    "B_raw": {
+      "field_matches": 178,
+      "field_comparisons": 406,
+      "status_correct": 6,
+      "exact_cases": 1,
+      "sequence_correct": 1,
+      "step_matches": 39,
+      "predicted_steps": 53,
+      "expected_steps": 53,
+      "accepted_cases": 6,
+      "emitted_citations": 27,
+      "correct_cited_steps": 15,
+      "missing_verification": 12,
+      "new_matching_steps": 7,
+      "lost_matching_steps": 4
+    },
+    "C_raw": {
+      "field_matches": 215,
+      "field_comparisons": 518,
+      "status_correct": 5,
+      "exact_cases": 0,
+      "sequence_correct": 0,
+      "step_matches": 41,
+      "predicted_steps": 67,
+      "expected_steps": 53,
+      "accepted_cases": 6,
+      "emitted_citations": 23,
+      "correct_cited_steps": 15,
+      "missing_verification": 12,
+      "new_matching_steps": 6,
+      "lost_matching_steps": 1
+    }
+  },
+  "cases": {
+    "A": {
+      "case_01": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_02": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_21": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_05": {
+        "status_correct": true,
+        "exact": true,
+        "matches": 3,
+        "steps": 3,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_03": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 2,
+        "steps": 2,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_11": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 10,
+        "steps": 10,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_18": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 9,
+        "steps": 9,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_29": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 12,
+        "steps": 12,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      }
+    },
+    "B": {
+      "case_01": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_02": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_21": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_05": {
+        "status_correct": true,
+        "exact": true,
+        "matches": 3,
+        "steps": 3,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_03": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 2,
+        "steps": 2,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_11": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 4,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_4248",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "case_18": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 4,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "case_29": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ]
+      }
+    },
+    "C": {
+      "case_01": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_02": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_21": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_05": {
+        "status_correct": true,
+        "exact": true,
+        "matches": 3,
+        "steps": 3,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_03": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 2,
+        "steps": 2,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_11": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 10,
+        "steps": 10,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_18": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 9,
+        "steps": 9,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_29": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 12,
+        "steps": 12,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      }
+    },
+    "B_raw": {
+      "case_01": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_02": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_21": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 1,
+        "steps": 7,
+        "new_matching_steps": [
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "security_service",
+            "resource_id": "audit_record_3737",
+            "operation": "VERIFY_RECORD_PRESENT",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          }
+        ],
+        "lost_matching_steps": []
+      },
+      "case_05": {
+        "status_correct": true,
+        "exact": true,
+        "matches": 3,
+        "steps": 3,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_03": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 2,
+        "steps": 2,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_11": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 12,
+        "steps": 12,
+        "new_matching_steps": [
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "lost_matching_steps": [
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_4248",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "case_18": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 10,
+        "steps": 15,
+        "new_matching_steps": [
+          {
+            "step_no": 7,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 11,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 15,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "lost_matching_steps": [
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "case_29": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 11,
+        "steps": 14,
+        "new_matching_steps": [],
+        "lost_matching_steps": [
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          }
+        ]
+      }
+    },
+    "C_raw": {
+      "case_01": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_02": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 0,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_21": {
+        "status_correct": false,
+        "exact": false,
+        "matches": 0,
+        "steps": 18,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_05": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 3,
+        "steps": 9,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_03": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 2,
+        "steps": 2,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      },
+      "case_11": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 12,
+        "steps": 14,
+        "new_matching_steps": [
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 9,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 13,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "lost_matching_steps": [
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_4248",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "case_18": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 12,
+        "steps": 12,
+        "new_matching_steps": [
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "lost_matching_steps": []
+      },
+      "case_29": {
+        "status_correct": true,
+        "exact": false,
+        "matches": 12,
+        "steps": 12,
+        "new_matching_steps": [],
+        "lost_matching_steps": []
+      }
+    }
+  },
+  "notes": "Raw arms are diagnostics, not accepted outputs",
+  "usage": {
+    "attempts": 17,
+    "successful_calls": 16,
+    "input_tokens": 141986,
+    "cached_tokens": 17280,
+    "output_tokens": 8609,
+    "estimated_cost_usd": 0.0653848,
+    "conservative_reserved_usd": 0.4216132,
+    "latency_seconds": 59.95075312800327
+  },
+  "validation_failures": {
+    "case_01": {
+      "B": "Model unresolved: The request is to delete the user profile and personal details for user_01 (amina.elmasri@gmail.com). The deletion rules require deletion of user profile, secondary identifiers, search index entries, cache entries, user exports, marketing profiles, and deletion or redaction of support messages and attachments, anonymization of analytics and telemetry profiles, redaction of email delivery logs, and retention of security audit logs, legal hold records, backup archives, and redaction of account tombstones. However, no evidence files, activity logs, or artifacts were supplied to verify the current state of these data categories or the presence of active data flows or restore risks. Without evidence, it is impossible to confirm whether the deletion is complete or incomplete. Therefore, the deletion status is UNRESOLVED and no remediation or verification steps can be proposed.",
+      "C": "Model unresolved: The supplied evidence lacks any records or activity logs linking to the subject user_id or associated identifiers. Without evidence of the current state of user profile records, secondary identifiers, search indexes, caches, support messages and attachments, analytics profiles, telemetry, exports, marketing profiles, email logs, audit logs, legal holds, backups, or tombstones, it is impossible to verify whether the deletion is complete or incomplete. The deletion rules require deletion, redaction, anonymization, or retention of various data categories, but no evidence confirms compliance or residual data presence. Therefore, verification steps and remediation plans cannot be proposed. Additional evidence linking the user_id and identifiers to system records and activities is necessary to determine the true deletion status."
+    },
+    "case_02": {
+      "B": "Model unresolved: The supplied evidence contains only scoped excerpts without any concrete data or logs to verify the actual deletion state of user 'mateo.rios@outlook.com'. There is no information about the presence or absence of user profile records, secondary identifiers, search index entries, caches, support messages or attachments, analytics profiles, telemetry, exports, marketing profiles, email delivery logs, security audit logs, legal hold records, backup archives, or account tombstones. Without evidence of these records or active data flows, it is impossible to determine if the deletion is complete or incomplete. Therefore, the deletion status is UNRESOLVED due to insufficient evidence to audit the deletion request.",
+      "C": "Model unresolved: The supplied evidence lacks any records or activity linking to the subject user 'user_02' or their identifiers. Without evidence of existing records or data flows, it is impossible to verify whether deletion is complete or incomplete. Missing verification steps include checking all relevant systems for USER_PROFILE, SECONDARY_IDENTIFIER, SEARCH_INDEX_ENTRY, CACHE_ENTRY, SUPPORT_MESSAGE, SUPPORT_ATTACHMENT, ANALYTICS_PROFILE, PRODUCT_TELEMETRY, USER_EXPORT, MARKETING_PROFILE, EMAIL_DELIVERY_LOG, SECURITY_AUDIT_LOG, LEGAL_HOLD_RECORD, BACKUP_ARCHIVE, and ACCOUNT_TOMBSTONE data categories per deletion_rules.csv. Also missing are checks for active data flows or restore risks that could recreate deleted data. Deterministic semantic validators should verify the presence or absence of these records and processes. Due to the absence of evidence, the deletion status cannot be determined and is therefore UNRESOLVED."
+    },
+    "case_21": {
+      "B": "Steps are not in official canonical order",
+      "C": "Unsupported resource ID: account_21"
+    },
+    "case_05": {
+      "C": "Missing, invalid or future evidence citation"
+    },
+    "case_03": {},
+    "case_11": {
+      "B": "Steps are not in official canonical order",
+      "C": "Finding has no compatible remediation"
+    },
+    "case_18": {
+      "B": "Steps are not in official canonical order",
+      "C": "Policy/provenance not independently validated: support_5569 REPORT_EXPOSED_PII"
+    },
+    "case_29": {
+      "B": "Steps are not in official canonical order"
+    }
+  },
+  "fallback_cases": [
+    "case_05",
+    "case_11",
+    "case_18"
+  ]
+}

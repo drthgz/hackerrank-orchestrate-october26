@@ -86,3 +86,22 @@ The baseline script has no network code. It imports the existing audit pipeline
 without changes and uses identical request cutoffs. B/C evidence parity remains
 unverified until those arms exist. Dollar amounts here cover runtime API usage
 only; development-assistant usage is separate and not metered by this script.
+
+
+## Retry — credential supplied
+
+Confirmed a nonempty OPENAI_API_KEY entry in ignored .env without displaying
+its value or executing file contents. Authentication has not been tested.
+Rechecked the official repository rules and problem statement and searched the
+official event pages. No explicit runtime external API permission was found;
+the challenge page remains inaccessible. No authenticated browser tab is
+available. Credential prerequisite is resolved; rules prerequisite is not.
+No runtime API calls, input/output tokens, model latency or cost incurred.
+The $1 authorization remains unused. No predictions or baseline metrics changed.
+
+
+## Superseded by completed experiment
+
+Local testing was subsequently explicitly authorized. See measured_report.md
+for completed A/B/C results, actual token usage and estimated costs. Earlier
+preflight notes above are historical.

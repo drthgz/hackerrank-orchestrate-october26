@@ -1,0 +1,2666 @@
+{
+  "case_01": {
+    "A": {
+      "error": "No supported evidence resource lineage links to subject"
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "UNRESOLVED",
+        "steps": [],
+        "reasoning": "The request is to delete the user profile and personal details for user_01 (amina.elmasri@gmail.com). The deletion rules require deletion of user profile, secondary identifiers, search index entries, cache entries, user exports, marketing profiles, and deletion or redaction of support messages and attachments, anonymization of analytics and telemetry profiles, redaction of email delivery logs, and retention of security audit logs, legal hold records, backup archives, and redaction of account tombstones. However, no evidence files, activity logs, or artifacts were supplied to verify the current state of these data categories or the presence of active data flows or restore risks. Without evidence, it is impossible to confirm whether the deletion is complete or incomplete. Therefore, the deletion status is UNRESOLVED and no remediation or verification steps can be proposed."
+      },
+      "validation_failure": "Model unresolved: The request is to delete the user profile and personal details for user_01 (amina.elmasri@gmail.com). The deletion rules require deletion of user profile, secondary identifiers, search index entries, cache entries, user exports, marketing profiles, and deletion or redaction of support messages and attachments, anonymization of analytics and telemetry profiles, redaction of email delivery logs, and retention of security audit logs, legal hold records, backup archives, and redaction of account tombstones. However, no evidence files, activity logs, or artifacts were supplied to verify the current state of these data categories or the presence of active data flows or restore risks. Without evidence, it is impossible to confirm whether the deletion is complete or incomplete. Therefore, the deletion status is UNRESOLVED and no remediation or verification steps can be proposed."
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "UNRESOLVED",
+        "steps": [],
+        "reasoning": "The supplied evidence lacks any records or activity logs linking to the subject user_id or associated identifiers. Without evidence of the current state of user profile records, secondary identifiers, search indexes, caches, support messages and attachments, analytics profiles, telemetry, exports, marketing profiles, email logs, audit logs, legal holds, backups, or tombstones, it is impossible to verify whether the deletion is complete or incomplete. The deletion rules require deletion, redaction, anonymization, or retention of various data categories, but no evidence confirms compliance or residual data presence. Therefore, verification steps and remediation plans cannot be proposed. Additional evidence linking the user_id and identifiers to system records and activities is necessary to determine the true deletion status."
+      },
+      "validation_failure": "Model unresolved: The supplied evidence lacks any records or activity logs linking to the subject user_id or associated identifiers. Without evidence of the current state of user profile records, secondary identifiers, search indexes, caches, support messages and attachments, analytics profiles, telemetry, exports, marketing profiles, email logs, audit logs, legal holds, backups, or tombstones, it is impossible to verify whether the deletion is complete or incomplete. The deletion rules require deletion, redaction, anonymization, or retention of various data categories, but no evidence confirms compliance or residual data presence. Therefore, verification steps and remediation plans cannot be proposed. Additional evidence linking the user_id and identifiers to system records and activities is necessary to determine the true deletion status."
+    }
+  },
+  "case_02": {
+    "A": {
+      "error": "No supported evidence resource lineage links to subject"
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "UNRESOLVED",
+        "steps": [],
+        "reasoning": "The supplied evidence contains only scoped excerpts without any concrete data or logs to verify the actual deletion state of user 'mateo.rios@outlook.com'. There is no information about the presence or absence of user profile records, secondary identifiers, search index entries, caches, support messages or attachments, analytics profiles, telemetry, exports, marketing profiles, email delivery logs, security audit logs, legal hold records, backup archives, or account tombstones. Without evidence of these records or active data flows, it is impossible to determine if the deletion is complete or incomplete. Therefore, the deletion status is UNRESOLVED due to insufficient evidence to audit the deletion request."
+      },
+      "validation_failure": "Model unresolved: The supplied evidence contains only scoped excerpts without any concrete data or logs to verify the actual deletion state of user 'mateo.rios@outlook.com'. There is no information about the presence or absence of user profile records, secondary identifiers, search index entries, caches, support messages or attachments, analytics profiles, telemetry, exports, marketing profiles, email delivery logs, security audit logs, legal hold records, backup archives, or account tombstones. Without evidence of these records or active data flows, it is impossible to determine if the deletion is complete or incomplete. Therefore, the deletion status is UNRESOLVED due to insufficient evidence to audit the deletion request."
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "UNRESOLVED",
+        "steps": [],
+        "reasoning": "The supplied evidence lacks any records or activity linking to the subject user 'user_02' or their identifiers. Without evidence of existing records or data flows, it is impossible to verify whether deletion is complete or incomplete. Missing verification steps include checking all relevant systems for USER_PROFILE, SECONDARY_IDENTIFIER, SEARCH_INDEX_ENTRY, CACHE_ENTRY, SUPPORT_MESSAGE, SUPPORT_ATTACHMENT, ANALYTICS_PROFILE, PRODUCT_TELEMETRY, USER_EXPORT, MARKETING_PROFILE, EMAIL_DELIVERY_LOG, SECURITY_AUDIT_LOG, LEGAL_HOLD_RECORD, BACKUP_ARCHIVE, and ACCOUNT_TOMBSTONE data categories per deletion_rules.csv. Also missing are checks for active data flows or restore risks that could recreate deleted data. Deterministic semantic validators should verify the presence or absence of these records and processes. Due to the absence of evidence, the deletion status cannot be determined and is therefore UNRESOLVED."
+      },
+      "validation_failure": "Model unresolved: The supplied evidence lacks any records or activity linking to the subject user 'user_02' or their identifiers. Without evidence of existing records or data flows, it is impossible to verify whether deletion is complete or incomplete. Missing verification steps include checking all relevant systems for USER_PROFILE, SECONDARY_IDENTIFIER, SEARCH_INDEX_ENTRY, CACHE_ENTRY, SUPPORT_MESSAGE, SUPPORT_ATTACHMENT, ANALYTICS_PROFILE, PRODUCT_TELEMETRY, USER_EXPORT, MARKETING_PROFILE, EMAIL_DELIVERY_LOG, SECURITY_AUDIT_LOG, LEGAL_HOLD_RECORD, BACKUP_ARCHIVE, and ACCOUNT_TOMBSTONE data categories per deletion_rules.csv. Also missing are checks for active data flows or restore risks that could recreate deleted data. Deterministic semantic validators should verify the presence or absence of these records and processes. Due to the absence of evidence, the deletion status cannot be determined and is therefore UNRESOLVED."
+    }
+  },
+  "case_21": {
+    "A": {
+      "error": "Complete account deletion requires positive scoped profile-absence evidence"
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "COMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "user_21",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 2,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "user_21",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 3,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "user_21",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 4,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "user_21",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 5,
+            "phase": "VERIFICATION",
+            "system_id": "export_service",
+            "resource_id": "user_21",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 6,
+            "phase": "VERIFICATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_5626",
+            "operation": "VERIFY_RESTORE_BLOCKED",
+            "state": "BLOCKED",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "security_service",
+            "resource_id": "audit_record_3737",
+            "operation": "VERIFY_RECORD_PRESENT",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          }
+        ],
+        "reasoning": "The user_id user_21 corresponds to the deletion request email amara-okeke@proton.me. Evidence from the account_service and search_service snapshots at 2026-07-03 show no present user profile or search index entries for user_21, confirming deletion of direct user profile data as required by rules 01 and 03. Analytics platform records for user_21 are anonymized, consistent with rule 07. Support platform messages referencing user_21 are redacted per rule 05. User exports are absent, complying with rule 09. Backup restore entries exist but restore is blocked, satisfying rule 14. Security audit logs for user_21 are retained as required by rule 12, with a valid retention period and present record audit_record_3737 at audit time 2026-09-15. No active data flows or restore risks remain. Therefore, all deletion rules are met, no data flows can recreate data, and retained records are properly redacted or anonymized. The deletion is complete."
+      },
+      "validation_failure": "Steps are not in official canonical order"
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "account_service",
+            "resource_id": "account_21",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_21",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_21",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_1360",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 5,
+            "phase": "FINDING",
+            "system_id": "backup_service",
+            "resource_id": "backup_5626",
+            "operation": "REPORT_RESTORE_RISK",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 6,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_1791",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_21"
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "account_service",
+            "resource_id": "account_21",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_21",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_21",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_1360",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "REMEDIATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_5626",
+            "operation": "BLOCK_RESTORE",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_1791",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 13,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_21",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 14,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_21",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 15,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_21",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 16,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_1360",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 17,
+            "phase": "VERIFICATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_5626",
+            "operation": "VERIFY_RESTORE_BLOCKED",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 18,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_1791",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The user 'amara-okeke@proton.me' (user_21) requested account deletion with reported status COMPLETE. However, evidence from the snapshot and logs (evidence_81, evidence_21) shows residual records in multiple systems: account_service still has an account record; search_service retains search documents; analytics_platform retains an analytics profile with exposed PII; support_platform has support messages with exposed PII; backup_service has a backup archive that can restore data; integration_service has an active data flow that can recreate data. According to deletion_rules, user profile and secondary identifiers must be deleted, analytics and telemetry anonymized, support messages redacted, backups retained but restore blocked, and active data flows disabled. Therefore, the deletion is INCOMPLETE. The remediation steps include deleting or anonymizing these records, blocking restore, and disabling data flows, followed by verification steps to confirm these actions. Positive scoped profile-absence evidence is missing, so completion cannot be confirmed."
+      },
+      "normalized_proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "account_service",
+            "resource_id": "account_21",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_21",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_21",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_1360",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 5,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_1791",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_21"
+          },
+          {
+            "step_no": 6,
+            "phase": "FINDING",
+            "system_id": "backup_service",
+            "resource_id": "backup_5626",
+            "operation": "REPORT_RESTORE_RISK",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_81"
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_1791",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_5626",
+            "operation": "BLOCK_RESTORE",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "REMEDIATION",
+            "system_id": "account_service",
+            "resource_id": "account_21",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_21",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_1360",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_21",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 13,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_21",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 14,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_21",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 15,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_1360",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 16,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_21",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 17,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_1791",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 18,
+            "phase": "VERIFICATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_5626",
+            "operation": "VERIFY_RESTORE_BLOCKED",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The user 'amara-okeke@proton.me' (user_21) requested account deletion with reported status COMPLETE. However, evidence from the snapshot and logs (evidence_81, evidence_21) shows residual records in multiple systems: account_service still has an account record; search_service retains search documents; analytics_platform retains an analytics profile with exposed PII; support_platform has support messages with exposed PII; backup_service has a backup archive that can restore data; integration_service has an active data flow that can recreate data. According to deletion_rules, user profile and secondary identifiers must be deleted, analytics and telemetry anonymized, support messages redacted, backups retained but restore blocked, and active data flows disabled. Therefore, the deletion is INCOMPLETE. The remediation steps include deleting or anonymizing these records, blocking restore, and disabling data flows, followed by verification steps to confirm these actions. Positive scoped profile-absence evidence is missing, so completion cannot be confirmed."
+      },
+      "validation_failure": "Unsupported resource ID: account_21"
+    }
+  },
+  "case_05": {
+    "A": {
+      "case_id": "case_05",
+      "deletion_status": "INCOMPLETE",
+      "steps": [
+        {
+          "step_no": 1,
+          "phase": "FINDING",
+          "system_id": "account_service",
+          "resource_id": "account_005",
+          "operation": "REPORT_REMAINING_RECORD",
+          "state": "PRESENT",
+          "evidence_id": "evidence_54"
+        },
+        {
+          "step_no": 2,
+          "phase": "REMEDIATION",
+          "system_id": "account_service",
+          "resource_id": "account_005",
+          "operation": "DELETE_RECORD",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 3,
+          "phase": "VERIFICATION",
+          "system_id": "account_service",
+          "resource_id": "account_005",
+          "operation": "VERIFY_RECORD_ABSENT",
+          "state": "ABSENT",
+          "evidence_id": ""
+        }
+      ]
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_54"
+          },
+          {
+            "step_no": 2,
+            "phase": "REMEDIATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 3,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The supplied evidence shows that the user profile for user_05 (Leila Haddad) still exists in the failover replica database as of 2026-09-02, with active account status and full identifiers including email and phone. The primary database does not have this record, but the failover replica is a relevant copy that must be deleted according to rule_01 (USER_PROFILE: DELETE always). Since the deletion request was reported as COMPLETE but the failover replica still contains the full user profile, the deletion is incomplete. The remediation requires deleting the record from the failover replica and verifying its absence. No evidence was supplied about other data categories or active data flows, so further findings cannot be made. The deletion status is therefore INCOMPLETE."
+      },
+      "accepted": {
+        "case_id": "case_05",
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_54"
+          },
+          {
+            "step_no": 2,
+            "phase": "REMEDIATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 3,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          }
+        ]
+      }
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_54"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "sync_service",
+            "resource_id": "sync_job_001",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "backup_service",
+            "resource_id": "backup_2026_09_01",
+            "operation": "REPORT_RESTORE_RISK",
+            "state": "ACTIVE",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 4,
+            "phase": "REMEDIATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "sync_service",
+            "resource_id": "sync_job_001",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_2026_09_01",
+            "operation": "BLOCK_RESTORE",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "VERIFICATION",
+            "system_id": "sync_service",
+            "resource_id": "sync_job_001",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_2026_09_01",
+            "operation": "VERIFY_RESTORE_BLOCKED",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The supplied evidence shows that the user profile record for user_05 (account_005) remains present in the failover replica database as of 2026-09-02, despite the primary database record being deleted. This indicates incomplete deletion. Given the known issue of synchronization jobs recreating deleted data, an active sync job likely replicates this record back into the failover replica. Additionally, backup archives from before deletion may restore the data unless blocked. Therefore, findings include the present record in failover replica, an active data flow (sync job) that can recreate the data, and a restore risk from backups. Remediation requires deleting the record from failover replica, disabling the sync job, and blocking restore from backups. Verification steps confirm the absence of the record, the disabled state of the sync job, and the blocked restore path. This plan aligns with deletion rules requiring deletion of user profiles and prevention of data recreation. No evidence was supplied for sync or backup systems, so remediation and verification steps for these are proposed without evidence IDs."
+      },
+      "normalized_proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_54"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "sync_service",
+            "resource_id": "sync_job_001",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "backup_service",
+            "resource_id": "backup_2026_09_01",
+            "operation": "REPORT_RESTORE_RISK",
+            "state": "ACTIVE",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 4,
+            "phase": "REMEDIATION",
+            "system_id": "sync_service",
+            "resource_id": "sync_job_001",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_2026_09_01",
+            "operation": "BLOCK_RESTORE",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "VERIFICATION",
+            "system_id": "sync_service",
+            "resource_id": "sync_job_001",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "backup_service",
+            "resource_id": "backup_2026_09_01",
+            "operation": "VERIFY_RESTORE_BLOCKED",
+            "state": "BLOCKED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The supplied evidence shows that the user profile record for user_05 (account_005) remains present in the failover replica database as of 2026-09-02, despite the primary database record being deleted. This indicates incomplete deletion. Given the known issue of synchronization jobs recreating deleted data, an active sync job likely replicates this record back into the failover replica. Additionally, backup archives from before deletion may restore the data unless blocked. Therefore, findings include the present record in failover replica, an active data flow (sync job) that can recreate the data, and a restore risk from backups. Remediation requires deleting the record from failover replica, disabling the sync job, and blocking restore from backups. Verification steps confirm the absence of the record, the disabled state of the sync job, and the blocked restore path. This plan aligns with deletion rules requiring deletion of user profiles and prevention of data recreation. No evidence was supplied for sync or backup systems, so remediation and verification steps for these are proposed without evidence IDs."
+      },
+      "validation_failure": "Missing, invalid or future evidence citation",
+      "accepted": {
+        "case_id": "case_05",
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_54"
+          },
+          {
+            "step_no": 2,
+            "phase": "REMEDIATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 3,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_005",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "fallback": "Existing deterministic pipeline; model proposal rejected"
+    }
+  },
+  "case_03": {
+    "A": {
+      "case_id": "case_03",
+      "deletion_status": "COMPLETE",
+      "steps": [
+        {
+          "step_no": 1,
+          "phase": "VERIFICATION",
+          "system_id": "account_service",
+          "resource_id": "account_7566",
+          "operation": "VERIFY_RECORD_ABSENT",
+          "state": "ABSENT",
+          "evidence_id": "evidence_94"
+        },
+        {
+          "step_no": 2,
+          "phase": "VERIFICATION",
+          "system_id": "security_service",
+          "resource_id": "audit_record_2016",
+          "operation": "VERIFY_RECORD_PRESENT",
+          "state": "PRESENT",
+          "evidence_id": "evidence_94"
+        }
+      ]
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "COMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_7566",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "VERIFICATION",
+            "system_id": "security_service",
+            "resource_id": "audit_record_2016",
+            "operation": "VERIFY_RECORD_PRESENT",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          }
+        ],
+        "reasoning": "The user with email l.fontaine46@yahoo.com and user_id user_43 requested deletion. Evidence from account_service log (evidence_94) shows no USER_PROFILE record present (account_7566) at audit time, indicating deletion of primary profile as required by rule_01. The security audit log record (audit_record_2016) is present and retained as required by rule_12 due to retention period, which is compliant. No findings of remaining PII or active data flows were observed in the supplied evidence. Therefore, deletion is complete with verification steps confirming absence of user profile and presence of retained audit log."
+      },
+      "accepted": {
+        "case_id": "case_03",
+        "deletion_status": "COMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_7566",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "VERIFICATION",
+            "system_id": "security_service",
+            "resource_id": "audit_record_2016",
+            "operation": "VERIFY_RECORD_PRESENT",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          }
+        ]
+      }
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "COMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_7566",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "VERIFICATION",
+            "system_id": "security_service",
+            "resource_id": "audit_record_2016",
+            "operation": "VERIFY_RECORD_PRESENT",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          }
+        ],
+        "reasoning": "The account_service record account_7566 for user_43 is confirmed absent at audit time, satisfying the DELETE requirement for USER_PROFILE data. The security_service audit_record_2016 is present and retained as required by SECURITY_AUDIT_LOG retention rules. No evidence indicates remaining exposed PII or active data flows related to user_43. The supplied evidence supports the reported deletion status as COMPLETE. Additional verification steps for secondary identifiers, search indexes, analytics profiles, support messages, backups, and data flows are recommended but cannot be confirmed due to limited evidence. However, given the absence of the primary user profile and presence of required audit logs, the deletion is considered complete under the rules."
+      },
+      "normalized_proposal": {
+        "deletion_status": "COMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_7566",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "VERIFICATION",
+            "system_id": "security_service",
+            "resource_id": "audit_record_2016",
+            "operation": "VERIFY_RECORD_PRESENT",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          }
+        ],
+        "reasoning": "The account_service record account_7566 for user_43 is confirmed absent at audit time, satisfying the DELETE requirement for USER_PROFILE data. The security_service audit_record_2016 is present and retained as required by SECURITY_AUDIT_LOG retention rules. No evidence indicates remaining exposed PII or active data flows related to user_43. The supplied evidence supports the reported deletion status as COMPLETE. Additional verification steps for secondary identifiers, search indexes, analytics profiles, support messages, backups, and data flows are recommended but cannot be confirmed due to limited evidence. However, given the absence of the primary user profile and presence of required audit logs, the deletion is considered complete under the rules."
+      },
+      "accepted": {
+        "case_id": "case_03",
+        "deletion_status": "COMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_7566",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "VERIFICATION",
+            "system_id": "security_service",
+            "resource_id": "audit_record_2016",
+            "operation": "VERIFY_RECORD_PRESENT",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          }
+        ]
+      }
+    }
+  },
+  "case_11": {
+    "A": {
+      "case_id": "case_11",
+      "deletion_status": "INCOMPLETE",
+      "steps": [
+        {
+          "step_no": 1,
+          "phase": "FINDING",
+          "system_id": "search_service",
+          "resource_id": "search_052",
+          "operation": "REPORT_REMAINING_RECORD",
+          "state": "PRESENT",
+          "evidence_id": "evidence_03"
+        },
+        {
+          "step_no": 2,
+          "phase": "FINDING",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_2034",
+          "operation": "REPORT_EXPOSED_PII",
+          "state": "PRESENT",
+          "evidence_id": "evidence_03"
+        },
+        {
+          "step_no": 3,
+          "phase": "FINDING",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_9522",
+          "operation": "REPORT_ACTIVE_DATA_FLOW",
+          "state": "ACTIVE",
+          "evidence_id": "evidence_03"
+        },
+        {
+          "step_no": 4,
+          "phase": "REMEDIATION",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_9522",
+          "operation": "DISABLE_DATA_FLOW",
+          "state": "DISABLED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 5,
+          "phase": "REMEDIATION",
+          "system_id": "search_service",
+          "resource_id": "search_052",
+          "operation": "DELETE_RECORD",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 6,
+          "phase": "REMEDIATION",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_2034",
+          "operation": "ANONYMIZE_RECORD",
+          "state": "ANONYMIZED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 7,
+          "phase": "VERIFICATION",
+          "system_id": "account_service",
+          "resource_id": "account_4248",
+          "operation": "VERIFY_RECORD_ABSENT",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 8,
+          "phase": "VERIFICATION",
+          "system_id": "search_service",
+          "resource_id": "search_052",
+          "operation": "VERIFY_RECORD_ABSENT",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 9,
+          "phase": "VERIFICATION",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_2034",
+          "operation": "VERIFY_RECORD_ANONYMIZED",
+          "state": "ANONYMIZED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 10,
+          "phase": "VERIFICATION",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_9522",
+          "operation": "VERIFY_DATA_FLOW_DISABLED",
+          "state": "DISABLED",
+          "evidence_id": ""
+        }
+      ]
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The account_service user profile record for novak.tomasz@icloud.com is confirmed deleted (NOT_FOUND). However, evidence shows that an analytics profile (analytics_2034) still exists and is identifiable with exposed PII, violating the anonymization requirement for analytics profiles. An active data flow (data_flow_9522) is still enabled and can recreate or copy user data, posing an ongoing risk. The search index entry (search_052) for the user is still present and must be deleted. A support message (support_864) remains identifiable and must be redacted. According to deletion rules, analytics profiles must be anonymized, data flows disabled, search index entries deleted, and support messages redacted if they contain identifiers. Therefore, the deletion is incomplete and requires anonymization of the analytics profile, disabling the data flow, deletion of the search index entry, and redaction of the support message. Verification steps must confirm these remediations after completion."
+      },
+      "validation_failure": "Steps are not in official canonical order"
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 5,
+            "phase": "FINDING",
+            "system_id": "security_service",
+            "resource_id": "audit_record_9394",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_4248",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 13,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 14,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The account_service user profile record (account_4248) is absent as required by rule_01 (DELETE USER_PROFILE). However, the search_service index entry (search_052) remains present and must be deleted per rule_03 (DELETE SEARCH_INDEX_ENTRY). The analytics_platform profile (analytics_2034) remains identifiable and must be anonymized per rule_07 (ANONYMIZE ANALYTICS_PROFILE). An active data flow (data_flow_9522) exists that can recreate or copy user data and must be disabled. Additionally, a support message (support_864) remains identifiable and must be redacted per rule_05 (REDACT SUPPORT_MESSAGE with shared context). A security audit log record (audit_record_9394) remains present but is retained per rule_12 (RETAIN SECURITY_AUDIT_LOG within retention period), so it must be verified present but redacted or anonymized if required by policy (not indicated here, so presence is acceptable). The remediation steps include disabling the data flow, deleting the search index entry, anonymizing the analytics profile, and redacting the support message. Verification steps confirm the absence, anonymization, redaction, and disabling as appropriate. This plan addresses all identified exposures and active risks, ensuring compliance with deletion rules and preventing data resurrection. Missing evidence for remediation and verification steps is expected as these are future actions. No backup restore risks were found in the supplied evidence. Therefore, the deletion is INCOMPLETE until these remediation steps are completed and verified."
+      },
+      "normalized_proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "security_service",
+            "resource_id": "audit_record_9394",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 5,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_4248",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_864",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 13,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 14,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The account_service user profile record (account_4248) is absent as required by rule_01 (DELETE USER_PROFILE). However, the search_service index entry (search_052) remains present and must be deleted per rule_03 (DELETE SEARCH_INDEX_ENTRY). The analytics_platform profile (analytics_2034) remains identifiable and must be anonymized per rule_07 (ANONYMIZE ANALYTICS_PROFILE). An active data flow (data_flow_9522) exists that can recreate or copy user data and must be disabled. Additionally, a support message (support_864) remains identifiable and must be redacted per rule_05 (REDACT SUPPORT_MESSAGE with shared context). A security audit log record (audit_record_9394) remains present but is retained per rule_12 (RETAIN SECURITY_AUDIT_LOG within retention period), so it must be verified present but redacted or anonymized if required by policy (not indicated here, so presence is acceptable). The remediation steps include disabling the data flow, deleting the search index entry, anonymizing the analytics profile, and redacting the support message. Verification steps confirm the absence, anonymization, redaction, and disabling as appropriate. This plan addresses all identified exposures and active risks, ensuring compliance with deletion rules and preventing data resurrection. Missing evidence for remediation and verification steps is expected as these are future actions. No backup restore risks were found in the supplied evidence. Therefore, the deletion is INCOMPLETE until these remediation steps are completed and verified."
+      },
+      "validation_failure": "Finding has no compatible remediation",
+      "accepted": {
+        "case_id": "case_11",
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_03"
+          },
+          {
+            "step_no": 4,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "account_service",
+            "resource_id": "account_4248",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_052",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_2034",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_9522",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "fallback": "Existing deterministic pipeline; model proposal rejected"
+    }
+  },
+  "case_18": {
+    "A": {
+      "case_id": "case_18",
+      "deletion_status": "INCOMPLETE",
+      "steps": [
+        {
+          "step_no": 1,
+          "phase": "FINDING",
+          "system_id": "search_service",
+          "resource_id": "search_4013",
+          "operation": "REPORT_REMAINING_RECORD",
+          "state": "PRESENT",
+          "evidence_id": "evidence_94"
+        },
+        {
+          "step_no": 2,
+          "phase": "FINDING",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_037",
+          "operation": "REPORT_EXPOSED_PII",
+          "state": "PRESENT",
+          "evidence_id": "evidence_94"
+        },
+        {
+          "step_no": 3,
+          "phase": "FINDING",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_4890",
+          "operation": "REPORT_ACTIVE_DATA_FLOW",
+          "state": "ACTIVE",
+          "evidence_id": "evidence_94"
+        },
+        {
+          "step_no": 4,
+          "phase": "REMEDIATION",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_4890",
+          "operation": "DISABLE_DATA_FLOW",
+          "state": "DISABLED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 5,
+          "phase": "REMEDIATION",
+          "system_id": "search_service",
+          "resource_id": "search_4013",
+          "operation": "DELETE_RECORD",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 6,
+          "phase": "REMEDIATION",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_037",
+          "operation": "ANONYMIZE_RECORD",
+          "state": "ANONYMIZED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 7,
+          "phase": "VERIFICATION",
+          "system_id": "search_service",
+          "resource_id": "search_4013",
+          "operation": "VERIFY_RECORD_ABSENT",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 8,
+          "phase": "VERIFICATION",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_037",
+          "operation": "VERIFY_RECORD_ANONYMIZED",
+          "state": "ANONYMIZED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 9,
+          "phase": "VERIFICATION",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_4890",
+          "operation": "VERIFY_DATA_FLOW_DISABLED",
+          "state": "DISABLED",
+          "evidence_id": ""
+        }
+      ]
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 5,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 6,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 7,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 13,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 14,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 15,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The audit found that the analytics profile (analytics_037) still exists with exposed email PII, violating the DELETE requirement for ANALYTICS_PROFILE. An active data flow (data_flow_4890) is enabled and delivering data linked to the user's email, risking data recreation. The search index (search_4013) contains an entry with the user's email, which must be deleted. A support message (support_5569) exists with the user's email exposed; per rules, support messages must be redacted if they contain shared context or identifiers. Therefore, deletion is incomplete. Remediation requires deleting the analytics profile and search index entry, disabling the active data flow, and redacting the support message. Verification steps must confirm these actions. No evidence shows these remediations were completed by audit time, so the status is INCOMPLETE."
+      },
+      "validation_failure": "Steps are not in official canonical order"
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The user 'mori.ren@gmail.com' has a deletion request with reported status COMPLETE, but evidence shows remaining personal data in multiple systems at audit time. The search_service has a present search index entry (search_4013) containing the user's email, violating rule_03 which requires deletion. The analytics_platform has an analytics profile (analytics_037) still attributable to the user with exposed PII, requiring anonymization per rule_07. The integration_service has an active data flow (data_flow_4890) enabled for this user, which can recreate data, so it must be disabled. Additionally, the support_platform has a support message (support_5569) containing exposed PII (requester_email) that must be redacted per rule_05 since the conversation contains shared context. No evidence was found of backup restore risks or account tombstones for this user. The remediation steps include disabling the active data flow, deleting the search index record, anonymizing the analytics profile, and redacting the support message. Verification steps confirm these actions. This plan aligns with the deletion rules and ensures no active process can recreate the data, and all identifiers are treated appropriately. Therefore, the deletion is INCOMPLETE until these remediation steps are executed and verified."
+      },
+      "normalized_proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5569",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The user 'mori.ren@gmail.com' has a deletion request with reported status COMPLETE, but evidence shows remaining personal data in multiple systems at audit time. The search_service has a present search index entry (search_4013) containing the user's email, violating rule_03 which requires deletion. The analytics_platform has an analytics profile (analytics_037) still attributable to the user with exposed PII, requiring anonymization per rule_07. The integration_service has an active data flow (data_flow_4890) enabled for this user, which can recreate data, so it must be disabled. Additionally, the support_platform has a support message (support_5569) containing exposed PII (requester_email) that must be redacted per rule_05 since the conversation contains shared context. No evidence was found of backup restore risks or account tombstones for this user. The remediation steps include disabling the active data flow, deleting the search index record, anonymizing the analytics profile, and redacting the support message. Verification steps confirm these actions. This plan aligns with the deletion rules and ensures no active process can recreate the data, and all identifiers are treated appropriately. Therefore, the deletion is INCOMPLETE until these remediation steps are executed and verified."
+      },
+      "validation_failure": "Policy/provenance not independently validated: support_5569 REPORT_EXPOSED_PII",
+      "accepted": {
+        "case_id": "case_18",
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_94"
+          },
+          {
+            "step_no": 4,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_4013",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_037",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_4890",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ]
+      },
+      "fallback": "Existing deterministic pipeline; model proposal rejected"
+    }
+  },
+  "case_29": {
+    "A": {
+      "case_id": "case_29",
+      "deletion_status": "INCOMPLETE",
+      "steps": [
+        {
+          "step_no": 1,
+          "phase": "FINDING",
+          "system_id": "search_service",
+          "resource_id": "search_1993",
+          "operation": "REPORT_REMAINING_RECORD",
+          "state": "PRESENT",
+          "evidence_id": "evidence_92"
+        },
+        {
+          "step_no": 2,
+          "phase": "FINDING",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_5208",
+          "operation": "REPORT_EXPOSED_PII",
+          "state": "PRESENT",
+          "evidence_id": "evidence_92"
+        },
+        {
+          "step_no": 3,
+          "phase": "FINDING",
+          "system_id": "support_platform",
+          "resource_id": "support_5281",
+          "operation": "REPORT_EXPOSED_PII",
+          "state": "PRESENT",
+          "evidence_id": "evidence_92"
+        },
+        {
+          "step_no": 4,
+          "phase": "FINDING",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_3827",
+          "operation": "REPORT_ACTIVE_DATA_FLOW",
+          "state": "ACTIVE",
+          "evidence_id": "evidence_92"
+        },
+        {
+          "step_no": 5,
+          "phase": "REMEDIATION",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_3827",
+          "operation": "DISABLE_DATA_FLOW",
+          "state": "DISABLED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 6,
+          "phase": "REMEDIATION",
+          "system_id": "search_service",
+          "resource_id": "search_1993",
+          "operation": "DELETE_RECORD",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 7,
+          "phase": "REMEDIATION",
+          "system_id": "support_platform",
+          "resource_id": "support_5281",
+          "operation": "REDACT_RECORD",
+          "state": "REDACTED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 8,
+          "phase": "REMEDIATION",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_5208",
+          "operation": "ANONYMIZE_RECORD",
+          "state": "ANONYMIZED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 9,
+          "phase": "VERIFICATION",
+          "system_id": "search_service",
+          "resource_id": "search_1993",
+          "operation": "VERIFY_RECORD_ABSENT",
+          "state": "ABSENT",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 10,
+          "phase": "VERIFICATION",
+          "system_id": "support_platform",
+          "resource_id": "support_5281",
+          "operation": "VERIFY_RECORD_REDACTED",
+          "state": "REDACTED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 11,
+          "phase": "VERIFICATION",
+          "system_id": "analytics_platform",
+          "resource_id": "analytics_5208",
+          "operation": "VERIFY_RECORD_ANONYMIZED",
+          "state": "ANONYMIZED",
+          "evidence_id": ""
+        },
+        {
+          "step_no": 12,
+          "phase": "VERIFICATION",
+          "system_id": "integration_service",
+          "resource_id": "data_flow_3827",
+          "operation": "VERIFY_DATA_FLOW_DISABLED",
+          "state": "DISABLED",
+          "evidence_id": ""
+        }
+      ]
+    },
+    "B": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 5,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 6,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 13,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 14,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The deletion request is marked NOT_STARTED, and evidence shows multiple records with the user's email still present at audit time, including analytics profile, search index entry, and support message. The analytics profile contains exposed PII and must be anonymized per rule_07. The search index entry and analytics identity bridge data flow are active and must be deleted and disabled respectively. The support message contains shared context and must be redacted, not deleted. No evidence of backup or restore risks is supplied. Therefore, deletion is incomplete and requires anonymization, disabling data flows, deletion, and redaction steps, followed by verification."
+      },
+      "validation_failure": "Steps are not in official canonical order"
+    },
+    "C": {
+      "finish_reason": "stop",
+      "proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The audit evidence shows that the user 'noah.f438085@outlook.com' has remaining personal data in the search_service (search_1993), analytics_platform (analytics_5208), and support_platform (support_5281) systems, all containing exposed PII or records that should have been deleted or anonymized per deletion rules. Additionally, an active data flow (data_flow_3827) is enabled and can recreate or copy user data back into analytics, violating the deletion request. The deletion rules require deletion of search index entries, redaction of support messages with shared context, and anonymization of analytics profiles. The remediation steps include disabling the active data flow, deleting the search record, redacting the support record, and anonymizing the analytics profile. Verification steps confirm the absence or proper treatment of these records and the disabling of the data flow. No evidence was provided about backups or restore risks, so no restore remediation or verification steps are proposed. The user requested deletion of all records under current and previous emails and disabling integrations that could restore data. The audit confirms incomplete deletion and prescribes the ordered remediation and verification steps accordingly."
+      },
+      "normalized_proposal": {
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ],
+        "reasoning": "The audit evidence shows that the user 'noah.f438085@outlook.com' has remaining personal data in the search_service (search_1993), analytics_platform (analytics_5208), and support_platform (support_5281) systems, all containing exposed PII or records that should have been deleted or anonymized per deletion rules. Additionally, an active data flow (data_flow_3827) is enabled and can recreate or copy user data back into analytics, violating the deletion request. The deletion rules require deletion of search index entries, redaction of support messages with shared context, and anonymization of analytics profiles. The remediation steps include disabling the active data flow, deleting the search record, redacting the support record, and anonymizing the analytics profile. Verification steps confirm the absence or proper treatment of these records and the disabling of the data flow. No evidence was provided about backups or restore risks, so no restore remediation or verification steps are proposed. The user requested deletion of all records under current and previous emails and disabling integrations that could restore data. The audit confirms incomplete deletion and prescribes the ordered remediation and verification steps accordingly."
+      },
+      "accepted": {
+        "case_id": "case_29",
+        "deletion_status": "INCOMPLETE",
+        "steps": [
+          {
+            "step_no": 1,
+            "phase": "FINDING",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "REPORT_REMAINING_RECORD",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 2,
+            "phase": "FINDING",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 3,
+            "phase": "FINDING",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REPORT_EXPOSED_PII",
+            "state": "PRESENT",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 4,
+            "phase": "FINDING",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "REPORT_ACTIVE_DATA_FLOW",
+            "state": "ACTIVE",
+            "evidence_id": "evidence_92"
+          },
+          {
+            "step_no": 5,
+            "phase": "REMEDIATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "DISABLE_DATA_FLOW",
+            "state": "DISABLED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 6,
+            "phase": "REMEDIATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "DELETE_RECORD",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 7,
+            "phase": "REMEDIATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "REDACT_RECORD",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 8,
+            "phase": "REMEDIATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "ANONYMIZE_RECORD",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 9,
+            "phase": "VERIFICATION",
+            "system_id": "search_service",
+            "resource_id": "search_1993",
+            "operation": "VERIFY_RECORD_ABSENT",
+            "state": "ABSENT",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 10,
+            "phase": "VERIFICATION",
+            "system_id": "support_platform",
+            "resource_id": "support_5281",
+            "operation": "VERIFY_RECORD_REDACTED",
+            "state": "REDACTED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 11,
+            "phase": "VERIFICATION",
+            "system_id": "analytics_platform",
+            "resource_id": "analytics_5208",
+            "operation": "VERIFY_RECORD_ANONYMIZED",
+            "state": "ANONYMIZED",
+            "evidence_id": ""
+          },
+          {
+            "step_no": 12,
+            "phase": "VERIFICATION",
+            "system_id": "integration_service",
+            "resource_id": "data_flow_3827",
+            "operation": "VERIFY_DATA_FLOW_DISABLED",
+            "state": "DISABLED",
+            "evidence_id": ""
+          }
+        ]
+      }
+    }
+  }
+}

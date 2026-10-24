@@ -10,3 +10,8 @@ artifacts/
 /output.csv
 /code.zip
 /agent-trace.zip
+# Isolated local runtime experiment evidence and API response caches.
+/experiments/runtime_ai/*_bundle.json
+/experiments/runtime_ai/calls/*.json
+!/experiments/runtime_ai/calls/usage.json
+/experiments/runtime_ai/calls/budget.lock
