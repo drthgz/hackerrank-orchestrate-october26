@@ -109,7 +109,7 @@ def read_sql(file):
         db.close()
 
 
-def extract_observations(files, subject, cutoff, linked_resources=None):
+def extract_observations(files, subject, cutoff, linked_resources=None, allow_pending=False):
     snapshots = []
     for file in sorted(files, key=lambda x: (x.captured_at, x.file_id)):
         if file.path.suffix != '.sql' or file.captured_at > cutoff:
@@ -183,7 +183,7 @@ def extract_observations(files, subject, cutoff, linked_resources=None):
                         raise AuditError('Resource reassigned to another subject')
                 if not has_link and snapshot.category in {'USER_PROFILE', 'SEARCH_INDEX_ENTRY', 'USER_EXPORT'}:
                     raise AuditError('Known deletable resource has conflicting/removed identity')
-                if snapshot.category == 'USER_PROFILE' and row.get('account_status') != 'ACTIVE':
+                if snapshot.category == 'USER_PROFILE' and row.get('account_status') != 'ACTIVE' and not (allow_pending and row.get('account_status') == 'DELETION_PENDING'):
                     raise AuditError('Non-active profile requires a dedicated tombstone schema')
             observations.append(Observation(
                 snapshot.system, resource, snapshot.category, snapshot.copy_id,

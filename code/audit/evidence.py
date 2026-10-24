@@ -202,12 +202,16 @@ def enrich(observations, subject, cutoff):
     return tuple(result)
 
 
-def extract_observations(files, subject, cutoff):
+def extract_observations(files, subject, cutoff, include_images=False):
     observations = []
     extra, snapshots = [], []
     documents = []
     for file in sorted(files, key=lambda f: (f.captured_at, f.file_id)):
         if file.captured_at > cutoff:
+            continue
+        if include_images and file.path.suffix.lower() in {'.png', '.jpg', '.jpeg'}:
+            from .reviewed_images import read_image
+            extra.extend(read_image(file))
             continue
         if file.path.suffix == '.pdf':
             document = read_pdf(file)
@@ -231,11 +235,11 @@ def extract_observations(files, subject, cutoff):
     for o in seeds:
         if o.facts.get('source_resource_id'):
             lineage.setdefault(('account_service', 'USER_PROFILE'), set()).add(o.facts['source_resource_id'])
-    initial_sql = extract_sql(files, subject, cutoff)
+    initial_sql = extract_sql(files, subject, cutoff, allow_pending=include_images)
     for o in initial_sql:
         if o.facts.get('source_resource_id'):
             lineage.setdefault(('account_service', 'USER_PROFILE'), set()).add(o.facts['source_resource_id'])
-    observations = list(extract_sql(files, subject, cutoff, lineage))
+    observations = list(extract_sql(files, subject, cutoff, lineage, allow_pending=include_images))
     linked = {(o.system_id, o.resource_id) for o in observations}
     linked.update((o.system_id, o.resource_id) for o in extra if linked_facts(o.facts, subject))
     changed = True

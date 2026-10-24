@@ -26,7 +26,7 @@ def identifiers_cleared(facts, required):
     return all(facts[k] in (None, '') for k in fields)
 
 
-def assess_policy(observations, rules, cutoff=None):
+def assess_policy(observations, rules, cutoff=None, check_relationship=True):
     decisions = []
     for o in observations:
         facts = o.facts
@@ -93,7 +93,7 @@ def assess_policy(observations, rules, cutoff=None):
             else:
                 raise AuditError('Unsupported policy category')
         decisions.append(PolicyDecision(o, action, rule_id, compliant, verify, state))
-    if any(d.observation.category == 'ACCOUNT_TOMBSTONE' for d in decisions):
+    if check_relationship and any(d.observation.category == 'ACCOUNT_TOMBSTONE' for d in decisions):
         if not any(d.action == 'RETAIN' and d.observation.present for d in decisions):
             raise AuditError('Tombstone reference has no supported retained-record relationship')
     return tuple(decisions)

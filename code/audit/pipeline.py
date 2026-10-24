@@ -70,13 +70,18 @@ def plan(decisions, case_id, complete_scope=False):
     return Result(case_id, 'INCOMPLETE' if incomplete else 'COMPLETE', ordered)
 
 
-def audit(request, inputs):
-    if classify_intent(request.request_text) == 'NON_DELETION':
+def audit(request, inputs, mode='strict'):
+    if mode not in {'strict', 'best-effort'}:
+        raise AuditError('Unknown audit mode')
+    from .competition import competition_intent, best_effort_policy
+    intent = competition_intent if mode == 'best-effort' else classify_intent
+    omissions = []
+    if intent(request.request_text) == 'NON_DELETION':
         result = Result(request.case_id, 'NOT_APPLICABLE', ())
         validate_result(result, request, inputs.citation_times())
         return result, {'scope': 'Non-deletion intent; no deletion or verification authorized'}
     subject = resolve_subject(request.email, request.audit_at, inputs.identities, inputs.history)
-    observations = extract_observations(inputs.evidence, subject, request.audit_at)
+    observations = extract_observations(inputs.evidence, subject, request.audit_at, include_images=mode == 'best-effort')
     latest = latest_per_copy(observations, request.audit_at)
     if not latest:
         raise AuditError('No supported evidence resource lineage links to subject')
@@ -86,17 +91,33 @@ def audit(request, inputs):
             continue
         keys = {subject.user_id, *subject.aliases['email'], *subject.aliases['email_hash']}
         if any(re.search(r'(?<![\w@.])' + re.escape(k) + r'(?![\w@.])', event.get('details', ''), re.I) for k in keys if k):
-            raise AuditError('Subject-linked activity resource lacks scoped evidence')
+            if mode == 'strict':
+                raise AuditError('Subject-linked activity resource lacks scoped evidence')
+            omissions.append(dict(resource_id=event['resource_id'], reason='Subject-linked activity resource lacks scoped evidence'))
     claims = [x for x in inputs.activity if x['resource_id'] in resources
               and timestamp(x['event_time']) <= request.audit_at]
+    stale_resources = set()
     for claim in claims:
+        if claim.get('event_type') in {'LINK_RESOURCE_IDENTITY', 'CLASSIFY_REQUEST'}:
+            continue  # Catalog/request metadata cannot mutate the observed resource state.
         relevant = [o for o in latest if o.resource_id == claim['resource_id']]
         if timestamp(claim['event_time']) > max(o.observed_at for o in relevant):
-            raise AuditError('Post-snapshot activity requires state reconstruction beyond this slice')
-    decisions = assess_policy(latest, inputs.rules, request.audit_at)
+            if mode == 'strict':
+                raise AuditError('Post-snapshot activity requires state reconstruction beyond this slice')
+            stale_resources.add(claim['resource_id'])
+            omissions.append(dict(resource_id=claim['resource_id'], reason='Post-snapshot state-changing claim requires newer readback'))
+    latest = tuple(o for o in latest if o.resource_id not in stale_resources)
+    if mode == 'best-effort':
+        decisions, policy_omissions = best_effort_policy(latest, inputs.rules, request.audit_at)
+        omissions.extend(policy_omissions)
+    else:
+        decisions = assess_policy(latest, inputs.rules, request.audit_at)
     unprocessed = [e for e in inputs.evidence if e.captured_at <= request.audit_at and e.path.suffix not in {'.sql', '.json', '.txt', '.log'}
                    and not (e.path.suffix == '.pdf' and read_pdf(e).understood)]
-    closed_scope = not unprocessed
+    if mode == 'best-effort':
+        from .competition import relevant_unprocessed_media
+        unprocessed = relevant_unprocessed_media(unprocessed, subject, latest, inputs.activity, request.audit_at)
+    closed_scope = not unprocessed and not omissions
     if closed_scope:
         for file in inputs.evidence:
             if file.captured_at <= request.audit_at and file.path.suffix == '.sql':
@@ -109,6 +130,9 @@ def audit(request, inputs):
     validate_result(result, request, inputs.citation_times())
     # Diagnostics retain physical copies, policy reasons and claims separately.
     details = {
+        'mode': mode,
+        'omissions': omissions,
+        'plan_exhaustive': not omissions and not unprocessed,
         'scope': 'Deterministic SQL/JSON/text/log/PDF audit; images remain uninterpreted',
         'evidence_scope_closed': closed_scope,
         'subject': asdict(subject),

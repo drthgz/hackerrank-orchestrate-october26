@@ -49,7 +49,7 @@ def compare(prediction, expected):
     }
 
 
-def evaluate_all(inputs, labels_path, output_dir):
+def evaluate_all(inputs, labels_path, output_dir, mode='strict'):
     """Predict every request before opening labels; unsupported stays explicit."""
     from audit.pipeline import audit, classify_intent
     from audit.contract import write_output
@@ -63,8 +63,8 @@ def evaluate_all(inputs, labels_path, output_dir):
         except AuditError as exc:
             intent_unsupported[request.case_id] = str(exc)
         try:
-            result, _ = audit(request, inputs)
-            repeated, _ = audit(request, inputs)
+            result, _ = audit(request, inputs, mode=mode)
+            repeated, _ = audit(request, inputs, mode=mode)
             reproducible = reproducible and result == repeated
             validate_result(result, request, inputs.citation_times())
             results.append(result)
@@ -119,6 +119,7 @@ def evaluate_all(inputs, labels_path, output_dir):
             return 'support_context_or_full_text'
         return 'other'
     report = {
+        'mode': mode,
         'valid_output_coverage': ratio(n, len(inputs.requests)),
         'status_accuracy_all_samples': ratio(status_count, len(inputs.requests)),
         'sequence_accuracy_all_samples': ratio(sequence_count, len(inputs.requests)),
@@ -155,6 +156,7 @@ def evaluate_all(inputs, labels_path, output_dir):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--all-samples', action='store_true')
+    parser.add_argument('--mode', choices=['strict', 'best-effort'], default='strict')
     parser.add_argument('--output-dir', default='artifacts/structured-benchmark')
     parser.add_argument('--prediction')
     parser.add_argument('--repeat', help='Separately generated output to compare byte-for-byte')
@@ -169,7 +171,7 @@ def main():
             output_dir = rooted(args.output_dir).resolve()
             if output_dir.is_relative_to(rooted(args.dataset).resolve()):
                 raise AuditError('Benchmark outputs cannot overwrite dataset inputs')
-            report = evaluate_all(inputs, rooted(args.labels), output_dir)
+            report = evaluate_all(inputs, rooted(args.labels), output_dir, args.mode)
             print(json.dumps(report, indent=2, sort_keys=True))
             return 0 if not report['regressions'] and report['reproducible_results'] else 1
         if not (args.prediction and args.repeat and args.case_id):
