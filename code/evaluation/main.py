@@ -55,6 +55,12 @@ def evaluate_all(inputs, labels_path, output_dir, mode='strict'):
     from audit.contract import write_output
     output_dir.mkdir(parents=True, exist_ok=True)
     results, unsupported, reproducible = [], {}, True
+    prediction_details, audit_validator_failures = {}, {}
+    runner, validator, writer = audit, validate_result, write_output
+    if mode == 'prediction':
+        from audit.prediction import predict, validate_prediction, write_predictions
+        runner = lambda request, inputs, mode: predict(request, inputs)
+        validator, writer = validate_prediction, write_predictions
     intent_counts, intent_unsupported = Counter(), {}
     started = time.perf_counter()
     for request in inputs.requests:
@@ -63,17 +69,23 @@ def evaluate_all(inputs, labels_path, output_dir, mode='strict'):
         except AuditError as exc:
             intent_unsupported[request.case_id] = str(exc)
         try:
-            result, _ = audit(request, inputs, mode=mode)
-            repeated, _ = audit(request, inputs, mode=mode)
+            result, detail = runner(request, inputs, mode=mode)
+            repeated, _ = runner(request, inputs, mode=mode)
             reproducible = reproducible and result == repeated
-            validate_result(result, request, inputs.citation_times())
+            validator(result, request, inputs.citation_times())
+            if mode == 'prediction':
+                prediction_details[request.case_id] = detail['prediction']
+                try:
+                    validate_result(result, request, inputs.citation_times())
+                except AuditError as exc:
+                    audit_validator_failures[request.case_id] = str(exc)
             results.append(result)
         except AuditError as exc:
             unsupported[request.case_id] = str(exc)
     elapsed = time.perf_counter() - started
     selected = [r for r in inputs.requests if r.case_id not in unsupported]
     prediction_path = output_dir / 'predictions.csv'
-    write_output(prediction_path, results, selected, inputs.citation_times())
+    writer(prediction_path, results, selected, inputs.citation_times())
     # This is the sole label access; it is outside prediction and occurs after
     # all selected requests have been attempted independently.
     with labels_path.open(encoding='utf-8', newline='') as source:
@@ -149,6 +161,12 @@ def evaluate_all(inputs, labels_path, output_dir, mode='strict'):
         'prediction_sha256': hashlib.sha256(prediction_path.read_bytes()).hexdigest(),
         'comparisons': comparisons,
     }
+    if mode == 'prediction':
+        report.update(prediction_details=prediction_details,
+                      uncertain_status_predictions=sorted(cid for cid, d in prediction_details.items() if d['status_uncertain']),
+                      audit_validator_failures=audit_validator_failures,
+                      incomplete_or_unproved_plans=sorted(cid for cid, d in prediction_details.items() if not d['plan_complete']),
+                      semantic_compliance_certified=False, organizer_approved=False)
     (output_dir / 'benchmark.json').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
     return report
 
@@ -156,7 +174,7 @@ def evaluate_all(inputs, labels_path, output_dir, mode='strict'):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--all-samples', action='store_true')
-    parser.add_argument('--mode', choices=['strict', 'best-effort'], default='strict')
+    parser.add_argument('--mode', choices=['strict', 'best-effort', 'prediction'], default='strict')
     parser.add_argument('--output-dir', default='artifacts/structured-benchmark')
     parser.add_argument('--prediction')
     parser.add_argument('--repeat', help='Separately generated output to compare byte-for-byte')

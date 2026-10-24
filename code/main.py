@@ -35,7 +35,7 @@ def main():
     parser.add_argument('--requests', default='dataset/deletion_requests.csv')
     parser.add_argument('--case-id')
     parser.add_argument('--all', action='store_true')
-    parser.add_argument('--mode', choices=['strict', 'best-effort'], default='strict')
+    parser.add_argument('--mode', choices=['strict', 'best-effort', 'prediction'], default='strict')
     parser.add_argument('--output', default='output.csv')
     parser.add_argument('--diagnostics', default='artifacts/run.json')
     args = parser.parse_args()
@@ -56,9 +56,14 @@ def main():
             raise AuditError('Diagnostics must not overwrite inputs or predictions')
         started = time.perf_counter()
         results, details, unsupported = [], {}, {}
+        runner, writer = audit, write_output
+        if args.mode == 'prediction':
+            from audit.prediction import predict, write_predictions
+            runner = lambda request, inputs, mode: predict(request, inputs)
+            writer = write_predictions
         for request in requests:
             try:
-                result, detail = audit(request, inputs, mode=args.mode)
+                result, detail = runner(request, inputs, mode=args.mode)
                 results.append(result)
                 details[request.case_id] = detail
             except AuditError as exc:
@@ -69,15 +74,25 @@ def main():
                        model_providers=[], model_names=[], model_calls=0, input_tokens=0, output_tokens=0,
                        total_tokens=0, average_tokens_per_request=0, estimated_total_cost_usd=0,
                        estimated_cost_per_request_usd=0, elapsed_seconds=time.perf_counter()-started)
+        if args.mode == 'prediction':
+            summary.update(
+                uncertain_status_predictions=sorted(k for k, d in details.items()
+                    if d.get('prediction', {}).get('status_uncertain')),
+                audit_validator_failures={k: d['prediction']['audit_validation_error'] for k, d in details.items()
+                    if d.get('prediction', {}).get('audit_validation_error')},
+                incomplete_or_unproved_plans=sorted(k for k, d in details.items()
+                    if not d.get('prediction', {}).get('plan_complete', False)),
+                semantic_compliance_certified=False, organizer_approved=False,
+                interpretation='Competition predictions; uncertainty diagnostics are outside the CSV.')
         if not unsupported:
             temporary = output.with_name(output.name + '.tmp')
-            write_output(temporary, results, requests, inputs.citation_times())
+            writer(temporary, results, requests, inputs.citation_times())
             temporary.replace(output)
             summary['output_sha256'] = hashlib.sha256(output.read_bytes()).hexdigest()
         else:
             partial = ROOT / 'artifacts' / 'supported.csv'
             selected = [r for r in requests if r.case_id not in unsupported]
-            write_output(partial, results, selected, inputs.citation_times())
+            writer(partial, results, selected, inputs.citation_times())
             summary['partial_output'] = str(partial)
         diagnostic.parent.mkdir(parents=True, exist_ok=True)
         diagnostic.write_text(json.dumps(dict(summary=summary, cases=details), default=json_value,
