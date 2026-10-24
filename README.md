@@ -1,100 +1,85 @@
-# Ghost Data Still Exists — competition audit agent
+# Ghost Data Still Exists — deterministic deletion audit
 
-Python 3.10+ with standard-library SQLite/JSON support and Poppler `pdftotext`.
-There are no Python package dependencies, runtime model calls or credentials.
+Python 3.10+ and Poppler `pdftotext` are required. No Python packages, credentials,
+network access or runtime model calls are needed. On Debian/Ubuntu install
+`poppler-utils`; on macOS install `poppler`; on Windows add Poppler's bin directory
+to PATH. Verify with `pdftotext -v`.
 
-Install Poppler on Debian/Ubuntu with `sudo apt install poppler-utils`, or on
-macOS with `brew install poppler`. On Windows, install Poppler and add its bin
-directory to PATH. `pdftotext -v` must work from the terminal.
-
-Place the supplied participant `dataset/` beside this README. The dataset is
-intentionally excluded from code.zip. All paths default relative to this project
-root; `--dataset` and `--requests` also accept absolute external paths.
-
-## Run
+Place the supplied participant `dataset/` beside this README. It is excluded from
+code.zip. Paths default relative to this project, regardless of terminal cwd.
 
 ```bash
 python3 -m unittest discover -s tests -q
-python3 code/main.py --all --mode best-effort --output output.csv --diagnostics artifacts/run.json
+python3 code/main.py --all --mode best-effort --output output.csv --diagnostics artifacts/submission-run.json
+python3 code/evaluation/main.py --all-samples --mode best-effort --output-dir artifacts/submission-benchmark
 ```
 
-**Current coverage: 367/518. This is not yet a valid submission candidate.**
-The full command currently exits **2**, lists 151 unresolved cases, and writes
-only `artifacts/supported.csv` plus `artifacts/run.json`. It does not write a
-misleading partial root output.csv or fill unsupported rows. Once every request
-has a defensible answer, it atomically creates output.csv with exactly one row per
-input case. Do not upload the current partial CSV as the required final output.
+**Coverage is 374/518. No valid 518-row submission exists yet.** The full command
+exits 2, writes `artifacts/supported.csv` and diagnostics, and leaves root
+`output.csv` absent. It writes root output atomically only if every requested case
+has a defensible result. It does not turn uncertainty into a guessed status.
 
-`best-effort` returns the maximum currently supported policy decisions while
-recording missing policy/resource facts in diagnostics. Every emitted INCOMPLETE
-requires a grounded violation, compatible remediation and verification. It never
-uses unknown alone as a status. COMPLETE requires sufficient evidence, positive
-profile absence, no unresolved relevant scope and valid verification citations.
-Reported workflow success is never accepted as proof.
+The 374 rows comprise 339 INCOMPLETE, 25 COMPLETE and 10 NOT_APPLICABLE.
+INCOMPLETE requires an observed violation; its supported plan may still omit
+unresolved resources. Such partial plans do not meet the official requirement for
+a complete remediation plan. Diagnostics expose omissions and exhaustive-scope
+flags. COMPLETE requires policy compliance, positive profile absence, closed
+relevant scope and admissible verification citations. Non-deletion intent alone
+authorizes NOT_APPLICABLE. Reported workflow success never proves state.
 
-`strict` preserves conservative whole-case diagnostics:
-
-```bash
-python3 code/main.py --all --mode strict --output output.csv --diagnostics artifacts/strict-run.json
-python3 code/main.py --requests dataset/sample_deletion_requests.csv --case-id case_06 --mode strict --output artifacts/case_06.csv
-```
-
-Partial selected-case runs cannot overwrite final root output.csv. For full runs,
-exit 0 means all selected requests were written; exit 2 means explicit unsupported
-cases or input failure. Inspect diagnostics before using any artifact.
+[Evidence sufficiency](docs/evidence_sufficiency.md) documents all original 151
+blockers, seven recovered decisions, the remaining 144 cases, and the organizer
+clarification needed. The output contract has no uncertainty status or documented
+fallback when neither completion nor a violation can be established. No resources,
+retention dates, citations or blanket fallback rows are invented.
 
 ## Evidence and policy
 
-SQL snapshots and replicas, nested JSON, service/readback logs, text handovers and
-selectable-text PDFs feed typed observations. Current/historical identifiers and
-explicit resource lineage correlate the subject. Observations retain capture and
-observation times, evidence IDs, source provenance and page/line origins. Future
-captures and post-snapshot state uncertainty cannot silently become proof.
+SQL snapshots/replicas, nested JSON, trace-correlated logs, text handovers,
+selectable-text PDFs and reviewed screenshot fields become typed observations.
+Current and historical identifiers establish lineage. Capture timestamps constrain
+availability; observation timestamps constrain state. Flows/restores are stopped
+before dependent record changes; retained records and tombstones follow policy.
 
-The eleven supplied screenshots have reviewed, content-hash-bound field
-transcriptions in `code/audit/reviewed_images.py`. These are evidence artifacts,
-not output labels or case-ID rules. Unknown or changed images remain unresolved.
-Read [image review](docs/image_review.md) for excluded ambiguous/future fields.
+Eleven screenshots have content-hash-bound field transcriptions in
+`code/audit/reviewed_images.py`. These are visible evidence facts, not answer labels.
+Unknown/changed screenshots remain unresolved. The object-storage attachment join
+requires both a visible filename and an explicit pre-cutoff catalog ownership link.
+See [image review](docs/image_review.md).
 
-Policy requires evidence of retention dates, ownership, shared support context
-and other conditions. Tombstones preserve permitted stable references. Flows and
-restore risks are stopped before record changes. In best-effort mode an unresolved
-resource does not discard a different supported violation; omissions remain
-explicit. Complete-plan accuracy is lower than structurally valid output coverage.
-
-## Evaluate
+Strict mode rejects whole cases with unresolved facts:
 
 ```bash
-python3 code/evaluation/main.py --all-samples --mode strict --output-dir artifacts/strict
-python3 code/evaluation/main.py --all-samples --mode best-effort --output-dir artifacts/best-effort
+python3 code/main.py --all --mode strict --diagnostics artifacts/strict-run.json
+python3 code/main.py --case-id case_61 --mode best-effort --output artifacts/case_61.csv
 ```
 
-The predictor never reads public labels. The evaluator opens them only after all
-predictions are attempted and repeats successful predictions for reproducibility.
+`--dataset` and `--requests` accept external absolute paths. Partial selected-case
+runs cannot overwrite root output.csv. Exit 0 means all selected rows were written;
+exit 2 means unsupported cases or invalid inputs. Examine diagnostics before use.
 
-Current public results: **22/32** valid rows and correct statuses; **2/32** exact
-cases/sequences; **118/118** emitted step contents correct; **61.14%** recall over
-all public steps. All **115 tests** pass. Runtime inference costs are **$0**.
-See [evaluation](evaluation/evaluation_report.md), [actual usage](evaluation/usage_report.md)
-and [interview briefing](docs/interview_briefing.md) for denominators and limitations.
+## Measurements and packaging
 
-## Package and traces
+The 32-case public benchmark gives 22 correct statuses, 2 exact cases/sequences,
+118/121 matching emitted steps (97.52% precision), and 118/193 recall (61.14%).
+Citation matches are 38/39 emitted cited steps; all emitted citations pass ID and
+cutoff validation. The new attachment triple is grounded but absent from the
+public canonical answer. All 119 solution tests pass. No additional paid inference
+was performed; the retained deterministic runtime uses zero calls/tokens and $0.
+See [evaluation](evaluation/evaluation_report.md), [usage](evaluation/usage_report.md)
+and [interview briefing](docs/interview_briefing.md).
 
 ```bash
 python3 code/tools/package.py
+python3 code/tools/verify_package.py
 python3 code/tools/export_traces.py
 ```
 
-`code.zip` contains runnable source, tests, README, required reports, the supplied
-problem statement and current briefing/review. It excludes dataset, caches,
-virtual environments, credentials, nested archives and traces. Its file list and
-ZIP integrity are validated by the packaging command.
-
-`log.txt` is the required chat transcript and is provided separately.
-`agent-trace.zip` contains relevant, redacted local Codex session snapshots only.
-The active session snapshot is incomplete: after closing Codex, rerun the trace
-export command from a terminal before uploading, as required by the supplied
-agent trace instructions. No authentication/configuration stores are included.
-
-The source archive is runnable, but submission remains blocked on 151 cases and
-the missing valid 518-row output.csv. No push or submission is performed.
+code.zip contains runnable source, tests, README, required reports and evidence
+review/briefing documents. It excludes dataset, virtual environments, caches,
+credentials, model experiment code/caches, nested archives and traces. log.txt is
+the separate conversation transcript. agent-trace.zip is a redacted session
+snapshot; refresh it after closing Codex to obtain a complete active-session trace.
+The package has been tested from a clean extraction with the participant dataset
+supplied externally. Its full run correctly exits 2 with the same partial output.
+No push or submission has been performed. The official deadline is not configured.

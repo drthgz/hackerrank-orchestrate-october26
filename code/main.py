@@ -63,6 +63,7 @@ def main():
                 details[request.case_id] = detail
             except AuditError as exc:
                 unsupported[request.case_id] = str(exc)
+                details[request.case_id] = dict(getattr(exc, 'details', {}), error=str(exc))
         summary = dict(mode=args.mode, attempted=len(requests), produced=len(results), unsupported=unsupported,
                        statuses=dict(Counter(r.deletion_status for r in results)),
                        model_providers=[], model_names=[], model_calls=0, input_tokens=0, output_tokens=0,

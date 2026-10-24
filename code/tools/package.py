@@ -10,7 +10,7 @@ def build():
     for folder in ('code', 'tests', 'evaluation'):
         files.extend(p for p in (ROOT/folder).rglob('*') if p.is_file()
                      and p.suffix in {'.py', '.md'} and '__pycache__' not in p.parts)
-    files.extend(ROOT/'docs'/name for name in ('interview_briefing.md','image_review.md'))
+    files.extend(ROOT/'docs'/name for name in ('interview_briefing.md','image_review.md','evidence_sufficiency.md'))
     required = {'README.md','code/main.py','evaluation/evaluation_report.md','evaluation/usage_report.md'}
     names = {p.relative_to(ROOT).as_posix() for p in files}
     if not required <= names:

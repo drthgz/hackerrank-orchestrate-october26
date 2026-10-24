@@ -19,8 +19,11 @@ Limits observed during review:
   than manifest capture. It cannot independently prove compliant tombstoning.
 - The backup console shows an archive but not restore authorization. Presence
   alone is insufficient for a restore-risk finding or blocked-restore verification.
-- The object browser lists filenames but no direct subject or stable object ID.
-  Catalog ownership links remain separate from current resource-state proof.
+- The object browser lists filenames in a support-attachments folder but no
+  direct subject or stable object ID. An exact filename/resource/sole-owner join
+  to an admissible catalog event now supplies ownership and lineage. The listing
+  supplies presence; the catalog supplies metadata. Both witnesses and their
+  availability times are retained. Unlisted filenames or future events cannot join.
 - Search execution time is fourteen seconds after manifest capture; only visible
   indexed records with earlier indexed times are transcribed, not a later query
   state or inferred absence. Customer export rows with displayed future dates

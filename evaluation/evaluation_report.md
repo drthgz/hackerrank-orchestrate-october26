@@ -1,348 +1,127 @@
-# Competition baseline evaluation — 2026-10-24
+# Submission completion evaluation — 2026-10-24
 
-## Rules and scoring interpretation
+## Result and contract
 
-The supplied official `problem_statement.md` requires complete plans for
-INCOMPLETE cases and scores status, discovered records, risks, citations, policy,
-completeness and sequence. It does **not** expressly promise acceptance or partial
-credit for incomplete plans. Both the prescribed challenge URL and its standard
-www problem-page variant were inaccessible to the web tool during this session;
-no stronger live-rule claim is made. Best-effort partial plans are therefore
-score candidates with known omissions, not certified complete solutions.
+Continued from commit 00317fc and retained the deterministic pipeline. No additional
+paid inference calls were made. The full run produces **374/518 (72.20%)** supported
+rows, up from 367/518. **144 cases remain unsupported**, so root output.csv is absent.
+This is a runnable review package, not a valid complete competition submission.
+339 INCOMPLETE, 25 COMPLETE and 10 NOT_APPLICABLE statuses are emitted.
+Of the emitted deletion rows, 158 have explicit policy/state omissions and 206
+are flagged exhaustive by the current extractor; the latter flag is diagnostic,
+not measured hidden-answer completeness. Ten non-deletion rows need no plan.
 
-A best-effort INCOMPLETE row still requires at least one supported policy violation.
-Every emitted finding has compatible remediation and future verification; all
-schema, ordering, citation and cutoff validators remain enabled. Unknown records
-or policy conditions are omitted with diagnostics. Unknown alone never becomes
-INCOMPLETE. COMPLETE retains positive profile-absence, sufficient policy facts,
-per-subject evidence-scope and citation proof gates. Strict mode remains available.
+The supplied official problem_statement.md requires 518 rows and complete plans.
+AGENTS.md §6.3–6.6 requires evidence-backed states at audit_at and prohibits
+fabricated evidence. Neither supplied document defines UNKNOWN or an uncertainty
+fallback. Unknown cannot become INCOMPLETE without a violation, COMPLETE without
+proof, or NOT_APPLICABLE for an authorized deletion. Partial plans may have grounded
+statuses but are not certified complete plans; partial-credit scoring is unspecified.
+See docs/evidence_sufficiency.md for exact conflicts and organizer questions.
+No organizer-only data or labels enter prediction. No live organizer clarification
+has been obtained and no message has been sent. Deadline is not configured.
 
-## Reproduce
+## Public benchmark: all 32 cases
 
-Requires Python 3.10+ and Poppler pdftotext; no Python packages or credentials.
+Predictions are completed before the evaluator opens sample_output.csv. Every
+successful prediction is repeated and compared for determinism.
+
+| Metric | Commit 00317fc baseline | Current |
+| --- | ---: | ---: |
+| Produced / all public cases | 22/32 | 22/32 |
+| Correct statuses / all public cases | 22/32 (68.75%) | 22/32 (68.75%) |
+| Correct statuses / produced | 22/22 | 22/22 |
+| Exact cases and exact sequences / all cases | 2/32 (6.25%) | 2/32 (6.25%) |
+| Matching emitted step contents | 118/118 | 118/121 |
+| Step precision | 100% | 97.52% |
+| Step recall / all 193 public steps | 118/193 (61.14%) | 61.14% |
+| Step recall / 157 steps in produced cases | 75.16% | 75.16% |
+| Positional field accuracy | 670/1099 (60.96%) | 666/1113 (59.84%) |
+| Positional citation-field accuracy | 114/157 (72.61%) | 113/159 (71.07%) |
+| Citation match / emitted cited steps | 38/38 | 38/39 (97.44%) |
+| Cited-step recall / all cited public steps | 38/75 (50.67%) | 38/75 (50.67%) |
+| Full-dataset supported coverage | 367/518 | 374/518 |
+
+All 118 previously matching step contents remain. The catalog-backed object_19
+finding/remedy/check triple adds three noncanonical public steps; the same join
+recovers full-dataset case_61 with a supported violation. This small precision
+tradeoff is retained because both presence and sole ownership have admissible
+witnesses. It creates no new status/sequence regression, and does not replace
+measured facts with missing canonical lineage. No exact-case gain is claimed.
+
+Citation correctness above compares against canonical answers; structural citation
+validity checks only that IDs exist, cutoffs are respected and future-work citations
+are empty. Neither metric alone establishes full semantic correctness. Full-dataset
+status/exact-case accuracy is unmeasured because hidden answers are not accessed.
+
+## Evidence investigation and limitations
+
+Pipe-delimited logs previously lost their service/trace/event headers. Recovering
+those headers establishes observations for ten originally unlinked cases: six now
+support INCOMPLETE, four move to unresolved policy/scope gaps. The attachment join
+recovers one further decision using evidence_46 plus activity_4007. It uses the
+screenshot for presence and catalog metadata for ownership/resource lineage.
+
+All original 151 unsupported cases were reviewed with raw identifier/resource
+searches across the 94 participant evidence files, current/historical identifiers,
+parsed observations and policy omissions. Later captures are listed separately
+and excluded from proof. Raw hits do not automatically prove state or ownership.
+Machine detail: artifacts/evidence-sufficiency.json. Portable case dispositions:
+docs/evidence_sufficiency.md, included in code.zip.
+
+Remaining first blockers: 69 missing positive profile-absence proofs; 43 no
+policy-assessable verification resource; 30 unresolved scope; 2 missing/conflicting
+lineage. Independent gaps overlap these counts: missing supplied retention periods,
+shared support context, full text scans, attachment ownership and tombstone/retained
+record relationships. First failures do not describe all missing facts.
+
+For example, case_103 has an undated security record in evidence_10 and no supported
+violation. Neither an integrity seal nor a reported success supplies a retention
+deadline. case_55 has a backup without restore authorization; case_63 has conflicting
+screenshot/catalog ownership. No safe fallback covers these authorized requests.
+The CLI preserves exit 2 and explicitly refuses to fabricate a 518-row file.
+
+## Participant-created evaluation cases
+
+All 119 solution tests pass, including these independent fixtures with arbitrary
+identifiers (no public labels):
+
+1. Interleaved pipe-format traces read two subjects; only the matching subject's
+   scoped 404 becomes profile absence. Trace/service/instance isolation is retained.
+2. A visible attachment filename plus exact catalog resource/sole-owner metadata
+   creates a grounded attachment observation with both witnesses in provenance.
+3. The same ownership event after audit_at yields no attachment observation.
+4. A catalog filename absent from the screenshot yields no presence observation.
+5. An active profile plus an undated security record produces only a grounded
+   partial INCOMPLETE plan in best-effort mode; strict rejects missing policy facts.
+6. An undated security record alone yields no guessed COMPLETE/INCOMPLETE result.
+
+Existing tests also cover replica drift, future capture exclusion, historical
+identifiers, redaction/anonymization fields, tombstones, retention joins, mutation
+claims versus readbacks, canonical order, and label isolation.
+
+## Reproduction and package validation
 
 ```bash
 python3 -m unittest discover -s tests -q
-python3 code/evaluation/main.py --all-samples --mode strict --output-dir artifacts/strict
-python3 code/evaluation/main.py --all-samples --mode best-effort --output-dir artifacts/best-effort
-python3 code/main.py --all --mode best-effort --output output.csv --diagnostics artifacts/run.json
+python3 code/main.py --all --mode best-effort --diagnostics artifacts/submission-run.json
+python3 code/evaluation/main.py --all-samples --mode best-effort --output-dir artifacts/submission-benchmark
+python3 code/evaluation/investigate.py --run artifacts/submission-run.json
 python3 code/tools/package.py
+python3 code/tools/verify_package.py
 ```
 
-The full run currently exits 2, writes only artifacts/supported.csv and diagnostics,
-and leaves root output.csv absent. It refuses to silently fill unsupported cases.
-Prediction runs before sample labels are opened. No organizer-only data, labels,
-case-ID mappings or reported workflow statuses enter prediction logic.
+Optional --baseline artifacts/competition-run.json reconstructs the original 151-case
+recovery comparison in the development checkout. That baseline is not a predictor
+input or a package dependency. Standalone investigation reports current blockers.
 
-## Measured public checkpoints
+The clean extracted package runs in a fresh Python virtual environment without
+pip packages, using external participant data and system Poppler. All 119 tests
+pass, benchmark predictions reproduce byte-for-byte, and the full run exits 2 with
+374 supported rows and the same SHA-256 below. No dataset, caches, credentials,
+experiment clients or nested archives are in code.zip. No push or submission.
 
-| Metric | e909b0d strict baseline | Initial best effort | Final best effort |
-| --- | ---: | ---: | ---: |
-| Valid output coverage | 10/32 | 20/32 | 22/32 |
-| Correct statuses | 10/32 | 20/32 | 22/32 |
-| Exact cases | 2/32 | 2/32 | 2/32 |
-| Exact sequences | 2/32 | 2/32 | 2/32 |
-| Emitted matching steps / emitted steps | 58/58 | 112/112 | 118/118 |
-| Step precision | 100% | 100.00% | 100.00% |
-| Step recall across all 193 public steps | 30.05% | 58.03% | 61.14% |
-| Exact sequence yield across all 32 | 6.25% | 6.25% | 6.25% |
-| Unsupported cases | 22 | 12 | 10 |
-
-Final processed-case step recall: 118/157 (75.16%).
-Positional field accuracy: 670/1099 (60.96%).
-All 118 emitted step contents, including their citations, match.
-Cited-step coverage among processed cases is 38/43
-(88.37%); this penalizes missing citations, not incorrect ones.
-Cited-step recall across all public cases is 38/75
-(50.67%).
-Positional citation-field accuracy (including future empty citations) is
-114/157 (72.61%).
-
-Exact-case improvement remains zero. Structurally valid plans still omit expected
-verification resources. No previously exact public case regressed. All previous
-58 matched step contents remain present; new admitted rows add supported work.
-Successful predictions repeat identically in the evaluator. All 115 tests pass.
-
-## Functional changes and observed benefit
-
-1. Best-effort assessment isolates missing retention/support facts per resource
-   instead of rejecting grounded findings for other resources. Initial public
-   coverage/status matches double from 10 to 20, with 100% emitted precision.
-2. Request-only grammar handles clear account-deletion formulations in English,
-   Portuguese, Spanish, French, Japanese and Korean; explicit preservation and
-   non-deletion requests return NOT_APPLICABLE. The 240 full-run intent first
-   failures are eliminated on this corpus without using statuses or identity IDs.
-3. All eleven screenshots were visually inspected. Hash-bound reviewed extraction
-   now supplies visible account/search/connector/analytics/export/support/security/
-   marketing facts. This is a transparent evidence cache, not a broad OCR engine.
-   See docs/image_review.md for concrete ambiguities and excluded claims.
-4. Best-effort scope is subject-specific: reviewed media with no grounded link to
-   this subject no longer globally blocks COMPLETE. Relevant unresolved media and
-   unknown/altered images remain open. Metadata-only catalog events do not mutate
-   state; later state-changing claims invalidate that resource's old readback,
-   while other supported findings can still be returned.
-5. A still-present DELETION_PENDING row in an explicitly USER_PROFILE collection
-   follows its unconditional DELETE rule in best-effort mode. It is not silently
-   reclassified as a tombstone. Strict diagnostics remain conservative.
-6. A full-request CLI validates all selected rows before writing atomically.
-   It exits nonzero with explicit case blockers if full coverage fails. Packaging
-   is allowlisted and deterministic; trace snapshots are separate from code.zip.
-
-## Full-dataset coverage and unresolvable status gaps
-
-Attempted 518 cases. Supported **367/518 (70.85%)**:
-25 COMPLETE, 332 INCOMPLETE, 10 NOT_APPLICABLE.
-Unsupported: **151**. Supported rows use exactly the required
-three-column schema, sorted unique IDs, canonical phases/operations/states,
-consecutive steps, compatible remedies and checks, and admissible citations.
-
-No defensible 518-row output.csv exists. No guessed or empty INCOMPLETE rows were
-created. The source package and partial output are reviewable but are not a valid
-submission candidate. Schema validity of supported rows is distinct from full
-coverage and semantic plan completeness.
-
-| Remaining first failure | Cases |
-| --- | ---: |
-| Complete account deletion requires positive scoped profile-absence evidence | 69 |
-| No evidence-backed resources to verify | 43 |
-| Compliant observations do not close the unprocessed evidence scope | 26 |
-| No supported evidence resource lineage links to subject | 13 |
-
-Concrete examples from participant-facing evidence:
-
-- case_103 / user_101: the SQL read replica contains audit_record_9522, but supplies
-  no retention deadline. There is no linked deletion violation supporting an
-  INCOMPLETE status, nor enough retention/account-absence proof for COMPLETE.
-- case_112 / user_110: a blocked backup and redacted support text do not establish
-  the missing account lineage/absence or security-retention applicability.
-- case_513 / user_511: no supported evidence resource observation is admissible at
-  its 2026-02-03 06:00 UTC cutoff. Later captures cannot repair that audit.
-
-Closest rule-compliant resolution: obtain admissible missing evidence/ownership/
-retention facts or organizer clarification. Continue deterministic extraction if
-those facts exist in supplied artifacts. AI cannot create genuinely absent dates,
-resource IDs or earlier snapshots. Do not substitute reported COMPLETE, blanket
-INCOMPLETE, fabricated IDs or NOT_APPLICABLE for unresolved authorized requests.
-Text-model spending is not justified as a solution to missing evidence; no paid
-calls were made. Any new inference experiment still requires user approval.
-
-## Additional participant-created tests
-
-- An observed active profile plus a security record lacking a date produces a
-  grounded three-step INCOMPLETE partial plan only in best-effort mode; the missing
-  retention condition is recorded as an omission. Strict mode raises. Pass.
-- That undated security record alone produces no guessed INCOMPLETE or COMPLETE
-  row in either mode. Empty evidence also fails explicitly. Pass.
-- Independent clear multilingual account-deletion requests and ancillary identity
-  verification clauses classify correctly. Explicit preservation is non-deletion;
-  contradictory/conditional deletion remains unsupported. Pass.
-- A new image byte sequence has no cached interpretation; altered screenshots
-  cannot reuse another image's reviewed evidence. Pass.
-- A metadata-only resource-identity event cannot invalidate measured profile state.
-  State-changing claims still require newer readback for that resource. Pass.
-- Prior PDF fixtures cover retained security verification with profile absence,
-  customer-owned attachment planning, exact legal subject/order joins, inactive
-  holds, future capture exclusion and a real selectable-text PDF. Pass.
-
-## Packaging and readiness
-
-code.zip includes README.md, runnable code, tests, required evaluation reports,
-problem_statement.md and the current briefing/image review. It excludes dataset,
-virtual environments, caches, secrets, nested archives and trace archives.
-Poppler is an external system dependency documented in README. Runtime uses no
-Python dependencies. A clean extracted archive is tested against the externally
-supplied participant dataset in a fresh Python virtual environment.
-
-log.txt is the required conversation transcript. agent-trace.zip is a separate,
-redacted snapshot of relevant Codex sessions only, not a nested source artifact.
-Because this session is active, the complete trace must be refreshed after Codex
-is closed, following agent_trace_instructions.md. No final trace completeness is
-claimed while the app is running.
-
-Nothing was pushed or submitted. Approval remains required before submission,
-paid inference or a major architecture change. The user estimates approximately
-16 hours to interview; no configured official submission deadline was found.
-
-## Complete unsupported-case list
-
-| Case | Blocker |
-| --- | --- |
-| case_103 | No evidence-backed resources to verify |
-| case_107 | No evidence-backed resources to verify |
-| case_108 | No evidence-backed resources to verify |
-| case_111 | No evidence-backed resources to verify |
-| case_112 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_126 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_127 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_135 | Compliant observations do not close the unprocessed evidence scope |
-| case_137 | Compliant observations do not close the unprocessed evidence scope |
-| case_150 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_151 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_152 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_155 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_157 | No evidence-backed resources to verify |
-| case_160 | No evidence-backed resources to verify |
-| case_162 | No evidence-backed resources to verify |
-| case_175 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_178 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_183 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_190 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_191 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_204 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_206 | No evidence-backed resources to verify |
-| case_213 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_215 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_218 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_219 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_221 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_225 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_226 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_231 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_233 | Compliant observations do not close the unprocessed evidence scope |
-| case_235 | Compliant observations do not close the unprocessed evidence scope |
-| case_243 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_244 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_253 | No evidence-backed resources to verify |
-| case_257 | No evidence-backed resources to verify |
-| case_260 | No evidence-backed resources to verify |
-| case_264 | Compliant observations do not close the unprocessed evidence scope |
-| case_265 | Compliant observations do not close the unprocessed evidence scope |
-| case_267 | Compliant observations do not close the unprocessed evidence scope |
-| case_274 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_276 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_277 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_292 | Compliant observations do not close the unprocessed evidence scope |
-| case_294 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_295 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_297 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_299 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_304 | No evidence-backed resources to verify |
-| case_308 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_309 | No evidence-backed resources to verify |
-| case_313 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_314 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_319 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_322 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_324 | Compliant observations do not close the unprocessed evidence scope |
-| case_326 | Compliant observations do not close the unprocessed evidence scope |
-| case_331 | Compliant observations do not close the unprocessed evidence scope |
-| case_335 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_336 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_339 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_343 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_345 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_346 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_351 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_354 | No evidence-backed resources to verify |
-| case_362 | No evidence-backed resources to verify |
-| case_369 | Compliant observations do not close the unprocessed evidence scope |
-| case_383 | Compliant observations do not close the unprocessed evidence scope |
-| case_390 | Compliant observations do not close the unprocessed evidence scope |
-| case_392 | Compliant observations do not close the unprocessed evidence scope |
-| case_393 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_395 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_398 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_403 | No evidence-backed resources to verify |
-| case_408 | No evidence-backed resources to verify |
-| case_409 | No evidence-backed resources to verify |
-| case_41 | Compliant observations do not close the unprocessed evidence scope |
-| case_411 | No evidence-backed resources to verify |
-| case_412 | No evidence-backed resources to verify |
-| case_423 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_424 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_427 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_430 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_44 | Compliant observations do not close the unprocessed evidence scope |
-| case_448 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_45 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_452 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_456 | No evidence-backed resources to verify |
-| case_457 | No evidence-backed resources to verify |
-| case_458 | No evidence-backed resources to verify |
-| case_46 | Compliant observations do not close the unprocessed evidence scope |
-| case_460 | No evidence-backed resources to verify |
-| case_462 | No evidence-backed resources to verify |
-| case_463 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_464 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_467 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_470 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_479 | No evidence-backed resources to verify |
-| case_480 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_484 | No evidence-backed resources to verify |
-| case_493 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_494 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_497 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_502 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_503 | No evidence-backed resources to verify |
-| case_506 | No evidence-backed resources to verify |
-| case_508 | No evidence-backed resources to verify |
-| case_51 | Compliant observations do not close the unprocessed evidence scope |
-| case_512 | No evidence-backed resources to verify |
-| case_513 | No supported evidence resource lineage links to subject |
-| case_514 | No supported evidence resource lineage links to subject |
-| case_515 | No supported evidence resource lineage links to subject |
-| case_516 | No supported evidence resource lineage links to subject |
-| case_517 | No supported evidence resource lineage links to subject |
-| case_518 | No supported evidence resource lineage links to subject |
-| case_519 | No supported evidence resource lineage links to subject |
-| case_520 | No supported evidence resource lineage links to subject |
-| case_521 | No supported evidence resource lineage links to subject |
-| case_522 | No supported evidence resource lineage links to subject |
-| case_524 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_530 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_532 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_543 | No evidence-backed resources to verify |
-| case_544 | No evidence-backed resources to verify |
-| case_545 | No evidence-backed resources to verify |
-| case_546 | No evidence-backed resources to verify |
-| case_547 | No evidence-backed resources to verify |
-| case_548 | No evidence-backed resources to verify |
-| case_549 | No evidence-backed resources to verify |
-| case_55 | No supported evidence resource lineage links to subject |
-| case_550 | No evidence-backed resources to verify |
-| case_57 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_58 | No evidence-backed resources to verify |
-| case_59 | No evidence-backed resources to verify |
-| case_60 | No evidence-backed resources to verify |
-| case_61 | No supported evidence resource lineage links to subject |
-| case_63 | No supported evidence resource lineage links to subject |
-| case_64 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_69 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_70 | Complete account deletion requires positive scoped profile-absence evidence |
-| case_76 | No evidence-backed resources to verify |
-| case_77 | Compliant observations do not close the unprocessed evidence scope |
-| case_81 | Compliant observations do not close the unprocessed evidence scope |
-| case_82 | Compliant observations do not close the unprocessed evidence scope |
-| case_83 | Compliant observations do not close the unprocessed evidence scope |
-| case_84 | Compliant observations do not close the unprocessed evidence scope |
-| case_86 | Compliant observations do not close the unprocessed evidence scope |
-| case_88 | Compliant observations do not close the unprocessed evidence scope |
-| case_97 | Complete account deletion requires positive scoped profile-absence evidence |
-
-
-## Completed local runtime AI comparison — 2026-10-24
-
-Technical Lead authorized local API testing; judge network/credentials remain
-unproven. Eight public cases: 01, 02, 21, 05, 03, 11, 18, 29. Labels were isolated
-from inference. Accepted A/B/C status matches: 5/8, 2/8, 5/8; exact cases and
-sequences: 1/8 each; step recall: 36/53, 5/53, 36/53; emitted precision: 100% each;
-citation correctness: 13/13, 3/3, 13/13; missing verification: 13, 24, 13.
-No newly accepted correct case or step. C uses deterministic fallback on three
-rejected proposals. Raw model support-record triples match labels but do not
-prove missing support-policy conditions. Recommendation: retain deterministic
-operation and do not scale inference. 115 baseline + 8 experiment tests pass.
-
-OpenAI gpt-4.1-mini-2025-04-14, temperature 0, output cap 6000, strict schema:
-16 completed calls; 141,986 actual reported input tokens (17,280 cached), 8,609
-output; 150,595 total, 18,824.375 tokens/tested request across both model arms.
-Estimated completed-call total cost $0.0653848, per tested request $0.0081731.
-B: 69,794 input / 3,803 output, $0.0322744, 27.386s summed API latency.
-C: 72,192 input / 4,806 output, $0.0331104, 32.563s summed API latency.
-Overall summed API latency 59.951s. One failed network attempt retains its
-$0.0168484 reservation with unknown usage; estimate plus uncertain-call maximum
-$0.0822332. All-attempt conservative reservations total $0.4216132, below $1.
-Prices per million: input $0.40, cached $0.10, output $1.60, checked in official
-OpenAI model docs. Cost is a rate-based estimate, not an invoice actual charge.
-These are LOCAL EXPERIMENT numbers, not a new 518-case output-producing run;
-prior full-run usage/baselines remain intact. Full details, raw diagnostics,
-limitations and reproduction: experiments/runtime_ai/measured_report.md.
+Partial-output SHA-256: `a6b39fd24b7d31cb70578975720a33875179561206c3262d6877b112164182a6`.
+Public-prediction SHA-256: `4a40ddc20c7286a01cda1047241f3c8e324191aed21f1569306d2daf802b8f81`.
+Runtime details: evaluation/usage_report.md. The previous completed AI experiment
+is historical development evidence only and is not imported or rerun.

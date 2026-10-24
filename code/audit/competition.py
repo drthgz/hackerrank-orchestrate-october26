@@ -96,6 +96,7 @@ PDF customer statements stay open for their explicit subject, not everyone else.
             # Identity-free storage names may correlate via a later catalog;
             # keep that unresolved image open rather than infer its owner.
             linked_names = any(event.get('event_type') == 'LINK_RESOURCE_IDENTITY'
+                               and event.get('activity_id') not in {o.facts.get('_lineage_evidence') for o in observations}
                                and (cutoff is None or timestamp(event['event_time']) <= cutoff)
                                and any(name in event.get('details', '') for name in data.get('filenames', ()))
                                and any(re.search(r'(?<![\w@.])'+re.escape(k)+r'(?![\w@.])', event.get('details', ''), re.I)

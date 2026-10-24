@@ -127,14 +127,12 @@ def audit(request, inputs, mode='strict'):
                     closed_scope = False
                 if any(row['collection_name'] not in COLLECTIONS for table, rows in tables.items() if table in JSON_TABLES for row in rows):
                     closed_scope = False
-    result = plan(decisions, request.case_id, complete_scope=closed_scope)
-    validate_result(result, request, inputs.citation_times())
     # Diagnostics retain physical copies, policy reasons and claims separately.
     details = {
         'mode': mode,
         'omissions': omissions,
         'plan_exhaustive': not omissions and not unprocessed,
-        'scope': 'Deterministic SQL/JSON/text/log/PDF audit; images remain uninterpreted',
+        'scope': 'Deterministic SQL/JSON/text/log/PDF audit; reviewed image fields in best-effort mode',
         'evidence_scope_closed': closed_scope,
         'subject': asdict(subject),
         'observations': [asdict(o) for o in observations],
@@ -143,4 +141,11 @@ def audit(request, inputs, mode='strict'):
         'activity_claims': claims,
         'unprocessed_evidence_formats': sorted({e.path.suffix for e in unprocessed}),
     }
+    try:
+        result = plan(decisions, request.case_id, complete_scope=closed_scope)
+        validate_result(result, request, inputs.citation_times())
+    except AuditError as exc:
+        # Preserve all independent gaps rather than expose only the first gate.
+        exc.details = details
+        raise
     return result, details
