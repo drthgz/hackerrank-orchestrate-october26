@@ -1,0 +1,126 @@
+{
+  "baseline_commit": "938035d",
+  "mode": "best-effort",
+  "cases": {
+    "case_01": {
+      "unsupported": "No supported evidence resource lineage links to subject",
+      "seconds": 0.07200140599888982,
+      "expected_steps": 1,
+      "missing_verification": 1
+    },
+    "case_02": {
+      "unsupported": "No supported evidence resource lineage links to subject",
+      "seconds": 0.05468693599868857,
+      "expected_steps": 1,
+      "missing_verification": 1
+    },
+    "case_21": {
+      "unsupported": "Complete account deletion requires positive scoped profile-absence evidence",
+      "seconds": 0.07898887100054708,
+      "expected_steps": 3,
+      "missing_verification": 3
+    },
+    "case_05": {
+      "cited_step_matches": 1,
+      "cited_step_comparisons": 1,
+      "deletion_status_matches": true,
+      "all_steps_match": true,
+      "evidence_references_match": true,
+      "step_ordering_matches": true,
+      "citation_field_matches": 3,
+      "citation_field_comparisons": 3,
+      "step_matches": 3,
+      "expected_steps": 3,
+      "predicted_steps": 3,
+      "field_matches": 21,
+      "field_comparisons": 21,
+      "unsupported": null,
+      "seconds": 0.07619736600099714,
+      "missing_verification": 0
+    },
+    "case_03": {
+      "cited_step_matches": 2,
+      "cited_step_comparisons": 3,
+      "deletion_status_matches": true,
+      "all_steps_match": false,
+      "evidence_references_match": false,
+      "step_ordering_matches": false,
+      "citation_field_matches": 2,
+      "citation_field_comparisons": 3,
+      "step_matches": 2,
+      "expected_steps": 3,
+      "predicted_steps": 2,
+      "field_matches": 14,
+      "field_comparisons": 21,
+      "unsupported": null,
+      "seconds": 0.0995303640011116,
+      "missing_verification": 1
+    },
+    "case_11": {
+      "cited_step_matches": 3,
+      "cited_step_comparisons": 4,
+      "deletion_status_matches": true,
+      "all_steps_match": false,
+      "evidence_references_match": false,
+      "step_ordering_matches": false,
+      "citation_field_matches": 9,
+      "citation_field_comparisons": 14,
+      "step_matches": 10,
+      "expected_steps": 14,
+      "predicted_steps": 10,
+      "field_matches": 36,
+      "field_comparisons": 98,
+      "unsupported": null,
+      "seconds": 0.08584172500013665,
+      "missing_verification": 2
+    },
+    "case_18": {
+      "cited_step_matches": 3,
+      "cited_step_comparisons": 4,
+      "deletion_status_matches": true,
+      "all_steps_match": false,
+      "evidence_references_match": false,
+      "step_ordering_matches": false,
+      "citation_field_matches": 8,
+      "citation_field_comparisons": 14,
+      "step_matches": 9,
+      "expected_steps": 14,
+      "predicted_steps": 9,
+      "field_matches": 36,
+      "field_comparisons": 98,
+      "unsupported": null,
+      "seconds": 0.07959445900087303,
+      "missing_verification": 3
+    },
+    "case_29": {
+      "cited_step_matches": 4,
+      "cited_step_comparisons": 4,
+      "deletion_status_matches": true,
+      "all_steps_match": false,
+      "evidence_references_match": false,
+      "step_ordering_matches": false,
+      "citation_field_matches": 12,
+      "citation_field_comparisons": 14,
+      "step_matches": 12,
+      "expected_steps": 14,
+      "predicted_steps": 12,
+      "field_matches": 70,
+      "field_comparisons": 98,
+      "unsupported": null,
+      "seconds": 0.09001519500088762,
+      "missing_verification": 2
+    }
+  },
+  "runtime_api_calls": 0,
+  "runtime_api_cost_usd": 0,
+  "B": "NOT_RUN",
+  "C": "NOT_RUN",
+  "blockers": [
+    "Runtime external API permission unverified",
+    "OPENAI_API_KEY absent"
+  ],
+  "input_hashes": {
+    "sample_deletion_requests.csv": "fe08461a78fc04f1aadb076c54010ebe2b35bd599a09df2fd014683cc8914c22",
+    "sample_output.csv": "11bb0f1ab2956e2a8b1b082225b8ef76e07ec112e61e5108cf5819f269eac239"
+  }
+}

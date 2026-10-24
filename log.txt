@@ -1380,3 +1380,144 @@ branch=main
 repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
+## [2026-10-24T21:04:47.022298+00:00] SESSION START
+
+tool=Codex
+model=gpt-6.1-sol
+Repo Root: /home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+Branch: main
+Worktree: /home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+Parent Agent: none
+Language: py
+Time Remaining: not configured
+
+## [2026-10-24T21:05:57.632190+00:00] Runtime AI experiment preflight blocked
+
+User Prompt (verbatim, secrets redacted):
+# HackerRank Orchestrate October 2026 — Runtime AI Accuracy Experiment
+
+Continue from commit 938035d.
+
+The Technical Lead approves a bounded experiment comparing runtime OpenAI inference against our deterministic solution.
+
+Our objective is to maximize total competition score with limited remaining time.
+
+## Constraints
+
+- Preserve the current deterministic pipeline and its baseline metrics.
+- Do not rewrite the architecture.
+- Do not push or submit.
+- Never expose or commit API credentials.
+- Verify the competition permits runtime external API calls before using them.
+- Do not assume API access will be available in the judge's execution environment.
+- Maximum authorized experiment spend: $1 USD. Stop before exceeding this budget.
+- Use an inexpensive suitable OpenAI model and record its exact identifier and current pricing.
+
+## Experiment design
+
+Select 6–10 representative labeled public cases:
+
+- Several currently unsupported cases.
+- Several cases with incomplete verification plans.
+- At least one already-correct case.
+- Cases containing ambiguous text, policy, or evidence relationships.
+
+Keep public expected outputs completely isolated from the inference inputs.
+
+Compare three approaches:
+
+A. Existing deterministic pipeline.
+
+B. Model-only reasoning using the actual request, admissible evidence, official rules, and output schema.
+
+C. Hybrid reasoning: model extracts structured facts or proposes missing steps; deterministic code validates evidence, policy, temporal cutoffs, and ordering.
+
+Use the same evidence and audit cutoffs for all approaches.
+
+## Model integration
+
+Implement a minimal reusable API client.
+
+Supply only relevant evidence, not arbitrary entire datasets.
+
+Require structured output and preserve evidence provenance.
+
+Reject invented evidence references, unsupported resource IDs, invalid states, and temporal violations.
+
+Log:
+
+- Model and parameters.
+- Input/output tokens.
+- Actual or estimated cost, clearly distinguished.
+- Latency.
+- Validation failures.
+
+## Evaluation
+
+Compare:
+
+- Correct deletion statuses.
+- Exact case matches.
+- Step precision and recall.
+- Missing verification steps.
+- Citation accuracy.
+- Ordering accuracy.
+- Cases newly resolved.
+- Cost and runtime.
+
+Identify whether AI discovers valid evidence relationships that deterministic code missed.
+
+Do not use reference answers in runtime prompts.
+
+## Decision
+
+Recommend one of:
+
+1. Retain deterministic-only.
+2. Add selective AI inference for specific failure categories.
+3. Use a hybrid model-first approach for cases the deterministic pipeline cannot resolve.
+
+Base the recommendation on measured results, not assumptions.
+
+## Submission protection
+
+Do not disrupt the existing source package or partial output.
+
+If the experiment is not promising, revert or isolate experimental changes.
+
+Continue maintaining interview notes and actual usage reporting.
+
+Commit validated experimental code locally.
+
+## Completion
+
+Report:
+
+- Cases tested.
+- Side-by-side accuracy.
+- Newly correct steps/cases.
+- Validation failures.
+- API cost and runtime.
+- Recommendation for the remaining 518 requests.
+- Local commit hash.
+
+Stop after the experiment. Do not scale inference to all 518 requests without further approval.
+
+
+Agent Response Summary:
+Measured eight public deterministic cases with labels isolated until prediction completed. Runtime API permission could not be verified from accessible official pages and the API key environment variable is absent, so no paid calls were made. Isolated the baseline runner and report, preserving the source package and partial output; B/C comparison and reusable client remain unfinished. Recorded zero runtime API usage and provisional deterministic-only recommendation.
+
+Actions:
+* Read AGENTS.md and runtime metadata; verified baseline commit 938035d.
+* Inspected official event and OpenAI model documentation.
+* Added experiments/runtime_ai baseline runner/results/report; appended usage and interview notes.
+* Ran existing test suite; prepared local commit without push or submission.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none
+

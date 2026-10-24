@@ -82,3 +82,14 @@ They contain no case IDs, statuses or expected steps. Identity, policy and cutof
 logic still run normally. Unknown/changed images have no cached interpretation.
 The tradeoff is corpus-specific evidence extraction rather than a general OCR
 system; ambiguous ownership, access controls and future fields remain unresolved.
+
+
+## Runtime AI experiment preflight — 2026-10-24
+
+Eight public cases were measured in isolation; deterministic status matches 5/8,
+exact matches 1/8, step matches 36/53 with 100% emitted precision. B/C were not
+run: runtime API permission could not be verified and OPENAI_API_KEY is absent.
+Runtime API calls, input/output tokens and cost are all zero; model latency and
+per-model totals are not applicable. This does not replace the full-run usage
+report. See experiments/runtime_ai/report.md. No evidence relationship gains
+were measured; retain deterministic operation pending a completed comparison.
