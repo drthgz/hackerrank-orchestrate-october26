@@ -1,77 +1,80 @@
 # Five-minute interview briefing
 
-## Architecture
+## What the system does
 
-The agent audits deletion intent first, resolves current/historical identifiers,
-and reads only participant-facing evidence available by each audit_at cutoff.
-Python adapters extract SQL primary/replica snapshots, nested JSON, service logs,
-text handovers, selectable-text PDFs and reviewed screenshots. Observations retain
-identity/resource lineage, availability/observation time, physical copy and citation.
-Policy maps facts to deletion, redaction, anonymization, retention or tombstones.
-The planner stops active flows/restores before record changes, sorts canonical
-operations and produces verification for supported final states.
+The evidence audit resolves deletion intent and current/historical identifiers,
+extracts participant evidence available by audit_at, evaluates policy, and plans
+ordered remediation/verification. SQL replicas, JSON, trace logs, text handovers,
+PDFs and hash-bound reviewed screenshots supply typed observations. Workflow
+claims do not prove state. Missing lineage or retention facts are never invented.
 
-Reported workflow success is a claim, not state. Missing identities cannot be
-joined by numbered-ID patterns. Unknown retention dates cannot be inferred from
-integrity seals. New screenshots cannot reuse another image's reviewed facts.
+The strict engine and best-effort mode are unchanged from e6cb761. Strict supports
+86/518 requests; best-effort supports 374/518 and exposes partial-plan omissions.
+Neither returns a verified conclusion from unknown facts.
 
-## What changed after the runtime experiment
+## Why add a separate prediction mode?
 
-The completed experiment did not improve accepted accuracy, so deterministic
-operation was retained. No additional paid calls were made. Pipe-delimited log
-headers were missing in extraction; recovering service/trace/event fields adds
-six full-dataset decisions. A screenshot/catalog join adds one more: the screenshot
-proves an attachment filename is present; a pre-cutoff catalog event supplies the
-stable object ID, subject and sole ownership. Both witnesses remain in provenance.
+The statement requires one row per request and scores predictions against hidden
+canonical answers. It does not explicitly prohibit uncertainty, but it does require
+evidence-backed steps and complete plans. We separated the structural submission
+requirement from verified audit conclusions. The new user-authorized mode produces
+all 518 rows, while keeping 144 uncertain statuses and 302 incomplete/unproved
+plans explicit in a sidecar. Semantic acceptance and partial credit are unconfirmed;
+there is no organizer approval. See docs/submission_contract.md.
 
-All original 151 blockers now have explicit dispositions. Seven decisions were
-recovered and four other formerly unlinked cases now have readbacks but unresolved
-policy facts. Diagnostics preserve every independent omission instead of only the
-first proof gate. Full evidence sufficiency and organizer questions are documented
-in docs/evidence_sufficiency.md.
+The fixed fallback preserves all 374 best-effort rows. For the remaining evidence
+proof gates it predicts INCOMPLETE from observed residual PII or enabled recreation
+permission, otherwise COMPLETE. The latter is an absence-of-contradiction heuristic,
+not proof that deletion is done. It uses no reported workflow statuses, public
+answers, case-ID rules, invented resource IDs/citations or retention deadlines.
+Only independently assessed verifications become steps. Unknown resources stay out.
 
-## Measurements
+## Actual results
 
-119 solution tests pass. The public benchmark produces 22/32 correct statuses,
-2/32 exact cases/sequences, 118/121 matching emitted steps (97.52% precision),
-118/193 recall (61.14%), and 38/39 correct emitted citations. The attachment triple
-is supported by evidence but absent from the public canonical answer. Its inclusion
-slightly reduces precision; no previous matching step or exact case is lost.
+Public statuses: strict 10/32, best-effort 22/32, prediction 32/32. Exact cases and
+sequences stay 2/32. Step precision improves from 118/121 (97.52%) to 129/132
+(97.73%); full-step recall from 61.14% to 66.84%. Citations match 49/50 emitted
+witnesses. All previous matching steps/rows survive; eleven supported verifications
+and ten correct status predictions are added. Rules were fixed before evaluation.
 
-Full coverage improves from 367 to 374/518: 339 INCOMPLETE, 25 COMPLETE and 10
-NOT_APPLICABLE. There are still 144 unsupported cases. The required valid output.csv
-does not exist. A clean package reproduces the same partial output and exit 2.
-Runtime calls, input/output tokens and cost are zero. Hidden accuracy is unmeasured.
+Ten public statuses remain unproved despite matching labels; five public rows
+lack steps required by the stronger audit validator. Full candidate: 160 COMPLETE,
+348 INCOMPLETE, 10 NOT_APPLICABLE; 144 unproved statuses. Forty-nine full-dataset
+rows fail stronger audit validation, although all 518 pass structural/citation/
+resource-provenance checks. There are 302 incomplete/unproved plans. Hidden score
+and hidden accuracy are unknown. We do not present these predictions as compliance
+certifications or as a solved evidence gap.
+
+128 solution tests pass. Clean extraction/fresh venv reproduces the complete CSV,
+unchanged best-effort partial audit and all public benchmarks byte-for-byte without
+inherited credentials or installed pip packages. Runtime calls/tokens/cost are zero.
+The earlier paid AI experiment was completed previously and not rerun.
 
 ## Questions to be ready for
 
-**Why not fill the remaining rows with INCOMPLETE?**
-That asserts a violation. Missing completion proof alone does not establish one.
-The contract also requires a complete remediation plan, but defines no uncertainty
-status. For an undated security record, neither applicable retention nor unlawful
-persistence is established. We need missing facts or an organizer-defined fallback.
+**Does COMPLETE mean proved deletion for fallback rows?**
+No. It is a competition prediction constrained by the three-label output format.
+The sidecar marks low uncalibrated confidence, the missing proof, plan gaps and any
+audit-validator error. The grader still interprets its status normally; the sidecar
+does not repair a missing proof. This is an explicit submission tradeoff.
 
-**Why are exact cases still low?**
-Many expected verifications need lineage for already-absent accounts or anonymous
-resources; supplied exports can omit those identifiers. Security retention and
-support context can also be absent. A grounded violation supports the status while
-missing verification resources prevent an exact plan. We report both measures.
+**Why can a complete CSV still be semantically incomplete?**
+The schema requires identifiers, allowed statuses and an ordered JSON array. It
+has no explicit array minLength, but the prose demands findings/proofs and a complete
+plan. Empty/partial arrays pass structural parsing while falling short of that
+content. We report both and claim no organizer acceptance or partial-credit guarantee.
 
-**Is the package submission-ready?**
-The source is runnable and clean-tested; the predictions are incomplete. No valid
-518-row submission is claimed. The 374-row supported artifact is explicitly partial.
-Nothing is pushed or submitted. The official deadline is not configured.
-
-**Are the screenshot facts hardcoded answers?**
-They are reviewed visible fields keyed to image SHA-256, with no case IDs, verdicts
-or expected steps. Policy, identity and cutoff logic still run. Unknown or changed
-images remain unresolved. This trades general OCR capability for deterministic,
-reviewable evidence extraction on the supplied corpus.
+**Why did exact cases stay low?**
+Status prediction does not recover unknown account IDs, anonymous-record lineage,
+retention periods or support conditions. We preserve genuine evidence rather than
+inventing the canonical steps. Scoring considers several dimensions, but total
+weights and the hidden score are unavailable.
 
 ## Artifacts and handoff
 
-code.zip: source/tests/reports, excluding dataset, caches, credentials and experiments.
-artifacts/supported.csv: partial predictions. artifacts/submission-run.json: full
-per-case diagnostics, including unsupported-case omissions. log.txt: conversation
-transcript. agent-trace.zip: redacted snapshot, to refresh after closing Codex for
-complete active-session logs. No push/submission or organizer messaging occurred.
+output.csv: structurally complete 518-row prediction candidate. code.zip: runnable
+source/tests/reports and contract analysis, excluding dataset, credentials, caches,
+experiment clients and output data. artifacts/prediction-run.json: separate confidence/
+missing-proof diagnostics. log.txt: transcript. agent-trace.zip: redacted snapshot,
+to refresh after closing Codex for complete active-session logs. Nothing is pushed
+or submitted. The repository has no configured official deadline.

@@ -1,127 +1,145 @@
-# Submission completion evaluation — 2026-10-24
+# Final competition prediction evaluation — 2026-10-24
 
-## Result and contract
+## Candidate and exact contract interpretation
 
-Continued from commit 00317fc and retained the deterministic pipeline. No additional
-paid inference calls were made. The full run produces **374/518 (72.20%)** supported
-rows, up from 367/518. **144 cases remain unsupported**, so root output.csv is absent.
-This is a runnable review package, not a valid complete competition submission.
-339 INCOMPLETE, 25 COMPLETE and 10 NOT_APPLICABLE statuses are emitted.
-Of the emitted deletion rows, 158 have explicit policy/state omissions and 206
-are flagged exhaustive by the current extractor; the latter flag is diagnostic,
-not measured hidden-answer completeness. Ten non-deletion rows need no plan.
+Continued from e6cb761. The unchanged best-effort audit supports 374/518 requests;
+the new, separately selected prediction mode writes **518/518** rows. Its first
+implementation commit is a342529. No additional paid API calls were made.
 
-The supplied official problem_statement.md requires 518 rows and complete plans.
-AGENTS.md §6.3–6.6 requires evidence-backed states at audit_at and prohibits
-fabricated evidence. Neither supplied document defines UNKNOWN or an uncertainty
-fallback. Unknown cannot become INCOMPLETE without a violation, COMPLETE without
-proof, or NOT_APPLICABLE for an authorized deletion. Partial plans may have grounded
-statuses but are not certified complete plans; partial-credit scoring is unspecified.
-See docs/evidence_sufficiency.md for exact conflicts and organizer questions.
-No organizer-only data or labels enter prediction. No live organizer clarification
-has been obtained and no message has been sent. Deadline is not configured.
+The supplied problem_statement.md and AGENTS.md explicitly require a prediction
+row for every request. Neither expressly forbids uncertain/heuristic status
+predictions. They do require evidence-backed findings/verification and complete
+plans. The statement lists status, records, citations, policy, completeness and
+order as scoring considerations, but supplies no partial-credit formula or
+acceptance guarantee for partial/empty plans. Our interpretation is that a complete
+prediction CSV can meet the structural requirements while remaining semantically
+incomplete. This is not organizer approval or certification of compliance. Detailed
+rule-by-rule analysis: docs/submission_contract.md.
 
-## Public benchmark: all 32 cases
+We correct the earlier conflation of an unsupported verified audit conclusion with
+an impermissible competition prediction. Confidence sidecars do not change the
+meaning of COMPLETE to the grader. Unproved predictions can be wrong and missing
+plans can lose score or fail semantic expectations. No hidden score is claimed.
 
-Predictions are completed before the evaluator opens sample_output.csv. Every
-successful prediction is repeated and compared for determinism.
+## Fixed predictor, isolated from labels
 
-| Metric | Commit 00317fc baseline | Current |
-| --- | ---: | ---: |
-| Produced / all public cases | 22/32 | 22/32 |
-| Correct statuses / all public cases | 22/32 (68.75%) | 22/32 (68.75%) |
-| Correct statuses / produced | 22/22 | 22/22 |
-| Exact cases and exact sequences / all cases | 2/32 (6.25%) | 2/32 (6.25%) |
-| Matching emitted step contents | 118/118 | 118/121 |
-| Step precision | 100% | 97.52% |
-| Step recall / all 193 public steps | 118/193 (61.14%) | 61.14% |
-| Step recall / 157 steps in produced cases | 75.16% | 75.16% |
-| Positional field accuracy | 670/1099 (60.96%) | 666/1113 (59.84%) |
-| Positional citation-field accuracy | 114/157 (72.61%) | 113/159 (71.07%) |
-| Citation match / emitted cited steps | 38/38 | 38/39 (97.44%) |
-| Cited-step recall / all cited public steps | 38/75 (50.67%) | 38/75 (50.67%) |
-| Full-dataset supported coverage | 367/518 | 374/518 |
+Before running the new public benchmark, the predictor was implemented with this
+fixed rule: preserve each best-effort result; at the four evidence-sufficiency
+proof gates, predict INCOMPLETE for observed residual direct PII or enabled
+recreation permission, otherwise predict COMPLETE. Lack of contradiction is a
+heuristic, not proof of absence. Existing independently assessed verification
+steps survive; unknown lineage/policy produces no invented step.
 
-All 118 previously matching step contents remain. The catalog-backed object_19
-finding/remedy/check triple adds three noncanonical public steps; the same join
-recovers full-dataset case_61 with a supported violation. This small precision
-tradeoff is retained because both presence and sole ownership have admissible
-witnesses. It creates no new status/sequence regression, and does not replace
-measured facts with missing canonical lineage. No exact-case gain is claimed.
+The fallback reads only participant evidence at/before audit_at. It does not use
+reported_status/reported_result as features, case-ID rules, public-label priors,
+quotas, private truth, future evidence, fabricated resources or retention dates.
+Low/high confidence labels are uncalibrated assessments, not probabilities. Invalid
+input/schema/identity errors are not swallowed as uncertain predictions. The public
+evaluator opens labels only after every prediction and reproducibility repeat.
+No predictor rules were tuned after the measured result.
 
-Citation correctness above compares against canonical answers; structural citation
-validity checks only that IDs exist, cutoffs are respected and future-work citations
-are empty. Neither metric alone establishes full semantic correctness. Full-dataset
-status/exact-case accuracy is unmeasured because hidden answers are not accessed.
+## Public benchmark — all 32 samples
 
-## Evidence investigation and limitations
+| Metric | Strict audit | Best-effort baseline | Competition prediction |
+| --- | ---: | ---: | ---: |
+| Produced rows | 10/32 | 22/32 | 32/32 |
+| Correct statuses / all cases | 10/32 (31.25%) | 22/32 (68.75%) | 32/32 (100%) |
+| Exact cases / all cases | 2/32 | 2/32 | 2/32 |
+| Exact sequences / all cases | 2/32 (6.25%) | 2/32 (6.25%) | 2/32 (6.25%) |
+| Matching emitted steps | 58/58 | 118/121 | 129/132 |
+| Step precision | 100% | 97.52% | 97.73% |
+| Step recall / all 193 expected steps | 30.05% | 61.14% | 66.84% |
+| Correct citations / emitted cited steps | 19/19 | 38/39 | 49/50 |
+| Cited-step recall / 75 expected citations | 25.33% | 50.67% | 65.33% |
+| Positional field matches / full benchmark | 360/1351 (26.65%) | 666/1365 (48.79%) | 699/1365 (51.21%) |
+| First-error unsupported/no prediction | 22 | 10 | 0 |
+| Structurally invalid emitted rows | 0 | 0 | 0 |
+| Uncertain fallback status predictions | N/A: abstains | N/A: abstains | 10 |
+| Rows rejected by stronger audit validator | 0 | 0 | 5 |
 
-Pipe-delimited logs previously lost their service/trace/event headers. Recovering
-those headers establishes observations for ten originally unlinked cases: six now
-support INCOMPLETE, four move to unresolved policy/scope gaps. The attachment join
-recovers one further decision using evidence_46 plus activity_4007. It uses the
-screenshot for presence and catalog metadata for ownership/resource lineage.
+Field comparisons use max(predicted, expected) step count per case times seven,
+with missing cases counted as mismatches. Three noncanonical object-storage steps
+account for the precision difference; these were already in the best-effort
+baseline. Positional citation fields, including empty future citations, match
+124/195 (63.59%) in prediction mode. The candidate adds eleven matching supported
+verification steps and ten correct status predictions; every baseline row is
+preserved. There is no exact-case improvement and no baseline exact-case regression.
+The prediction output repeats byte-for-byte.
 
-All original 151 unsupported cases were reviewed with raw identifier/resource
-searches across the 94 participant evidence files, current/historical identifiers,
-parsed observations and policy omissions. Later captures are listed separately
-and excluded from proof. Raw hits do not automatically prove state or ownership.
-Machine detail: artifacts/evidence-sufficiency.json. Portable case dispositions:
-docs/evidence_sufficiency.md, included in code.zip.
+The 10 fallback statuses match labels but remain unproved. Five public fallback
+rows have no known steps and fail the audit validator's nonempty requirement.
+Twenty public plans are flagged incomplete/unproved. Structurally valid is not
+synonymous with fully supported or semantically correct.
 
-Remaining first blockers: 69 missing positive profile-absence proofs; 43 no
-policy-assessable verification resource; 30 unresolved scope; 2 missing/conflicting
-lineage. Independent gaps overlap these counts: missing supplied retention periods,
-shared support context, full text scans, attachment ownership and tombstone/retained
-record relationships. First failures do not describe all missing facts.
+## Full-dataset coverage and limitations
 
-For example, case_103 has an undated security record in evidence_10 and no supported
-violation. Neither an integrity seal nor a reported success supplies a retention
-deadline. case_55 has a backup without restore authorization; case_63 has conflicting
-screenshot/catalog ownership. No safe fallback covers these authorized requests.
-The CLI preserves exit 2 and explicitly refuses to fabricate a 518-row file.
+| Metric | Strict audit | Best-effort baseline | Competition prediction |
+| --- | ---: | ---: | ---: |
+| Produced / 518 requests | 86 | 374 | 518 |
+| Unsupported with no prediction | 432 | 144 | 0 |
+| Output status counts | see strict diagnostics | 25 COMPLETE / 339 INCOMPLETE / 10 NOT_APPLICABLE | 160 COMPLETE / 348 INCOMPLETE / 10 NOT_APPLICABLE |
 
-## Participant-created evaluation cases
+Every one of the 374 baseline rows matches exactly. The 144 added predictions
+comprise 135 COMPLETE and 9 INCOMPLETE, all low confidence and unproved. There are
+302 incomplete/unproved plans (158 carried over from baseline plus 144 fallbacks).
+49 rows fail stronger audit validation: 46 authorized-deletion rows have no steps;
+three INCOMPLETE predictions have only supported verification and no finding/
+remediation phases. Ten additional empty arrays are valid non-deletion rows.
 
-All 119 solution tests pass, including these independent fixtures with arbitrary
-identifiers (no public labels):
+Zero schema, ordering, duplicate-ID, citation-cutoff or resource/citation-provenance
+failures were found. All step resources and cited witnesses map to subject-linked
+observations in diagnostics. This checks emitted-step grounding, not completeness.
+Full-dataset status/exact-case accuracy and total competition score are unmeasured
+because hidden answers and scoring weights are unavailable and never accessed.
 
-1. Interleaved pipe-format traces read two subjects; only the matching subject's
-   scoped 404 becomes profile absence. Trace/service/instance isolation is retained.
-2. A visible attachment filename plus exact catalog resource/sole-owner metadata
-   creates a grounded attachment observation with both witnesses in provenance.
-3. The same ownership event after audit_at yields no attachment observation.
-4. A catalog filename absent from the screenshot yields no presence observation.
-5. An active profile plus an undated security record produces only a grounded
-   partial INCOMPLETE plan in best-effort mode; strict rejects missing policy facts.
-6. An undated security record alone yields no guessed COMPLETE/INCOMPLETE result.
+The known evidence gaps remain: missing profile lineage/absence, retention periods,
+support context/full scans, attachment ownership and conflicting catalog/media
+ownership. The new prediction layer does not solve these gaps or promote them into
+facts. docs/evidence_sufficiency.md preserves the original blocker investigation.
 
-Existing tests also cover replica drift, future capture exclusion, historical
-identifiers, redaction/anonymization fields, tombstones, retention joins, mutation
-claims versus readbacks, canonical order, and label isolation.
+## Additional participant-created evaluation cases and tests
 
-## Reproduction and package validation
+All **128 solution tests** pass. New independent fixtures include:
+
+1. Empty evidence yields low-confidence COMPLETE with [], while both unchanged
+   audit modes still raise. No fictitious resource/check is emitted.
+2. A subject-linked exposed tombstone without a proved retained-record relationship
+   predicts INCOMPLETE, but no unsupported finding/remedy is created.
+3. An explicitly in-period security record retains its grounded verification while
+   missing profile proof keeps the whole-case status uncertain.
+4. An undated security record creates no retention deadline or verification step.
+5. Changing the case identifier and reported workflow status does not change the
+   fallback decision. Malformed SQL/input errors still raise.
+6. Fabricated/future citations and duplicate prediction rows are rejected; the CSV
+   has only the official columns, with confidence confined to the sidecar.
+7. Existing best-effort steps are identical after wrapping them as predictions.
+
+Existing tests continue covering identity history, independent replicas, future
+capture exclusion, trace isolation, PDF extraction, policy, canonical order,
+resource lineage, claims versus readbacks and label isolation. The eight historical
+experiment tests are offline/mocked and no experiment inference was rerun.
+
+## Reproduction and clean package
 
 ```bash
 python3 -m unittest discover -s tests -q
-python3 code/main.py --all --mode best-effort --diagnostics artifacts/submission-run.json
-python3 code/evaluation/main.py --all-samples --mode best-effort --output-dir artifacts/submission-benchmark
-python3 code/evaluation/investigate.py --run artifacts/submission-run.json
+python3 code/main.py --all --mode prediction --diagnostics artifacts/prediction-run.json
+python3 code/tools/validate_candidate.py
+python3 code/evaluation/main.py --all-samples --mode prediction --output-dir artifacts/prediction-benchmark
+python3 code/evaluation/main.py --all-samples --mode strict --output-dir artifacts/final-strict-benchmark
 python3 code/tools/package.py
 python3 code/tools/verify_package.py
 ```
 
-Optional --baseline artifacts/competition-run.json reconstructs the original 151-case
-recovery comparison in the development checkout. That baseline is not a predictor
-input or a package dependency. Standalone investigation reports current blockers.
+The clean extraction uses a fresh venv with no pip packages and no inherited
+credentials. It reruns tests, the unchanged best-effort partial audit, the 518-row
+prediction run, candidate validation and all three public benchmarks. Predictions
+reproduce byte-for-byte. The code archive excludes dataset, output/diagnostic data,
+credentials, caches, experiment clients and nested archives. output.csv and log.txt
+are separate deliverables; the uncertainty sidecar remains local. No push,
+submission or organizer messaging occurred. Deadline is not configured.
 
-The clean extracted package runs in a fresh Python virtual environment without
-pip packages, using external participant data and system Poppler. All 119 tests
-pass, benchmark predictions reproduce byte-for-byte, and the full run exits 2 with
-374 supported rows and the same SHA-256 below. No dataset, caches, credentials,
-experiment clients or nested archives are in code.zip. No push or submission.
-
-Partial-output SHA-256: `a6b39fd24b7d31cb70578975720a33875179561206c3262d6877b112164182a6`.
-Public-prediction SHA-256: `4a40ddc20c7286a01cda1047241f3c8e324191aed21f1569306d2daf802b8f81`.
-Runtime details: evaluation/usage_report.md. The previous completed AI experiment
-is historical development evidence only and is not imported or rerun.
+Candidate output SHA-256: `b9045f0b71ec8025cfa1b67dd3b7ee5a82f7411787173743580d0f15aa9275b6`.
+Public prediction SHA-256: `a671432781c8379f6400a5051bd8fe939fe8aa04264171393630dd798a5b98b9`.
+Final output-producing run: 24.608s, zero model calls/tokens, $0.
+See evaluation/usage_report.md for runtime and separate historical experiment usage.

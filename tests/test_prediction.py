@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from test_structured import IDENTITY, REQUEST, RULES, NOW, FUTURE, profile
 from audit.inputs import Inputs
-from audit.models import AuditError, EvidenceFile, Result, Step
+from audit.models import AuditError, EvidenceFile, Result, Step, timestamp
 from audit.pipeline import audit
 from audit.prediction import predict, validate_prediction, write_predictions
 
@@ -94,7 +94,7 @@ class PredictionTests(unittest.TestCase):
             with self.subTest(citation=citation):
                 with self.assertRaises(AuditError):
                     validate_prediction(Result(REQUEST.case_id, 'COMPLETE', (step,)), REQUEST,
-                                        {'future-proof': __import__('audit.models', fromlist=['timestamp']).timestamp(FUTURE)})
+                                        {'future-proof': timestamp(FUTURE)})
 
     def test_writer_has_only_official_columns_and_rejects_duplicate_cases(self):
         inputs = self.inputs()

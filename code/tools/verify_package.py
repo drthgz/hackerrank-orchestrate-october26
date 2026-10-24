@@ -2,7 +2,7 @@
 
 The supplied participant dataset is attached outside the archive, as documented.
 No experiment client or model endpoint is imported. Subprocess credentials are
-not inherited. Diagnostics report incomplete coverage without manufacturing rows.
+not inherited. Both the unchanged partial audit and complete prediction replay.
 """
 import hashlib
 import json
@@ -54,10 +54,27 @@ def verify():
         run(['code/evaluation/main.py', '--all-samples', '--mode', 'best-effort', '--output-dir', 'artifacts/benchmark'])
         assert ((extracted / 'artifacts/benchmark/predictions.csv').read_bytes()
                 == (ROOT / 'artifacts/submission-benchmark/predictions.csv').read_bytes())
+        prediction = run(['code/main.py', '--all', '--mode', 'prediction', '--diagnostics', 'artifacts/prediction-run.json'])
+        predicted_summary = json.loads(prediction.stdout)
+        assert predicted_summary['attempted'] == predicted_summary['produced'] == 518
+        assert not predicted_summary['unsupported']
+        output_bytes = (extracted / 'output.csv').read_bytes()
+        assert output_bytes == (ROOT / 'output.csv').read_bytes()
+        run(['code/tools/validate_candidate.py', '--baseline', 'artifacts/supported.csv'])
+        run(['code/evaluation/main.py', '--all-samples', '--mode', 'prediction', '--output-dir', 'artifacts/prediction-benchmark'])
+        assert ((extracted / 'artifacts/prediction-benchmark/predictions.csv').read_bytes()
+                == (ROOT / 'artifacts/prediction-benchmark/predictions.csv').read_bytes())
+        run(['code/evaluation/main.py', '--all-samples', '--mode', 'strict', '--output-dir', 'artifacts/strict-benchmark'])
+        assert ((extracted / 'artifacts/strict-benchmark/predictions.csv').read_bytes()
+                == (ROOT / 'artifacts/final-strict-benchmark/predictions.csv').read_bytes())
         result = dict(clean_extraction=True, fresh_venv=True, python_packages_installed=0,
-                      tests=tests.stderr.strip(), full_run_exit=full.returncode,
-                      attempted=summary['attempted'], produced=summary['produced'],
-                      unsupported=len(summary['unsupported']), full_output_exists=False,
+                      tests=tests.stderr.strip(), baseline_run_exit=full.returncode,
+                      baseline_produced=summary['produced'], baseline_unsupported=len(summary['unsupported']),
+                      full_run_exit=prediction.returncode, attempted=predicted_summary['attempted'],
+                      produced=predicted_summary['produced'], uncertain_statuses=len(predicted_summary['uncertain_status_predictions']),
+                      unsupported=len(predicted_summary['unsupported']), full_output_exists=True,
+                      output_sha256=hashlib.sha256(output_bytes).hexdigest(), prediction_matches=True,
+                      prediction_benchmark_matches=True, strict_benchmark_matches=True,
                       partial_sha256=hashlib.sha256(actual).hexdigest(),
                       partial_matches=True, benchmark_matches=True,
                       inherited_credentials=False)

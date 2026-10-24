@@ -1,5 +1,10 @@
 # Evidence sufficiency and submission conflict
 
+This records evidence-backed audit sufficiency at e6cb761. The unchanged audit
+modes retain these gaps. A separate competition prediction mode now writes all
+518 rows with explicit external uncertainty; it does not resolve these proofs.
+See [contract interpretation](submission_contract.md).
+
 This review uses only participant-facing evidence and saved predictor diagnostics. It reads no public or private answer labels. Raw identifier/resource hits are discovery aids; they do not establish policy, ownership or current state. Later captures are listed separately and cannot repair an earlier audit.
 
 Coverage: **374/518**; **144 unresolved**. Recovered decisions from the original 151 blockers: case_513, case_514, case_515, case_517, case_518, case_519, case_61.

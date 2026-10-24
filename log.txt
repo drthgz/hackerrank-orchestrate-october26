@@ -2206,3 +2206,98 @@ branch=main
 repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
+
+## [2026-10-24T22:01:50.079754+00:00] Final strategy: complete uncertain competition candidate
+
+User Prompt (verbatim, secrets redacted):
+# HackerRank October 2026 — Final Submission Strategy
+
+Continue from commit e6cb761.
+
+Our primary objective is the highest achievable total competition score before the deadline.
+
+The current deterministic engine supports 374/518 requests. The remaining 144 cannot all be resolved through available evidence.
+
+Do not make additional paid API calls.
+
+## Task 1 — Interpret the submission contract
+
+Review the official problem statement and AGENTS.md.
+
+Determine whether:
+
+- The output contract requires a prediction for every request regardless of evidentiary certainty.
+- The challenge explicitly prohibits uncertain predictions or only prohibits unsupported compliance claims.
+- Partial plans receive any documented scoring consideration.
+- A complete CSV with uncertainty diagnostics kept outside the CSV would satisfy the structural submission requirements.
+
+Distinguish explicit rules from interpretations. Do not claim organizer approval where none exists.
+
+## Task 2 — Design a competition-only fallback
+
+Keep the strict evidence-backed audit engine unchanged.
+
+Investigate a separate prediction mode that:
+
+- Preserves all grounded evidence and valid steps.
+- Makes an explicitly uncertain status prediction when no conclusion is provable.
+- Does not invent resource IDs, citations, findings, or retention deadlines.
+- Records confidence and missing-proof diagnostics outside output.csv.
+- Never presents predictions as verified compliance decisions.
+
+Use only participant-visible evidence and label-independent heuristics.
+
+## Task 3 — Measure the trade-off
+
+Evaluate against all 32 public samples.
+
+Report:
+
+- Full 518-row coverage.
+- Correct public statuses.
+- Exact public cases.
+- Step precision and recall.
+- Invalid or unsupported predictions.
+- Differences from the strict baseline.
+
+Do not optimize rules against individual case IDs or copy public answers into the predictor.
+
+## Task 4 — Submission candidate
+
+If the official contract permits this prediction mode, generate a complete 518-row output.csv.
+
+Validate schema, ordering, citations, and row uniqueness.
+
+Rebuild code.zip and update the reports, README, transcript, and interview briefing.
+
+Keep uncertainty diagnostics separate from the submitted CSV.
+
+If the contract explicitly prohibits uncertain predictions, do not implement this fallback; instead report the rule conflict immediately.
+
+## Constraints
+
+- No paid inference.
+- No fabricated evidence or resource IDs.
+- No pushing or submission without approval.
+- Preserve the existing strict and best-effort modes.
+- Commit validated changes locally.
+
+Report the exact contract interpretation and resulting candidate metrics immediately.
+
+
+Agent Response Summary:
+Reviewed the supplied official statement and AGENTS.md: 518 rows are explicitly required, uncertain status predictions are not explicitly banned, and complete evidence-backed plans remain semantic requirements without a documented partial-credit guarantee or organizer approval. Added an isolated competition prediction mode with fixed label-independent heuristics, preserving all 374 prior best-effort rows and leaving strict/best-effort audit behavior unchanged; output.csv has 518 unique sorted rows, 144 uncertain statuses, 302 incomplete/unproved plans and 49 stronger audit-validator failures, with zero structural/citation/provenance failures. Public results are 32/32 correct statuses, 2/32 exact cases, 129/132 matching emitted steps, 129/193 recall and 49/50 emitted citation matches, compared with 10/32 strict and 22/32 best-effort statuses. All 128 solution tests and 8 offline experiment tests pass, and a fresh extracted package/venv reproduces the candidate, prior partial audit and all three benchmarks byte-for-byte without inherited credentials. Updated README, evaluation and usage reports, contract interpretation, interview briefing, transcript and trace snapshot; zero additional paid API calls, no push, and no submission.
+
+Actions:
+* Added code/audit/prediction.py and independent fixture tests; committed the prediction layer as a342529.
+* Extended CLI/evaluation selection; generated output.csv and separate artifacts/prediction-run.json.
+* Added candidate schema/citation/resource-provenance validation and full clean-package prediction replay.
+* Rebuilt code.zip, updated reports/briefing/contract analysis, and refreshed the redacted agent trace snapshot.
+
+Context:
+tool=Codex Desktop
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none
