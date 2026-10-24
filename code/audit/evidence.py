@@ -202,7 +202,7 @@ def enrich(observations, subject, cutoff):
     return tuple(result)
 
 
-def extract_observations(files, subject, cutoff, include_images=False):
+def extract_observations(files, subject, cutoff, include_images=False, activity=()):
     observations = []
     extra, snapshots = [], []
     documents = []
@@ -210,8 +210,9 @@ def extract_observations(files, subject, cutoff, include_images=False):
         if file.captured_at > cutoff:
             continue
         if include_images and file.path.suffix.lower() in {'.png', '.jpg', '.jpeg'}:
-            from .reviewed_images import read_image
+            from .reviewed_images import read_image, catalog_attachment_observations
             extra.extend(read_image(file))
+            extra.extend(catalog_attachment_observations(file, subject, activity, cutoff))
             continue
         if file.path.suffix == '.pdf':
             document = read_pdf(file)

@@ -6,8 +6,10 @@ unresolved. An altered or new image has no cached interpretation and fails scope
 No runtime OCR or model is used. See docs/image_review.md for review limits.
 """
 import hashlib
+import re
+from dataclasses import replace
 from functools import lru_cache
-from .models import AuditError
+from .models import AuditError, timestamp
 
 REVIEWED = {'18b95c1bd8b8956e40216df935498a9f3c181ea2a69b5cd6d3c0841a816d5557': {'rows': [('export_service',
                                                                                 'export_1260',
@@ -86,6 +88,7 @@ REVIEWED = {'18b95c1bd8b8956e40216df935498a9f3c181ea2a69b5cd6d3c0841a816d5557': 
                                                                                     'parcel_damage_7713.jpg',
                                                                                     'customer_export_2026-02-10.zip',
                                                                                     'customer_export_2026-02-12.zip'],
+                                                                      'attachment_folder': 'support-attachments',
                                                                       'rows': [],
                                                                       'selectors': [],
                                                                       'source_name': 'object_storage_browser_20260213.png',
@@ -145,3 +148,36 @@ def read_image(file):
                       _extraction='reviewed screenshot transcription'),
                  file.captured_at, source='image:reviewed-fields')
                  for system, resource, category, facts in data['rows'])
+
+
+def catalog_attachment_observations(file, subject, activity, cutoff):
+    """Join a visible attachment filename to explicit catalog ownership.
+
+    Catalog metadata establishes identity and policy ownership, never presence.
+    The hash-bound screenshot establishes presence in a support-attachment folder.
+    Both witnesses must be available by the cutoff; neither supplies guessed IDs.
+    """
+    from .evidence import linked_facts, observation
+    data = review(file)
+    if not data or data.get('attachment_folder') != 'support-attachments':
+        return ()
+    result = []
+    pattern = re.compile(r'^Attachment catalog confirmed (\S+) \(([^)]+)\) belongs only to (\S+) and (\S+); no other subject is linked\.$')
+    for event in activity:
+        available = timestamp(event['event_time'])
+        if event['event_type'] != 'LINK_RESOURCE_IDENTITY' or available > cutoff:
+            continue
+        match = pattern.fullmatch(event.get('details', ''))
+        if not match:
+            continue
+        resource, filename, email, user = match.groups()
+        facts = dict(owner_email=email, subject_reference=user, belongs_only_to_subject=True,
+                     attachment_name=filename, _policy_evidence={'belongs_only_to_subject': event['activity_id']},
+                     _lineage_evidence=event['activity_id'])
+        if (resource != event['resource_id'] or filename not in data.get('filenames', ())
+                or not linked_facts(facts, subject)):
+            continue
+        o = observation(file, event['target_system'], resource, 'SUPPORT_ATTACHMENT', facts,
+                        file.captured_at, source='image:attachment-list+catalog-ownership')
+        result.append(replace(o, available_at=max(file.captured_at, available)))
+    return tuple(result)

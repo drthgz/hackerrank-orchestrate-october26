@@ -4,12 +4,15 @@ import tempfile
 import unittest
 from pathlib import Path
 from dataclasses import replace
+from unittest.mock import patch
 from test_structured import IDENTITY, REQUEST, RULES, EARLY, NOW, FUTURE, profile
 from audit.competition import competition_intent
 from audit.models import AuditError, EvidenceFile
 from audit.inputs import Inputs
 from audit.pipeline import audit
 from audit.reviewed_images import review
+from audit.identity import resolve_subject
+from audit.reviewed_images import catalog_attachment_observations
 
 
 class CompetitionTests(unittest.TestCase):
@@ -66,3 +69,34 @@ class CompetitionTests(unittest.TestCase):
                          event_type='LINK_RESOURCE_IDENTITY',details='Catalog metadata',source_system='catalog',target_system='account_service')])
         result,_=audit(REQUEST,inputs,mode='best-effort')
         self.assertEqual(result.deletion_status,'INCOMPLETE')
+
+    def catalog_fixture(self, event_time=NOW, filename='parcel-note.pdf'):
+        p = self.root / 'listing.png'
+        p.write_bytes(b'fixture-image')
+        file = EvidenceFile('listing', p, 'object-storage', REQUEST.audit_at)
+        event = dict(activity_id='ownership', event_time=event_time, event_type='LINK_RESOURCE_IDENTITY',
+                     target_system='object_storage', resource_id='upload-ochre',
+                     details=f'Attachment catalog confirmed upload-ochre ({filename}) belongs only to {IDENTITY["email"]} and {IDENTITY["user_id"]}; no other subject is linked.')
+        subject = resolve_subject(REQUEST.email, REQUEST.audit_at, [IDENTITY], [])
+        return file, event, subject
+
+    def test_catalog_ownership_joins_visible_attachment(self):
+        file, event, subject = self.catalog_fixture()
+        with patch('audit.reviewed_images.review', return_value=dict(
+                attachment_folder='support-attachments', filenames=['parcel-note.pdf'])):
+            o, = catalog_attachment_observations(file, subject, [event], REQUEST.audit_at)
+        self.assertEqual((o.resource_id, o.system_id, o.evidence_id), ('upload-ochre', 'object_storage', 'listing'))
+        self.assertTrue(o.facts['belongs_only_to_subject'])
+        self.assertEqual(o.facts['_lineage_evidence'], 'ownership')
+
+    def test_catalog_future_metadata_cannot_join_attachment(self):
+        file, event, subject = self.catalog_fixture(event_time=FUTURE)
+        with patch('audit.reviewed_images.review', return_value=dict(
+                attachment_folder='support-attachments', filenames=['parcel-note.pdf'])):
+            self.assertEqual(catalog_attachment_observations(file, subject, [event], REQUEST.audit_at), ())
+
+    def test_catalog_does_not_prove_unlisted_attachment_presence(self):
+        file, event, subject = self.catalog_fixture(filename='unlisted.pdf')
+        with patch('audit.reviewed_images.review', return_value=dict(
+                attachment_folder='support-attachments', filenames=['parcel-note.pdf'])):
+            self.assertEqual(catalog_attachment_observations(file, subject, [event], REQUEST.audit_at), ())

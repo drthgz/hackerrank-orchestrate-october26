@@ -159,6 +159,7 @@ class EvidenceTests(unittest.TestCase):
         encoded = json.dumps('event="profile_lookup_completed" resource_id="r" rows="0" http_status="404"')
         lines = [
             NOW + ' ' + json.dumps(payload),
+            NOW + ' | INFO | account_service | t | profile_lookup_completed | resource_id="r" rows="0" http_status="404"',
             NOW + ' [INFO] [account_service] [t] profile_lookup_completed: resource_id="r" rows="0" http_status="404"',
             NOW + ' <14>1 node account_service t - - event="profile_lookup_completed" resource_id="r" rows="0" http_status="404"',
             NOW + ' requestId=t function=account_service message=' + encoded,
@@ -167,6 +168,15 @@ class EvidenceTests(unittest.TestCase):
             with self.subTest(line=line):
                 _, fields = parse_line(line)
                 self.assertEqual((fields['service'], fields['trace_id'], fields['event'], fields['resource_id']), ('account_service', 't', 'profile_lookup_completed', 'r'))
+
+    def test_pipe_log_context_and_interleaved_subjects(self):
+        log = f'{NOW} | DEBUG | account_service | ours | profile_lookup_started | instance="one" lookup_key="{IDENTITY["email"]}"\n'
+        log += f'{NOW} | DEBUG | account_service | theirs | profile_lookup_started | instance="one" lookup_key="other@example.invalid"\n'
+        log += f'{NOW} | INFO | account_service | theirs | profile_lookup_completed | instance="one" resource_id="other" rows="1" http_status="200"\n'
+        log += f'{NOW} | INFO | account_service | ours | profile_lookup_completed | instance="one" resource_id="our-profile" rows="0" http_status="404"\n'
+        o, = self.observations(self.file('pipe', log, suffix='.log'))
+        self.assertEqual(o.resource_id, 'our-profile')
+        self.assertFalse(o.present)
 
     def test_log_future_event_is_excluded(self):
         log = self.line('profile_lookup_completed', 'resource_id=profile-blue rows=0 http_status=404 correlation_key=' + IDENTITY['email'], when=FUTURE)

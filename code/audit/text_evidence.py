@@ -33,10 +33,13 @@ def parse_line(line):
             fields.update({m[1]: value(m[2]) for m in KV.finditer(fields['message'])})
         bracket = re.match(r'\[\w+\] \[([^]]+)\] \[([^]]+)\] (\w+):', body)
         syslog = re.match(r'<\d+>1 \S+ (\S+) (\S+) - - ', body)
+        pipe = re.match(r'\|\s*\w+\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(\w+)\s*\|', body)
         if bracket:
             fields.update(service=bracket[1], trace_id=bracket[2], event=bracket[3])
         elif syslog:
             fields.update(service=syslog[1], trace_id=syslog[2])
+        elif pipe:
+            fields.update(service=pipe[1], trace_id=pipe[2], event=pipe[3])
         if 'function' in fields:
             fields['service'] = fields['function']
         if 'requestId' in fields:

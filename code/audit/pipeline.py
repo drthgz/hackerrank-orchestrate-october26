@@ -81,7 +81,8 @@ def audit(request, inputs, mode='strict'):
         validate_result(result, request, inputs.citation_times())
         return result, {'scope': 'Non-deletion intent; no deletion or verification authorized'}
     subject = resolve_subject(request.email, request.audit_at, inputs.identities, inputs.history)
-    observations = extract_observations(inputs.evidence, subject, request.audit_at, include_images=mode == 'best-effort')
+    observations = extract_observations(inputs.evidence, subject, request.audit_at,
+                                        include_images=mode == 'best-effort', activity=inputs.activity)
     latest = latest_per_copy(observations, request.audit_at)
     if not latest:
         raise AuditError('No supported evidence resource lineage links to subject')
