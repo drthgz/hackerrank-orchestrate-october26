@@ -1,17 +1,21 @@
-# Ghost Data Still Exists — competition prediction candidate
+# Ghost Data Still Exists — reproducible competition submission
 
-**output.csv now contains all 518 requested rows.** This is a structurally complete
-competition prediction candidate, with 144 explicitly uncertain statuses and 302
-incomplete/unproved plans. It is not a verified compliance report or an
-organizer-approved solution. No push or submission has occurred.
+The final output.csv contains 518 sorted unique predictions: 160 COMPLETE,
+348 INCOMPLETE and 10 NOT_APPLICABLE. It includes 2,172 steps. This is a
+competition prediction submission, **not a verified compliance report**:
+140 statuses are uncertain, 302 plans are incomplete or unproved, and 45 rows
+fail the stronger audit validator. No organizer acceptance of these limitations
+is implied. No push or submission has occurred.
 
-Python 3.10+ and Poppler `pdftotext` are required; no Python packages, credentials,
-network access or runtime model calls are needed. Install `poppler-utils` on Debian/
-Ubuntu, `poppler` on macOS, or add Poppler's bin directory to PATH on Windows.
-Verify with `pdftotext -v`. Place the supplied participant dataset/ beside this
-README. Dataset and credentials are excluded from code.zip.
+## Setup and run
 
-## Generate the candidate
+Python 3.10+ and Poppler `pdftotext` are required. No Python packages, credentials,
+network access or runtime model calls are needed. Install `poppler-utils` on
+Debian/Ubuntu, `poppler` on macOS, or put Poppler's bin directory on PATH on Windows.
+Verify with `pdftotext -v`. Validation used Poppler 26.01.0.
+Place the supplied participant dataset/ beside this README; it is excluded from
+code.zip. Paths default to the project root. --dataset and --requests also accept
+absolute paths.
 
 ```bash
 python3 -m unittest discover -s tests -q
@@ -20,73 +24,77 @@ python3 code/tools/validate_candidate.py
 python3 code/evaluation/main.py --all-samples --mode prediction --output-dir artifacts/prediction-benchmark
 ```
 
-Prediction mode preserves all 374 existing best-effort rows and fills the 144
-previously unsupported requests using a fixed, label-independent heuristic.
-Observed subject-linked residual PII or enabled recreation permission predicts
-INCOMPLETE; otherwise it predicts COMPLETE. **No observed contradiction does not
-prove completion.** The fallback does not use reported workflow status, public
-answers, case-ID rules, invented resources, citations or retention dates.
-Invalid inputs and identity/schema errors still fail rather than silently guess.
+200 tests pass with Poppler installed. The validator checks exact CSV/JSON fields,
+coverage, canonical order, operation/state vocabulary, citation cutoff and
+subject-linked resource provenance. Its separate stronger-audit count remains 45;
+exit 0 in prediction mode indicates structural production, not whole-case proof.
+An authorized-deletion row with [] lacks required audit content even though it
+parses. The uncertainty sidecar cannot repair missing proof in the required CSV.
 
-All steps still come from grounded policy assessments. Where no valid step is
-known, the prediction can have an empty array. Such an authorized-deletion row
-lacks the semantic audit content required by the statement; it is recorded as an
-audit-validator failure. A status prediction is not an evidence-backed finding.
-Only the required three columns go into CSV. Confidence, missing facts, residual
-signals, proof-gate errors and plan gaps stay in artifacts/prediction-run.json.
-Confidence is qualitative and uncalibrated, never a measured probability.
+## Architecture and uncertainty
 
-[Contract interpretation](docs/submission_contract.md) distinguishes the explicit
-518-row requirement and evidence rules from our interpretation: uncertain
-predictions are not explicitly banned, but partial-plan credit and organizer
-acceptance are unconfirmed. The sidecar does not repair semantic shortcomings.
+Current identifiers and admissible audit history resolve subjects. Explicit
+SQL/JSON/log/text/PDF adapters and hash-bound reviewed screenshot fields produce
+observations with physical-copy and availability/observation timestamps. Policy
+requires grounded retention, redaction, anonymization and ownership facts.
+The planner uses official operation ordering and rejects incompatible source
+dependencies. Claims of workflow success never replace measured readbacks.
 
-## Existing audit modes are preserved
+The separate prediction layer preserves supported best-effort results; at four
+proof-gate failures it predicts INCOMPLETE for observed residual PII or enabled
+recreation permission, otherwise COMPLETE. **No observed contradiction does not
+prove completion.** This fixed fallback remains unchanged. It does not use labels,
+reported workflow status, case-ID rules or invented resources/citations. Invalid
+inputs and identity conflicts still fail. Missing facts and plan gaps remain in
+the diagnostic JSON. Confidence labels are qualitative and uncalibrated.
+
+Strict and best-effort audit modes still refuse unsupported whole-case conclusions:
 
 ```bash
 python3 code/main.py --all --mode best-effort --output artifacts/audit.csv --diagnostics artifacts/audit-run.json
 python3 code/main.py --all --mode strict --output artifacts/strict.csv --diagnostics artifacts/strict-run.json
 ```
 
-The audit engine, policy, proof gates, validators and evidence adapters are
-unchanged from e6cb761. Best-effort still supports 374/518 and exits 2 with an
-explicit partial artifact. Strict supports 86/518 and also exits 2. Neither mode
-turns uncertain evidence into a verified conclusion. Exit 0 in prediction mode
-means every selected row passes structural/citation checks, not that every case
-is proved. Partial case runs cannot overwrite root output.csv. Paths default
-relative to this project; --dataset and --requests accept external absolute paths.
+An unsupported batch exits 2 and writes the supported subset to
+artifacts/supported.csv rather than replacing root output.csv. Partial case runs
+cannot overwrite root output.csv. Input files are never modified.
 
-SQL replicas, JSON, trace-correlated logs, handover text, PDFs and hash-bound
-reviewed screenshot fields supply observations. Current/historical identifiers
-establish lineage and timestamps limit admissible evidence. See
-[evidence sufficiency](docs/evidence_sufficiency.md) and [image review](docs/image_review.md).
+The release preserves exposed-tombstone redaction while retaining stable subject
+references and adds exact stable subject_selector recognition with conflict and
+reassignment protection. Relative to the prior root CSV, nine rows add exactly
+17 evidence-backed steps: 12 tombstone plan steps and five disabled-flow checks.
+There are no status changes, removals or unrelated row changes. The experimental
+lineage engine is not imported by production.
 
-## Measurements and artifacts
+## Evaluation and replay
 
-Public samples: **32/32 correct statuses**, **2/32 exact cases/sequences**,
-**129/132 step precision (97.73%)**, **129/193 recall (66.84%)**, and **49/50
-correct emitted citations (98%)**. Ten public statuses remain epistemically
-uncertain despite matching labels. Five public rows fail the stronger audit
-validator. No hidden total score is known. All 128 solution tests pass.
-
-Full candidate: 160 COMPLETE, 348 INCOMPLETE, 10 NOT_APPLICABLE; 144 uncertain
-statuses; 49 audit-validator failures; zero structural/citation/provenance failures.
-All 374 prior best-effort rows are preserved exactly. Runtime inference: zero
-calls/tokens, $0. See [evaluation](evaluation/evaluation_report.md),
-[usage](evaluation/usage_report.md) and [interview briefing](docs/interview_briefing.md).
+Public benchmark: 32/32 status accuracy, 2/32 exact cases/sequences, step precision
+132/135 (97.78%), recall 132/193 (68.39%), positional field accuracy 716/1365
+(52.45%), and aligned citation correctness 50/50. Nine public statuses remain
+uncertain; four public rows fail stronger audit validation. Hidden-set accuracy
+and total competition score are unknown. Runtime inference uses zero calls/tokens,
+with $0 total and per-request inference cost.
 
 ```bash
 python3 code/tools/package.py
 python3 code/tools/verify_package.py
-python3 code/tools/export_traces.py
 ```
 
-code.zip includes runnable source, tests, README, required reports and briefing/
-evidence/contract documents. It excludes dataset, caches, credentials, experiments,
-nested archives, output CSV and traces. output.csv is supplied separately;
-artifacts/prediction-run.json is the separate local uncertainty sidecar.
-The clean extracted package reproduces candidate and all three public benchmark
-outputs byte-for-byte in a fresh venv without installed packages or inherited
-credentials. log.txt is the transcript. agent-trace.zip is a redacted snapshot;
-refresh it after closing Codex for a complete active-session trace. The official
-challenge deadline is not configured in the repository.
+Run the generation and public benchmark commands above before archive verification.
+The verifier checks archive integrity, member/source parity, documentation links,
+fresh-venv tests, all 518 predictions, candidate validation and public predictions.
+It attaches the same external dataset and strips credentials. Both CSVs must match
+the root/reference bytes. Rebuilding the archive is deterministic for fixed source.
+
+code.zip includes source, tests, README, required reports and the judge brief.
+It excludes dataset, secrets, caches, experiment run artifacts, nested archives,
+output.csv and log.txt. output.csv and the authentic root log.txt are separate
+submission artifacts. The final release report is external to the archive because
+it records the archive's hash. Recoverable previous artifacts remain locally in
+artifacts/final-release/previous-output.csv and previous-code.zip.
+
+See [evaluation](evaluation/evaluation_report.md), [usage](evaluation/usage_report.md),
+[AI Judge brief](docs/release/ai_judge_brief.md),
+[contract interpretation](docs/submission_contract.md),
+[evidence sufficiency](docs/evidence_sufficiency.md) and [image review](docs/image_review.md).
+The official October deadline is not configured in this repository.

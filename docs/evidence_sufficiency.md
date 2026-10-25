@@ -1,3 +1,6 @@
+> Historical evidence-sufficiency investigation. Final release counts are in
+> evaluation/evaluation_report.md; this document preserves the original analysis.
+
 # Evidence sufficiency and submission conflict
 
 This records evidence-backed audit sufficiency at e6cb761. The unchanged audit

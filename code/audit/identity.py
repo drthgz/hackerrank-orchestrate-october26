@@ -48,7 +48,9 @@ def resolve_subject(email, cutoff, identities, history) -> Subject:
 
 def matches(row, subject):
     """Exact typed keys only; nested SQL JSON documents retain their structure."""
-    stable = ('user_id', 'customer_reference', 'subject_reference')
+    # Connectors can select an internal subject ID as well as an email alias.
+    # Stable IDs remain exact and share the existing conflicting-reference guard.
+    stable = ('user_id', 'customer_reference', 'subject_reference', 'subject_selector')
     refs = [row[k] for k in stable if isinstance(row.get(k), str) and row[k]]
     direct = subject.user_id in refs
     alias = False

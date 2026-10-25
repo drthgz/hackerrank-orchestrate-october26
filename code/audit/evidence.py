@@ -279,7 +279,7 @@ def extract_observations(files, subject, cutoff, include_images=False, activity=
             surviving = [v for k, v in o.facts.items() if k in {'email', 'phone', 'email_hash', 'customer_email', 'owner_email', 'requester_email'} and v]
             if surviving:
                 raise AuditError('Known resource has conflicting surviving identifiers')
-        refs = [o.facts[k] for k in ('user_id', 'customer_reference', 'subject_reference') if o.facts.get(k)]
+        refs = [o.facts[k] for k in ('user_id', 'customer_reference', 'subject_reference', 'subject_selector') if o.facts.get(k)]
         if any(r != subject.user_id and normalize('email', r) not in subject.aliases['email'] for r in refs):
             raise AuditError('Resource reassigned to another subject')
     return enrich(supplement_retention(observations + selected, documents, subject, cutoff), subject, cutoff)

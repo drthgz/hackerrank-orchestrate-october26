@@ -53,8 +53,8 @@ The existing audit validator, planner, policy and evidence parsers are unchanged
 Prediction validation checks complete case-ID coverage, exact columns/step fields,
 JSON types, uniqueness, canonical numbering/order, allowed operation/state pairs,
 and admissible citations. It intentionally does not certify exhaustive plans or
-whole-case proof. The reports separately count 144 uncertain full-dataset statuses,
-302 incomplete/unproved plans, and 49 rows rejected by the audit validator's
+whole-case proof. The reports separately count 140 uncertain full-dataset statuses,
+302 incomplete/unproved plans, and 45 rows rejected by the audit validator's
 stronger nonempty/phase requirements.
 
 Future organizer clarification could require a different treatment of uncertainty

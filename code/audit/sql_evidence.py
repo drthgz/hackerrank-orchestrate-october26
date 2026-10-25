@@ -179,7 +179,7 @@ def extract_observations(files, subject, cutoff, linked_resources=None, allow_pe
                 # Known resources may legitimately lose identifiers after
                 # redaction/anonymization; contradictory surviving IDs may not.
                 has_link = matches(row, subject)
-                for field in ('user_id', 'customer_reference', 'subject_reference'):
+                for field in ('user_id', 'customer_reference', 'subject_reference', 'subject_selector'):
                     if row.get(field) and row[field] != subject.user_id and normalize('email', row[field]) not in subject.aliases['email']:
                         raise AuditError('Resource reassigned to another subject')
                 if not has_link and snapshot.category in {'USER_PROFILE', 'SEARCH_INDEX_ENTRY', 'USER_EXPORT'}:
