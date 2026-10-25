@@ -3587,3 +3587,121 @@ branch=main
 repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
+
+## [2026-10-25T01:57:16.611693+00:00] SESSION START
+
+tool=Codex
+model=gpt-6.1-sol
+Repo Root: /home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+Branch: main
+Worktree: main
+Parent Agent: none
+Language: py
+Time Remaining: not configured
+
+## [2026-10-25T02:05:41.315974+00:00] Historical evidence lineage experiment
+
+User Prompt (verbatim, secrets redacted):
+# Orchestrate October — Historical Evidence Lineage Experiment
+
+Continue from commit 054aca8.
+
+Objective: Determine whether historical evidence can establish additional subject-to-resource ownership links without guessing identities or resource IDs.
+
+Timebox this investigation to approximately 60–90 minutes. Preserve existing submission artifacts.
+
+No paid API calls, push, or submission.
+
+## 1. Build a temporal lineage index
+
+Correlate admissible observations using:
+
+- Explicit LINK_RESOURCE_IDENTITY events.
+- Historical identifier-bearing records.
+- Stable subject and resource references.
+- Cross-system lookup keys.
+- Physical-copy and replica relationships.
+- Observation and evidence-availability timestamps.
+
+Represent links with source provenance and validity intervals.
+
+Do not infer ownership from:
+
+- Case numbers.
+- Resource-number patterns.
+- Row order.
+- Product cohorts.
+- Unverified workflow claims.
+- Evidence captured after audit_at.
+
+## 2. Revisit unresolved resources
+
+Investigate missing account-absence and anonymized-analytics verification steps.
+
+Determine whether previously unlinked resources can now be associated with a subject through explicit historical evidence.
+
+Distinguish:
+
+- Proven identity/resource lineage.
+- Proven current resource state.
+- Proven absence within an authoritative scope.
+
+All three are necessary before asserting a completed deletion check.
+
+## 3. Test adversarial cases
+
+Include:
+
+- Shared identifiers across different people.
+- Identifier rotation.
+- Resource reassignment.
+- Conflicting historical links.
+- Primary/replica disagreement.
+- Identity-free 404 responses.
+- Fully anonymized records without prior ownership.
+- Late evidence capture.
+
+## 4. Measure results
+
+Compare with the current 91a8faf prediction baseline.
+
+Report:
+
+- Newly established lineage edges.
+- Newly recoverable verification steps.
+- Public status accuracy and exact cases.
+- Step precision and recall.
+- Citation correctness.
+- Full-dataset changed rows.
+- New audit-validator failures.
+
+Generate separate candidate files.
+
+Do not overwrite root output.csv or code.zip.
+
+## 5. Stop condition
+
+If no admissible new lineage is found after examining the explicit links and historical identifier-bearing evidence, stop rather than introducing speculative heuristics.
+
+Document the limitation and recommend release preparation.
+
+Commit locally and report the results.
+
+Agent Response Summary:
+Built an isolated temporal provenance index over 94 participant artifacts, with cutoff-specific ownership intervals and adversarial tests. No additional historical ownership path established any of the 27 missing public account/analytics checks; five explicit stable connector selectors recover five disabled-flow checks in a separate full candidate. Public status accuracy remains 32/32, exact cases 2/32, step precision 132/135, recall 132/193, and aligned citations 50/50; only five full rows change, with no new validator failures. All 189 tests pass, root submission artifact hashes are preserved, and the report recommends release preparation after stopping the unresolved ownership search. Prepared the experiment, tests and report for the requested local commit; no paid inference calls, push, packaging or submission occurred.
+
+Actions:
+* Read AGENTS.md, local contract, pipeline, prior experiment and participant evidence; verified current commit 054aca8 and reproduced the 91a8faf baseline.
+* Added code/evaluation/lineage.py and code/evaluation/historical_lineage.py.
+* Added tests/test_lineage.py with 26 counterexample and positive-control tests.
+* Generated separate baseline/candidate CSVs, sidecars, temporal index and reports under artifacts/historical-lineage/.
+* Added docs/historical_lineage_experiment.md; ran the full 189-test suite and candidate/integrity/provenance validators.
+* Verified unchanged output.csv and code.zip hashes; stage and commit only experiment code, tests, report and this append-only log.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=main
+parent_agent=none
