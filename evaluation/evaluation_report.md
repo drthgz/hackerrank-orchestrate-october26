@@ -143,3 +143,9 @@ Candidate output SHA-256: `b9045f0b71ec8025cfa1b67dd3b7ee5a82f7411787173743580d0
 Public prediction SHA-256: `a671432781c8379f6400a5051bd8fe939fe8aa04264171393630dd798a5b98b9`.
 Final output-producing run: 24.608s, zero model calls/tokens, $0.
 See evaluation/usage_report.md for runtime and separate historical experiment usage.
+
+## Evidence-backed improvement candidate (after d79eb59)
+
+Separate candidate; root release artifacts remain preserved. Public statuses: 32/32 before and after. Exact cases/sequence: 2/32 before and after. Step precision: 129/132 (97.727273%) → 132/135 (97.777778%); recall: 129/193 (66.839378%) → 132/193 (68.393782%). Positional field accuracy: 699/1365 (51.208791%) → 716/1365 (52.454212%). Aligned citation correctness: 49/49 → 50/50, both 100%. Missing finding/remediation/verification steps: 5/5/54 → 4/4/53.
+
+Recovered three case_32 tombstone steps; no newly exact public cases. Full dataset: all 518 rows, four changed cases (case_544, case_546, case_548, case_550), 12 additions, zero removals or status changes. Zero unsupported findings or provenance failures in the final integrity checks. All 147 tests pass. Added participant counterexamples include exposed versus clean tombstones with unresolved retention, missing stable subject lineage, partial versus complete support scans, and unknown versus exclusive attachment ownership. An overly narrow delivery-context matcher was caught by comparison, corrected, and covered by counterexamples before acceptance. Detailed changes, limits, all changed cases, and reproduction commands: [accuracy improvements](../docs/accuracy_improvements.md).

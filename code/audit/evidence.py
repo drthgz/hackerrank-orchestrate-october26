@@ -12,6 +12,7 @@ from .models import AuditError, Observation, timestamp
 from .text_evidence import read_logs, read_text
 from .pdf_evidence import read_pdf, supplement_retention
 from .sql_evidence import COLLECTIONS, extract_observations as extract_sql
+from .support_facts import extracted, establish, text_context
 
 SERVICE_COLLECTIONS = {
     ('account_service', 'profile_lookups'): 'USER_PROFILE',
@@ -44,6 +45,7 @@ def observation(file, system, resource, category, facts, observed, present=True,
     updated = facts.get('updated_at')
     if updated and timestamp(updated) > observed:
         raise AuditError(f'{file.file_id}: record update later than observation')
+    facts = extracted(facts, category, file.file_id, source, observed, file.captured_at)
     return Observation(system, resource, category, copy_id or (system + ':' + str(facts['copy_id']) if facts.get('copy_id') else system + ':service'), present,
                        observed, timestamp(updated) if updated else None, file.file_id,
                        file.captured_at, source,
@@ -167,13 +169,22 @@ def enrich(observations, subject, cutoff):
     result = []
     for o in observations:
         facts = dict(o.facts)
+        for metadata in ('_support_fact_provenance', '_policy_evidence'):
+            if metadata in facts:
+                facts[metadata] = dict(facts[metadata])
         related = [x for x in observations if x.system_id == o.system_id and x.resource_id == o.resource_id]
         for field in ('retention_until', 'retained_until', 'legal_hold_active', 'shared_context', 'belongs_only_to_subject'):
             sources = [x for x in related if field in x.facts]
+            if field in ('shared_context', 'belongs_only_to_subject'):
+                sources = [x for x in sources if x.copy_id == o.copy_id and x.observed_at <= o.observed_at
+                           and x.available_at <= cutoff and x.observed_at <= cutoff
+                           and field in x.facts.get('_support_fact_provenance', {})]
             if field not in facts and sources:
                 source = max(sources, key=lambda x: (x.observed_at, x.evidence_id))
                 facts[field] = source.facts[field]
                 facts.setdefault('_policy_evidence', {})[field] = source.evidence_id
+                if field in ('shared_context', 'belongs_only_to_subject'):
+                    facts['_support_fact_provenance'][field] = dict(source.facts['_support_fact_provenance'][field])
         if o.category == 'SUPPORT_MESSAGE':
             if any(facts.get(k) for k in ('requester_name', 'requester_email', 'requester_phone')):
                 facts['identifier_exposure'] = True
@@ -181,13 +192,15 @@ def enrich(observations, subject, cutoff):
             if isinstance(text, str):
                 # Evidence of order/delivery or an actual support exchange
                 # establishes context to preserve, not permission to erase it.
-                if re.search(r'\b(?:order|delivery|customer (?:contacted|followed up)|agent)\b', text, re.I):
-                    facts.setdefault('shared_context', True)
+                if 'shared_context' not in facts and text_context(text):
+                    establish(facts, 'shared_context', True, o.evidence_id, o.source_table,
+                              o.observed_at, o.available_at, 'explicit order/delivery or exchange content')
                 identifiers = [v for k, values in subject.aliases.items() if k != 'phone' for v in values] + list(subject.names)
                 exposed = any(re.search(r'(?<![\w@.])' + re.escape(v) + r'(?![\w@.])', text, re.I)
                               for v in identifiers if v)
-                if 'message_text' in facts:
-                    facts['text_scan_complete'] = True
+                if 'message_text' in facts and 'text_scan_complete' not in facts:
+                    establish(facts, 'text_scan_complete', True, o.evidence_id, o.source_table,
+                              o.observed_at, o.available_at, 'complete message_text field scanned')
                 exposed = exposed or any(re.search(r'(?<!\d)' + r'[\s()+.-]*'.join(re.escape(c) for c in phone) + r'(?!\d)', text)
                                          for phone in subject.aliases['phone'] if phone)
                 facts['text_has_subject_identifiers'] = exposed
@@ -195,7 +208,6 @@ def enrich(observations, subject, cutoff):
                     facts['identifier_exposure'] = True
             if facts.get('identifier_exposure') is True:
                 facts['text_has_subject_identifiers'] = True
-                facts['text_scan_complete'] = True
         if o.category == 'LEGAL_HOLD_RECORD' and facts.get('retention_reason') == 'LEGAL_HOLD':
             facts.setdefault('legal_hold_active', bool(facts.get('retained_until') and timestamp(facts['retained_until']) >= cutoff))
         result.append(replace(o, facts=facts, subject_id=subject.user_id))

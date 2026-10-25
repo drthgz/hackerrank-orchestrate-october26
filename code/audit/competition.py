@@ -62,7 +62,12 @@ def best_effort_policy(observations, rules, cutoff):
         for d in tombstones:
             omitted.append(dict(system_id=d.observation.system_id, resource_id=d.observation.resource_id,
                                 reason='Tombstone reference has no supported retained-record relationship'))
-        decisions = [d for d in decisions if d not in tombstones]
+        # A clean tombstone still needs the retained-reference proof before it
+        # can certify compliance. Directly measured prohibited identifiers do
+        # not become safe when a different record's retention is unresolved.
+        # assess_policy has already required DELETED and the stable subject ID;
+        # REDACT preserves that reference and never invents a retained edge.
+        decisions = [d for d in decisions if d not in tombstones or not d.compliant]
     # An unresolved physical copy cannot be hidden by a compliant other copy.
     unknown = {(x['system_id'], x['resource_id']) for x in omitted}
     decisions = [d for d in decisions if not (d.compliant and

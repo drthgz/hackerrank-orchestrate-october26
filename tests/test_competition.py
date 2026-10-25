@@ -45,6 +45,49 @@ class CompetitionTests(unittest.TestCase):
             dict(resource_id='ledger-ochre',subject_reference=IDENTITY['user_id'])])])
         with self.assertRaises(AuditError):audit(REQUEST,inputs,mode='best-effort')
 
+    def tombstone(self, exposed=True, **changes):
+        return dict(dict(resource_id='reference-jade', subject_reference=IDENTITY['user_id'],
+                    account_status='DELETED', name=None, phone=None, email_hash=None,
+                    email=IDENTITY['email'] if exposed else None), **changes)
+
+    def test_exposed_tombstone_survives_unresolved_retention(self):
+        inputs = self.inputs([self.snap('deleted_customer_references', [self.tombstone()]),
+            self.snap('security_audit_events', [dict(resource_id='ledger-ochre', subject_reference=IDENTITY['user_id'])])])
+        result, detail = audit(REQUEST, inputs, mode='best-effort')
+        self.assertEqual([s.operation for s in result.steps],
+                         ['REPORT_EXPOSED_PII', 'REDACT_RECORD', 'VERIFY_RECORD_REDACTED'])
+        self.assertEqual([s.evidence_id for s in result.steps], ['fixture', '', ''])
+        self.assertFalse(detail['plan_exhaustive'])
+        self.assertTrue(any('retained-record relationship' in x['reason'] for x in detail['omissions']))
+        current = detail['latest_copy_states'][0]
+        self.assertEqual(current['facts']['subject_reference'], IDENTITY['user_id'])
+        self.assertFalse(any(s.operation == 'DELETE_RECORD' for s in result.steps))
+
+    def test_exposed_tombstone_without_any_retained_record_keeps_safe_plan(self):
+        result, detail = audit(REQUEST, self.inputs([
+            self.snap('deleted_customer_references', [self.tombstone()])]), mode='best-effort')
+        self.assertEqual((result.deletion_status, len(result.steps)), ('INCOMPLETE', 3))
+        self.assertFalse(detail['evidence_scope_closed'])
+
+    def test_clean_tombstone_does_not_gain_invented_retention_relationship(self):
+        for security in ([], [self.snap('security_audit_events', [dict(
+                resource_id='ledger-ochre', subject_reference=IDENTITY['user_id'])])]):
+            with self.subTest(security=security), self.assertRaises(AuditError):
+                audit(REQUEST, self.inputs([self.snap('deleted_customer_references',
+                      [self.tombstone(False)]), *security]), mode='best-effort')
+
+    def test_exposure_without_stable_reference_cannot_authorize_tombstone_plan(self):
+        for changes in (dict(subject_reference=None), dict(subject_reference=IDENTITY['email']),
+                        dict(account_status='ACTIVE')):
+            with self.subTest(changes=changes), self.assertRaises(AuditError):
+                audit(REQUEST, self.inputs([self.snap('deleted_customer_references',
+                      [self.tombstone(**changes)])]), mode='best-effort')
+
+    def test_tombstone_missing_subject_lineage_does_not_join_by_resource_name(self):
+        row = self.tombstone(False, subject_reference=None, name='Unrelated person')
+        with self.assertRaises(AuditError):
+            audit(REQUEST, self.inputs([self.snap('deleted_customer_references', [row])]), mode='best-effort')
+
     def test_no_proof_no_guessed_row(self):
         with self.assertRaises(AuditError):audit(REQUEST,self.inputs([]),mode='best-effort')
 

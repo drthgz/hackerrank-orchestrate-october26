@@ -33,3 +33,7 @@ These are prior rate-based estimates, not invoice charges or final-runtime costs
 The archived experiment improved no accepted case or step; the Technical Lead
 retained deterministic operation. No further paid calls were made in this work.
 The experiment client, prompts, API caches and usage ledger are excluded from code.zip.
+
+## Separate accuracy-improvement candidate run
+
+This later full run wrote `artifacts/accuracy-improvement/candidate-518.csv`; it did not replace root `output.csv` or `code.zip`. Requests: 518. Providers/models: none. Model calls: 0. Input tokens: 0; output tokens: 0; total tokens: 0; average tokens/request: 0. Estimated total cost: $0; per-request cost: $0. No per-model totals apply. SHA-256: `5f30a16fb7b72a914ac7489e1a06e6967d19fefaf8c992858a7470f6a3e6c25f`. The coding assistant is not a runtime model dependency.

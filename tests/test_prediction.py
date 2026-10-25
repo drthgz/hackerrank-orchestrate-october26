@@ -48,16 +48,18 @@ class PredictionTests(unittest.TestCase):
         with self.assertRaises(AuditError):
             audit(REQUEST, inputs, mode='strict')
 
-    def test_exposed_tombstone_predicts_incomplete_without_inventing_policy_plan(self):
+    def test_exposed_tombstone_preserves_plan_without_inventing_retained_link(self):
         row = dict(resource_id='tombstone-ochre', subject_reference=IDENTITY['user_id'],
                    account_status='DELETED', name=IDENTITY['name'], email=IDENTITY['email'],
                    phone=IDENTITY['phone'], email_hash=IDENTITY['email_hash'])
         inputs = self.inputs([self.snapshot('deleted_customer_references', [row])])
         result, detail = predict(REQUEST, inputs)
         self.assertEqual(result.deletion_status, 'INCOMPLETE')
-        self.assertEqual(result.steps, ())  # Missing retention relationship is not fabricated.
-        self.assertTrue(detail['prediction']['status_uncertain'])
-        self.assertEqual(detail['prediction']['residual_signals'][0]['resource_id'], 'tombstone-ochre')
+        self.assertEqual([s.operation for s in result.steps],
+                         ['REPORT_EXPOSED_PII', 'REDACT_RECORD', 'VERIFY_RECORD_REDACTED'])
+        self.assertFalse(detail['prediction']['status_uncertain'])
+        self.assertFalse(detail['prediction']['plan_complete'])
+        self.assertTrue(any('retained-record relationship' in x['reason'] for x in detail['omissions']))
 
     def test_supported_retention_verification_survives_missing_profile_proof(self):
         row = dict(resource_id='ledger-mauve', subject_reference=IDENTITY['user_id'], retention_until=FUTURE)

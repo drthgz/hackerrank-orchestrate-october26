@@ -7,6 +7,7 @@ from datetime import datetime
 
 from .identity import matches, normalize
 from .models import AuditError, EvidenceFile, Observation, timestamp
+from .support_facts import extracted
 
 PROFILE_TABLES = {'customer_profiles_primary', 'customer_profiles_failover_replica'}
 REQUIRED_COLUMNS = {'resource_id', 'user_id', 'full_name', 'email', 'phone', 'account_status', 'updated_at'}
@@ -191,7 +192,8 @@ def extract_observations(files, subject, cutoff, linked_resources=None, allow_pe
                 timestamp(row.get('updated_at', row.get('indexed_at'))) if row else None,
                 snapshot.file.file_id, snapshot.file.captured_at, snapshot.table,
                 tuple((k, str(row[k])) for k in ('user_id', 'customer_reference', 'subject_reference', 'email', 'phone') if row and row.get(k)),
-                row or {}, subject.user_id,
+                extracted(row or {}, snapshot.category, snapshot.file.file_id, snapshot.table,
+                          snapshot.observed_at, snapshot.file.captured_at), subject.user_id,
             ))
     return tuple(observations)
 
