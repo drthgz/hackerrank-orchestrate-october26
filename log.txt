@@ -3465,3 +3465,125 @@ branch=main
 repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
 parent_agent=none
+
+## [2026-10-25T01:33:51.199580+00:00] Combined policy completeness experiment
+
+User Prompt (verbatim, secrets redacted):
+# Combined Policy Completeness Experiment
+
+Continue from commit 91a8faf.
+
+Objective: Recover additional evidence-backed deletion-audit steps by separating directly observed facts from policy conclusions.
+
+Investigate security retention and support context/ownership in one milestone, but implement and evaluate them independently before combining.
+
+Preserve root output.csv and code.zip. No paid inference, push, or submission.
+
+## Track A — Security retention
+
+Investigate the 18 missing public security verification steps identified in docs/accuracy_gap_analysis.md.
+
+Review official rules and admissible evidence for:
+
+- Security record presence.
+- Subject-to-record lineage.
+- Retention duration or deadline.
+- Policy applicability.
+- Evidence capture time versus audit_at.
+
+Determine whether VERIFY_RECORD_PRESENT can represent independently established record presence without asserting that retention is legally compliant.
+
+Do not interpret an integrity seal as a retention deadline or assume indefinite retention.
+
+If the contract supports it, implement the narrowest possible improvement with provenance and negative tests.
+
+Otherwise document why it cannot be emitted.
+
+## Track B — Support context and ownership
+
+Investigate the 15 missing public support steps.
+
+Separate:
+
+1. Directly observed exposed PII or remaining records.
+2. Whether the record is shared or subject-exclusive.
+3. Whether redaction or deletion is authorized.
+4. Whether a full-text clean verification is established.
+
+Determine whether direct exposure findings can be preserved while remediation remains unresolved.
+
+Do not automatically infer:
+
+- shared_context from SUPPORT_MESSAGE.
+- belongs_only_to_subject from subject matching.
+- text_scan_complete from excerpts.
+- REDACT versus DELETE from incomplete ownership evidence.
+
+Only emit remediation and verification steps when supported by the official policy.
+
+Add positive and negative counterexamples.
+
+## Independent evaluation
+
+Evaluate Track A and Track B separately against the preserved baseline.
+
+For each, report:
+
+- Public status accuracy.
+- Exact cases.
+- Step precision/recall.
+- Citation correctness.
+- Strong audit-validator failures.
+- Changed full-dataset rows.
+- Unsupported or temporally invalid findings.
+
+Then evaluate both tracks combined.
+
+Do not use public reference answers as production rules.
+
+Accept only improvements that preserve evidence integrity and generalize beyond individual case IDs.
+
+## Optional lineage investigation
+
+If time remains, inspect account and analytics lineage for explicit subject-to-resource links.
+
+Do not implement speculative ownership reconstruction.
+
+## Deliverables
+
+Produce docs/combined_policy_experiment.md with:
+
+- Separate Track A results.
+- Separate Track B results.
+- Combined results.
+- Accepted and rejected changes.
+- Evidence limitations.
+- Full-dataset impact.
+- Next recommended improvement.
+
+Generate separate candidate CSVs.
+
+Do not overwrite root output.csv or code.zip.
+
+Run all tests and commit accepted changes locally.
+
+Return the commit hash, metrics, and remaining blockers.
+
+
+Agent Response Summary:
+Reviewed the supplied official contract and the 18 security / 15 support omissions, keeping observed facts separate from policy conclusions. Neither proposed CSV relaxation is supported: retained-presence verification requires established retention, and neutral support exposure cannot become a policy finding with unknown treatment. Added independent evaluation-only fact/provenance ledgers, combined-union checks and 16 positive/negative counterexamples; all 163 tests pass. Separate public and full candidates reproduce 91a8faf unchanged (32/32 statuses, 2/32 exact, 132/135 precision, 132/193 recall), with zero changed full rows or new integrity failures; documented limitations and prepared a local commit without paid inference, push, submission or root-artifact replacement.
+
+Actions:
+* Read AGENTS.md, problem_statement.md, dataset/deletion_rules.csv and defect reports.
+* Inspected participant evidence and explicit identity catalog links; generated isolated baseline/Track A/Track B/combined candidate CSVs and JSON diagnostics.
+* Added code/evaluation/policy_tracks.py, code/evaluation/combined_policy.py and tests/test_policy_tracks.py.
+* Wrote docs/combined_policy_experiment.md and appended evaluation/usage reports.
+* Ran all tests and independent/combined evaluations; verified preserved artifact hashes.
+
+Context:
+tool=Codex Desktop
+model=gpt-6.1-sol
+branch=main
+repo_root=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+worktree=/home/faraz/Documents/GitHub/hackerrank-orchestrate-october26
+parent_agent=none

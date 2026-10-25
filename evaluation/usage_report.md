@@ -37,3 +37,7 @@ The experiment client, prompts, API caches and usage ledger are excluded from co
 ## Separate accuracy-improvement candidate run
 
 This later full run wrote `artifacts/accuracy-improvement/candidate-518.csv`; it did not replace root `output.csv` or `code.zip`. Requests: 518. Providers/models: none. Model calls: 0. Input tokens: 0; output tokens: 0; total tokens: 0; average tokens/request: 0. Estimated total cost: $0; per-request cost: $0. No per-model totals apply. SHA-256: `5f30a16fb7b72a914ac7489e1a06e6967d19fefaf8c992858a7470f6a3e6c25f`. The coding assistant is not a runtime model dependency.
+
+## Combined policy experiment
+
+The unchanged 91a8faf pipeline regenerated separate 32-request and 518-request baselines under `artifacts/combined-policy-experiment/`. Security-only, support-only and combined diagnostics reused immutable observations and independently serialized identical candidate CSVs; they made no additional inference calls. Full-run totals: providers/models none; calls 0; input/output/total tokens 0; average tokens/request 0; estimated total/per-request inference cost $0. Root submission artifacts remain unchanged.
